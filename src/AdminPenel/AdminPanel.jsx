@@ -11,7 +11,7 @@ function AdminPanel() {
         <HideSideBarProvidor>
             <main className="flex h-screen sm:h-screen relative">
                 <Sidebar className="w-full" /> {/* Set a fixed width for the sidebar */}
-                <section className="flex-1 p-5 h-fit"> {/* This will make the content area take up the remaining space */}
+                <section className="flex-1 p-0 sm:p-5 h-fit"> {/* This will make the content area take up the remaining space */}
                     <Routes>
                         <Route path="/" element={<Dashbaord />} />
                         <Route path="/QRStudentEntry" element={<QRStudentEntry />} />

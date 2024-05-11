@@ -38,16 +38,15 @@ function Dashbaord() {
         <>
             <main className='flex flex-col w-full h-fit xl:h-full'>
                 {/* Header contetn */}
-                <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] bg-secondary rounded-[20px] p-[20px] text-accent gap-5 xl:gap-0'>
+                <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] bg-secondary 
+                rounded-none sm:rounded-[20px] p-[20px] text-accent gap-5 xl:gap-0'>
                     <div className="tittle flex justify-between">
                         <div className="sruText">
                             <p className="sm:text-[30px] xl:text-[30px] font-bold" >SRU LIBRARY</p>
                             <p className="text-[10px] xl:text-[12px] font-bold" >MANAGEMENT</p>
                         </div>
                         <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
-                        <div className="sideBarToggle block md:hidden">
-                        <SideBarToggle/>
-                        </div>
+
                     </div>
                     <div className="showCard flex-1 grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-[20px] place-items-end">
                         {cardDataShow.map((e, index) => (
