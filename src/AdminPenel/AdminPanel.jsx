@@ -11,9 +11,9 @@ function AdminPanel() {
         <HideSideBarProvidor>
             <main className="flex h-screen sm:h-screen relative">
                 <div class="sideBarToggle absolute p-5 w-full flex flex-col sm:hidden items-end">
+                    {/* for hide or show sidebar when in mobile view  */}
                     <SideBarToggle />
                 </div>
-
                 <Sidebar className="w-full" /> {/* Set a fixed width for the sidebar */}
                 <section className="flex-1 p-0 sm:p-5 h-fit"> {/* This will make the content area take up the remaining space */}
                     <Routes>
