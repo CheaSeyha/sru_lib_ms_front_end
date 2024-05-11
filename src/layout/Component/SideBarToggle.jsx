@@ -9,7 +9,7 @@ function SideBarToggle() {
     }
 
     return (
-        <label className="btn btn-circle swap swap-rotate text-white">
+        <label className="btn btn-circle swap swap-rotate text-white justify-self-end">
 
             {/* this hidden checkbox controls the state */}
             <input type="checkbox" onChange={handleHideSidebar} />
