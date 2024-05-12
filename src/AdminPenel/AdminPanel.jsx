@@ -10,7 +10,7 @@ function AdminPanel() {
         //This cotext ise for show and hide sidebar
         <HideSideBarProvidor>
             <main className="flex h-screen sm:h-screen relative">
-                <div class="sideBarToggle absolute p-5 w-full flex flex-col sm:hidden items-end">
+                <div className="sideBarToggle absolute p-5 w-full flex flex-col sm:hidden items-end">
                     {/* for hide or show sidebar when in mobile view  */}
                     <SideBarToggle />
                 </div>

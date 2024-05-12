@@ -49,7 +49,7 @@ function Dashbaord() {
                 studyYear: 4,
                 entryTime: "7:20",
                 purpose: "Read book",
-                status: true
+                status: false
             },
             {
                 stuName: "John Wick",
@@ -73,7 +73,7 @@ function Dashbaord() {
                 studyYear: 4,
                 entryTime: "7:20",
                 purpose: "Read book",
-                status: true
+                status: false
             },
             {
                 stuName: "John Wick",
@@ -89,7 +89,7 @@ function Dashbaord() {
                 studyYear: 4,
                 entryTime: "7:20",
                 purpose: "Read book",
-                status: true
+                status: false
             },
             {
                 stuName: "John Wick",
@@ -176,7 +176,7 @@ function Dashbaord() {
                 </div>
                 {/* Header contetn */}
                 {/* Main Content  */}
-                <div className="flex container-main-cotent text-accent space-x-5 h-full overflow-hidden">
+                <div className="flex-1 flex container-main-cotent text-accent space-x-5 h-full overflow-hidden">
                     {/* Table Stu Name  */}
                     <div className="table-stu-entry w-[885px] h-full bg-secondary rounded-[20px] p-5 space-y-5">
                         <div className="text-table w-full h-[45px] flex justify-between items-center">
@@ -207,7 +207,7 @@ function Dashbaord() {
                                             <td>{entry.studyYear}</td>
                                             <td>{entry.entryTime}</td>
                                             <td>{entry.purpose}</td>
-                                            <td>{entry.status ? "IN" : "OUT"}</td>
+                                            <td><span className={`${entry.status ? "bg-blue-400 " : "bg-red-400 "}px-4 rounded-lg`}>{entry.status ? "IN" : "OUT"}</span></td>
                                         </tr>
                                     ))}
                                 </tbody>
