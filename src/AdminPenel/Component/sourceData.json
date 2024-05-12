@@ -1,0 +1,24 @@
+[
+    {
+      "mejorName": "CS",
+      "value": 32
+    },
+    {
+      "mejorName": "PA",
+      "value": 12
+    },
+    {
+      "mejorName": "BUS",
+      "value": 65
+    }
+    ,
+    {
+      "mejorName": "MATH",
+      "value": 23
+    }
+    ,
+    {
+      "mejorName": "ENG",
+      "value": 34
+    }
+]

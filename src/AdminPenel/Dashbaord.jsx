@@ -1,8 +1,9 @@
 import React from 'react'
 import CardData from './Component/CardData'
 import TableStuEntry from './Component/TableStuEntry'
-import { Doughnut } from 'react-chartjs-2'
-
+import { Chart as ChartJS, defaults } from "chart.js/auto";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
+import sourceData from './Component/sourceData.json'
 function Dashbaord() {
     const cardDataShow =
         [
@@ -36,29 +37,29 @@ function Dashbaord() {
             }
         ]
 
-    const DataUniEntry = 
-    [
-        {
-            mejorName : "CS",
-            totalAmount: 28,
-        },
-        {
-            mejorName : "PA",
-            totalAmount: 12,
-        },
-        {
-            mejorName : "BUS",
-            totalAmount: 6,
-        },
-        {
-            mejorName : "MATH",
-            totalAmount: 6,
-        },
-        {
-            mejorName : "ENG",
-            totalAmount: 6,
-        }
-    ]
+    const DataMejorVisitor =
+        [
+            {
+                mejorName: "CS",
+                totalAmount: 28,
+            },
+            {
+                mejorName: "PA",
+                totalAmount: 12,
+            },
+            {
+                mejorName: "BUS",
+                totalAmount: 6,
+            },
+            {
+                mejorName: "MATH",
+                totalAmount: 6,
+            },
+            {
+                mejorName: "ENG",
+                totalAmount: 6,
+            }
+        ]
 
     return (
         <>
@@ -89,14 +90,33 @@ function Dashbaord() {
                 {/* Main Content  */}
                 <div className="flex-1 flex container-main-cotent text-accent space-x-5 h-full overflow-hidden">
                     {/* table List Of Student name  */}
-                        <TableStuEntry />
+                    <TableStuEntry />
                     {/* table List Of Student name  */}
                     {/* Chart Data  */}
                     <div className="flex-1 chart-data w-full h-full">
                         <div className="PieChart-Uni w-[304px] h-full bg-secondary rounded-[20px] p-5">
+                            <div className="text-table w-full h-[45px] flex justify-between items-center">
+                                <p className='font-bold'>Mejor Vistor</p>
+                            </div>
                             <Doughnut
                                 data={{
-                                    labels: sourceData
+                                    labels: sourceData.map((data) => data.mejorName),
+                                    datasets: [
+                                        {
+                                            label: "Count",
+                                            data: sourceData.map((data) => data.value),
+                                            backgroundColor: [
+                                                "rgba(43, 63, 229, 0.8)",
+                                                "rgba(250, 192, 19, 0.8)",
+                                                "rgba(253, 135, 135, 0.8)",
+                                            ],
+                                            borderColor: [
+                                                "bg-primary",
+                                                "bg-primary",
+                                                "bg-primary",
+                                            ],
+                                        },
+                                    ],
                                 }}
                             />
                         </div>
