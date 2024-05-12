@@ -5,7 +5,6 @@ function SideBarToggle() {
     const { isHideSideBar, setIsHideSideBar } = useHideSideBar();
     const handleHideSidebar = ()=>{
         isHideSideBar ? setIsHideSideBar(false) :setIsHideSideBar(true)
-        console.log(isHideSideBar)
     }
 
     return (

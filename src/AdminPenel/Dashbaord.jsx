@@ -33,9 +33,125 @@ function Dashbaord() {
             }
         ]
 
+    const EntryTableData =
+        [
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            }
+        ]
+
     return (
         <>
-            <main className='flex flex-col w-full h-fit xl:h-full'>
+            <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
                 {/* Header contetn */}
                 <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] bg-secondary 
                 rounded-none sm:rounded-[20px] p-[20px] text-accent gap-5 xl:gap-0'>
@@ -45,7 +161,6 @@ function Dashbaord() {
                             <p className="text-[10px] xl:text-[12px] font-bold" >MANAGEMENT</p>
                         </div>
                         <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
-
                     </div>
                     <div className="showCard flex-1 grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-[20px] place-items-end">
                         {cardDataShow.map((e, index) => (
@@ -60,6 +175,54 @@ function Dashbaord() {
                     </div>
                 </div>
                 {/* Header contetn */}
+                {/* Main Content  */}
+                <div className="flex container-main-cotent text-accent space-x-5 h-full overflow-hidden">
+                    {/* Table Stu Name  */}
+                    <div className="table-stu-entry w-[885px] h-full bg-secondary rounded-[20px] p-5 space-y-5">
+                        <div className="text-table w-full h-[45px] flex justify-between items-center">
+                            <p className='font-bold'>List of Student Entry To Day </p>
+                            <button className="btn text-accent">Guest Entry</button>
+                        </div>
+                        <div className="overflow-y-scroll w-full h-full">
+                            <table className="table tectav">
+                                {/* head */}
+                                <thead className='text-accent'>
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>Student Name</th>
+                                        <th>Mejor</th>
+                                        <th>Year</th>
+                                        <th>Entry Times</th>
+                                        <th>Purpose</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {/* row 1 */}
+                                    {EntryTableData.map((entry, index) => (
+                                        <tr key={index}>
+                                            <th>{index + 1}</th>
+                                            <td>{entry.stuName}</td>
+                                            <td>{entry.mejor}</td>
+                                            <td>{entry.studyYear}</td>
+                                            <td>{entry.entryTime}</td>
+                                            <td>{entry.purpose}</td>
+                                            <td>{entry.status ? "IN" : "OUT"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                    {/* Table Stu Name  */}
+                    {/* Chart Data  */}
+                    <div className="flex-1 chart-data w-full h-full bg-secondary p-5 rounded-[20px]">
+                        1
+                    </div>
+                    {/* Chart Data  */}
+                </div>
+                {/* Main Content  */}
             </main>
         </>
 
