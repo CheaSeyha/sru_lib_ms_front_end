@@ -2,7 +2,7 @@ import React from 'react'
 
 function CardData({ cardType, amount, iconCard, analytic, colorBG }) {
     return (
-        <div className={`w-full h-[120px] sm:h-[150px] md:h-[120px] lg:h-[120px] xl:h-[205px] backdrop-blur-md ${colorBG} bg-opacity-[70%] flex flex-col rounded-[10px] p-4 text-white`}>
+        <div className={`w-full h-[120px] sm:h-[150px] md:h-[120px] lg:h-[120px] xl:h-[205px] backdrop-blur-md ${colorBG} backdrop-filter bg-opacity-40 flex flex-col rounded-[10px] p-4 text-white`}>
             <div className="containerIconText flex-1 flex justify-between">
                 <div className="con-text">
                     <p className='text-[12px] md:text-[13px] lg:text-[12px] xl:text-[13px] font-bold'>{cardType}</p>
