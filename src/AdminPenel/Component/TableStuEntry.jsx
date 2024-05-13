@@ -52,77 +52,12 @@ export default function TableStuEntry() {
                 entryTime: "7:20",
                 purpose: "Read book",
                 status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: false
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
             }
         ]
-
     return (
         <>
             <div className="table-stu-entry w-[885px] h-full bg-secondary rounded-[20px] p-5 space-y-5">
-                <div className="text-table w-full h-[45px] flex justify-between items-center">
+                <div className="text-table w-full h-[45px] flex justify-between">
                     <p className='font-bold'>List of Student Entry To Day </p>
                     <BtnGredient btnType="Guest Entry" Icon={<UserRoundPlus />}/>
                 </div>
@@ -150,7 +85,7 @@ export default function TableStuEntry() {
                                     <td>{entry.studyYear}</td>
                                     <td>{entry.entryTime}</td>
                                     <td>{entry.purpose}</td>
-                                    <td><span className={`${entry.status ? "bg-blue-400 " : "bg-red-400 "}px-4 rounded-lg`}>{entry.status ? "IN" : "OUT"}</span></td>
+                                    <td><span className={`${entry.status ? "bg-blue-400 " : "bg-red-400 "}px-4 rounded-lg text-accent`}>{entry.status ? "IN" : "OUT"}</span></td>
                                 </tr>
                             ))}
                         </tbody>

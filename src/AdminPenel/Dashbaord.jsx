@@ -1,9 +1,7 @@
 import React from 'react'
 import CardData from './Component/CardData'
 import TableStuEntry from './Component/TableStuEntry'
-import { Chart as ChartJS, defaults } from "chart.js/auto";
-import { Bar, Doughnut, Line } from "react-chartjs-2";
-import sourceData from './Component/sourceData.json'
+import MejorPirChart from './Component/MejorPirChart'
 function Dashbaord() {
     const cardDataShow =
         [
@@ -92,36 +90,16 @@ function Dashbaord() {
                     {/* table List Of Student name  */}
                     <TableStuEntry />
                     {/* table List Of Student name  */}
-                    {/* Chart Data  */}
+                    {/* Chart Data Mejor Visitor  */}
                     <div className="flex-1 chart-data w-full h-full">
                         <div className="PieChart-Uni w-[304px] h-full bg-secondary rounded-[20px] p-5">
-                            <div className="text-table w-full h-[45px] flex justify-between items-center">
+                            <div className="text-table w-full h-[45px] flex">
                                 <p className='font-bold'>Mejor Vistor</p>
                             </div>
-                            <Doughnut
-                                data={{
-                                    labels: sourceData.map((data) => data.mejorName),
-                                    datasets: [
-                                        {
-                                            label: "Count",
-                                            data: sourceData.map((data) => data.value),
-                                            backgroundColor: [
-                                                "rgba(43, 63, 229, 0.8)",
-                                                "rgba(250, 192, 19, 0.8)",
-                                                "rgba(253, 135, 135, 0.8)",
-                                            ],
-                                            borderColor: [
-                                                "bg-primary",
-                                                "bg-primary",
-                                                "bg-primary",
-                                            ],
-                                        },
-                                    ],
-                                }}
-                            />
+                            <MejorPirChart/>
                         </div>
                     </div>
-                    {/* Chart Data  */}
+                    {/* Chart Data Mejor Visitor  */}
                 </div>
                 {/* Main Content  */}
             </main>
