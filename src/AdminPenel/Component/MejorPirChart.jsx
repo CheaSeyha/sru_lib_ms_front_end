@@ -17,27 +17,44 @@ export default class MejorPirChart extends PureComponent {
     render() {
         return (
 
-            <div className="container-piechart w-full flex justify-center items-center">
-                <div className="container-piechart relative">
-                    <div className="text-container text-center justify-center items-center absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                        <p className='font-bold text-accent'>Total Mejor</p>
-                        <p className='font-bold text-accent'>{data.length+1}</p>
+            <div className="PieChart-Uni w-[304px] h-full bg-secondary rounded-[20px] p-5">
+                <div className="text-table w-full h-[45px] flex">
+                    <p className='font-bold'>Mejor Vistor</p>
+                </div>
+                <div className="container-piechart w-full justify-center items-center">
+                    <div className="container-piechart relative ">
+                        <div className="text-container text-center justify-center items-center absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                            <p className='font-bold text-accent'>Total Mejor</p>
+                            <p className='font-bold text-accent'>{data.length + 1}</p>
+                        </div>
+                        <PieChart width={263} height={200}>
+                            <Pie
+                                data={data}
+                                cx={125}
+                                innerRadius={70}
+                                outerRadius={95}
+                                paddingAngle={0}
+                                dataKey="value"
+                            >
+                                {data.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                                ))}
+                            </Pie>
+                            <Tooltip />
+                        </PieChart>
                     </div>
-                    <PieChart width={263} height={200} onMouseEnter={this.onPieEnter}>
-                        <Pie
-                            data={data}
-                            cx={125}
-                            innerRadius={70}
-                            outerRadius={95}
-                            paddingAngle={0}
-                            dataKey="value"
-                        >
-                            {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                    </PieChart>
+                    <div className="listaData-mejor ">
+                        <div className="header flex justify-between text-[13px]">
+                            <p className='font-bold'>Mejor Name</p>
+                            <p>Total</p>
+                        </div>
+                        {data.map((e, index) => (
+                            <div key={index} className="dataOfMejor flex justify-between text-[13px] space-y-2">
+                                <p>{e.name}</p>
+                                <p>{e.value}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         );
