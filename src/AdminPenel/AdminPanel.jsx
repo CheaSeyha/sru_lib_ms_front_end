@@ -10,12 +10,12 @@ function AdminPanel() {
         //This cotext ise for show and hide sidebar
         <HideSideBarProvidor>
             <main className="flex h-screen sm:h-screen relative">
-                <div className="sideBarToggle absolute p-5 w-full flex flex-col sm:hidden items-end">
+                <div className="sideBarToggle absolute p-5 w-full flex flex-col sm:hidden items-end z-50">
                     {/* for hide or show sidebar when in mobile view  */}
                     <SideBarToggle />
                 </div>
-                <Sidebar className="w-full" /> {/* Set a fixed width for the sidebar */}
-                <section className="flex-1 p-0 sm:p-5 h-fit xl:h-full"> {/* This will make the content area take up the remaining space */}
+                <Sidebar /> {/* Set a fixed width for the sidebar */}
+                <section className="flex-1 p-0 sm:p-5 xl:h-full overflow-y-auto sm:overscroll-y-none"> {/* This will make the content area take up the remaining space */}
                     <Routes>
                         <Route path="/" element={<Dashbaord />} />
                         <Route path="/QRStudentEntry" element={<QRStudentEntry />} />

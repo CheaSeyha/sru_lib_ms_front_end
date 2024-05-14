@@ -3,8 +3,8 @@ import { useHideSideBar } from '../../Context/HideSidebarContext'
 
 function SideBarToggle() {
     const { isHideSideBar, setIsHideSideBar } = useHideSideBar();
-    const handleHideSidebar = ()=>{
-        isHideSideBar ? setIsHideSideBar(false) :setIsHideSideBar(true)
+    const handleHideSidebar = () => {
+        isHideSideBar ? setIsHideSideBar(false) : setIsHideSideBar(true)
     }
 
     return (

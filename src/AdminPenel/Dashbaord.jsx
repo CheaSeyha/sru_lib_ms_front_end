@@ -65,13 +65,7 @@ function Dashbaord() {
         <>
             <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
                 {/* Header contetn */}
-                <div className='
-                flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px]
-                rounded-none sm:rounded-[20px] p-[20px] text-white gap-5 xl:gap-0
-                overflow-hidden
-                '
-                    style={{ backgroundImage: `url(${BGImag})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-                >
+                <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-none sm:rounded-[20px] p-[20px] text-white gap-5 xl:gap-0' style={{ backgroundImage: `url(${BGImag})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className="tittle flex justify-between">
                         <div className="sruText">
                             <p className="sm:text-[30px] xl:text-[30px] font-bold" >SRU LIBRARY</p>
@@ -93,7 +87,7 @@ function Dashbaord() {
                 </div>
                 {/* Header contetn */}
                 {/* Main Content  */}
-                <div className="flex-1 flex  container-main-cotent text-accent space-x-5 h-full overflow-hidden">
+                <div className="flex container-main-cotent text-accent h-[690px] sm:overflow-hidden gap-5">
                     <div className="table-chart flex gap-5">
                         {/* table List Of Student name  */}
                         <div className="table-container table-stu-entry w-[885px] h-full bg-secondary rounded-[20px] p-5">
@@ -104,12 +98,12 @@ function Dashbaord() {
                     {/* Card Pirchart And Weekly visitor  */}
                     <div className="w-full flex gap-5">
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="flex-1 chart-data w-full h-full">
+                        <div className="chart-data w-[304px] h-full">
                             <MejorPirChart />
                         </div>
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="weekly-visitor w-full h-full bg-secondary rounded-[20px]">
-
+                        <div className="flex-1 weekly-visitor w-full h-full bg-secondary rounded-[20px] p-5">
+                            Test
                         </div>
                     </div>
                     {/* Card Pirchart And Weekly visitor  */}

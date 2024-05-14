@@ -17,7 +17,7 @@ export default class MejorPirChart extends PureComponent {
     render() {
         return (
 
-            <div className="PieChart-Uni flex flex-col w-[304px] h-full bg-secondary rounded-[20px] p-5">
+            <div className="PieChart-Uni flex flex-col w-full h-full bg-secondary rounded-[20px] p-5">
                 <div className="chart ">
                     <div className="text-table w-full h-[45px] flex">
                         <p>Mejor Vistor</p>
