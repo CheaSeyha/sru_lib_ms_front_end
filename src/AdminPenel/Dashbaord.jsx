@@ -96,13 +96,13 @@ function Dashbaord() {
                         {/* table List Of Student name  */}
                     </div>
                     {/* Card Pirchart And Weekly visitor  */}
-                    <div className="w-full h-full flex flex-col md:flex-row gap-5">
+                    <div className="w-full h-full flex flex-col sm:flex-row gap-5">
                         {/* Chart Data Mejor Visitor  */}
                         <div className="chart-data flex justify-center items-center h-full bg-secondary rounded-[20px] md:bg-none">
                             <MejorPirChart />
                         </div>
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="flex-1 w-full hidden md:block weekly-visitor  bg-secondary rounded-[20px] p-5">
+                        <div className="flex-1 w-full hidden sm:block weekly-visitor  bg-secondary rounded-[20px] p-5">
                             Test s
                         </div>
                     </div>
