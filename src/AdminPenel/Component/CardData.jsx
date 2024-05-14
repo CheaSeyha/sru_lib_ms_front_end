@@ -5,7 +5,7 @@ function CardData({ cardType, amount, iconCard, analytic, colorBG }) {
         <div className={`
         cursor-pointer w-full h-[120px] sm:h-[150px] md:h-[120px] lg:h-[120px] xl:h-[205px] 
         backdrop-blur-md ${colorBG} backdrop-filter bg-opacity-40 flex flex-col rounded-[10px] p-4 text-white 
-        hover:-translate-y-3 transition-all ease-in-out hover:bg-opacity-70`}
+        hover:-translate-y-2 transition-all ease-in-out hover:bg-opacity-70`}
         >
             <div className="containerIconText flex-1 flex justify-between">
                 <div className="con-text">

@@ -20,7 +20,7 @@ export default class MejorPirChart extends PureComponent {
             <div className="PieChart-Uni flex flex-col w-[304px] h-full bg-secondary rounded-[20px] p-5">
                 <div className="chart ">
                     <div className="text-table w-full h-[45px] flex">
-                        <p className='font-bold'>Mejor Vistor</p>
+                        <p>Mejor Vistor</p>
                     </div>
                     <div className="container-piechart w-full justify-center items-center ">
                         <div className="container-piechart relative ">
@@ -57,7 +57,7 @@ export default class MejorPirChart extends PureComponent {
                     </div>
                     <div className="flex-1  dataContainer h-full grid items-center cursor-pointer">
                         {data.map((e, index) => (
-                            <div key={index} className="dataOfMejor flex items-center text-[12px]">
+                            <div key={index} className="dataOfMejor flex items-center text-[12px] hover:-translate-x-2 transition-all ease-in-out hover:bg-[#ffffff54] rounded-lg">
                                 <div className="w-[10px] h-[10px]  rounded-lg"
                                     style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
                                 <div className="div flex justify-between w-full ps-5">
