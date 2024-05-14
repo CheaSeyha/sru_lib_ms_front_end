@@ -87,10 +87,10 @@ function Dashbaord() {
                 </div>
                 {/* Header contetn */}
                 {/* Main Content  */}
-                <div className="flex container-main-cotent text-accent h-[690px] sm:overflow-hidden gap-5">
+                <div className="flex-1 flex lg:flex-col xl:flex-row container-main-cotent text-accent h-[690px] gap-5">
                     <div className="table-chart flex gap-5">
                         {/* table List Of Student name  */}
-                        <div className="table-container table-stu-entry w-[885px] h-full bg-secondary rounded-[20px] p-5">
+                        <div className="table-container table-stu-entry lg:w-full xl:w-[670px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">
                             <TableStuEntry />
                         </div>
                         {/* table List Of Student name  */}
