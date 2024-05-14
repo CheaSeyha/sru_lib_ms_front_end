@@ -58,7 +58,7 @@ export default function TableStuEntry() {
         <>
             <div className="w-full h-full space-y-5">
                 <div className="text-table w-full h-[45px] flex justify-between">
-                    <p>List of Student Entry To Day </p>
+                    <p className='hidden md:block'>Student Entry To Day </p>
                     <BtnGredient btnType="Guest Entry" Icon={<UserRoundPlus />} />
                 </div>
                 <div className=" w-full h-full">
