@@ -17,45 +17,58 @@ export default class MejorPirChart extends PureComponent {
     render() {
         return (
 
-            <div className="PieChart-Uni w-[304px] h-full bg-secondary rounded-[20px] p-5">
-                <div className="text-table w-full h-[45px] flex">
-                    <p className='font-bold'>Mejor Vistor</p>
-                </div>
-                <div className="container-piechart w-full justify-center items-center">
-                    <div className="container-piechart relative ">
-                        <div className="text-container text-center justify-center items-center absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                            <p className='font-bold text-accent'>Total Mejor</p>
-                            <p className='font-bold text-accent'>{data.length + 1}</p>
-                        </div>
-                        <PieChart width={263} height={200}>
-                            <Pie
-                                data={data}
-                                cx={125}
-                                innerRadius={70}
-                                outerRadius={95}
-                                paddingAngle={0}
-                                dataKey="value"
-                            >
-                                {data.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                                ))}
-                            </Pie>
-                            <Tooltip />
-                        </PieChart>
+            <div className="PieChart-Uni flex flex-col w-[304px] h-full bg-secondary rounded-[20px] p-5">
+                <div className="chart ">
+                    <div className="text-table w-full h-[45px] flex">
+                        <p className='font-bold'>Mejor Vistor</p>
                     </div>
-                    <div className="listaData-mejor ">
-                        <div className="header flex justify-between text-[13px]">
-                            <p className='font-bold'>Mejor Name</p>
+                    <div className="container-piechart w-full justify-center items-center ">
+                        <div className="container-piechart relative ">
+                            <div className="text-container text-center justify-center items-center absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                <p className='font-bold text-accent'>Total Mejor</p>
+                                <p className='font-bold text-accent'>{data.length}</p>
+                            </div>
+                            <PieChart width={263} height={200}>
+                                <Pie
+                                    data={data}
+                                    cx={125}
+                                    innerRadius={70}
+                                    outerRadius={95}
+                                    paddingAngle={0}
+                                    dataKey="value"
+                                >
+                                    {data.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </div>
+                    </div>
+                </div>
+                {/* List Data of major entry  */}
+                <div className="listaData-mejor h-full  flex flex-col">
+                    <div className="header flex justify-between">
+                        <p className='font-bold bg'></p>
+                        <div className="text-conatienr flex w-full justify-between ps-7">
+                            <p>Mejor</p>
                             <p>Total</p>
                         </div>
+                    </div>
+                    <div className="flex-1  dataContainer h-full grid items-center cursor-pointer">
                         {data.map((e, index) => (
-                            <div key={index} className="dataOfMejor flex justify-between text-[13px] space-y-2">
-                                <p>{e.name}</p>
-                                <p>{e.value}</p>
+                            <div key={index} className="dataOfMejor flex items-center text-[12px]">
+                                <div className="w-[10px] h-[10px]  rounded-lg"
+                                    style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                                <div className="div flex justify-between w-full ps-5">
+                                    <p className="w-fit h-fit">{e.name}</p>
+                                    <p>{e.value}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
+                {/* List Data of major entry  */}
             </div>
         );
     }

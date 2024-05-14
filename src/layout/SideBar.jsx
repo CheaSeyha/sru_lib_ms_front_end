@@ -31,7 +31,7 @@ function Sidebar() {
 
     return (
         <>
-            <section className={`z-50 sidebar ${isHideSideBar ? 'translate-x-0' : 'translate-x-[-250px]' } sm:translate-x-0 transition-transform ease-in-out delay-150 sm:left-0 absolute sm:relative sm:right-0  w-[223px] sm:w-fit lg:w-[223px] h-[100vh] shadow-xl bg-secondary text-accent`}>
+            <section className={`z-50 sidebar ${isHideSideBar ? 'translate-x-0' : 'translate-x-[-250px]'} sm:translate-x-0 transition-transform ease-in-out delay-150 sm:left-0 absolute sm:relative sm:right-0  w-[223px] sm:w-fit lg:w-[223px] h-[100vh] shadow-xl bg-secondary text-accent`}>
                 {/* Sidebar header  */}
                 {/* User Frofile  */}
                 <header className='header-sidebar shadow-md bg-primary w-full h-[100px] p-[10px] lg:ps-[14px] bg-light-bg-sec flex items-center rounded-br-[50px] sm:rounded-br-[20px] lg:rounded-br-[50px] transition-transform ease-in-out duration-300'>

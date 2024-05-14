@@ -1,5 +1,5 @@
 import React from 'react'
-import {UserRoundPlus} from 'lucide-react'
+import { UserRoundPlus } from 'lucide-react'
 import BtnGredient from './BtnGredient'
 export default function TableStuEntry() {
     // Fake Data of student Name entry 
@@ -56,10 +56,10 @@ export default function TableStuEntry() {
         ]
     return (
         <>
-            <div className="table-stu-entry w-[885px] h-full bg-secondary rounded-[20px] p-5 space-y-5">
+            <div className="w-full h-full space-y-5">
                 <div className="text-table w-full h-[45px] flex justify-between">
-                    <p className='font-bold'>List of Student Entry To Day </p>
-                    <BtnGredient btnType="Guest Entry" Icon={<UserRoundPlus />}/>
+                    <p>List of Student Entry To Day </p>
+                    <BtnGredient btnType="Guest Entry" Icon={<UserRoundPlus />} />
                 </div>
                 <div className=" w-full h-full">
                     <table className="table tectav">
