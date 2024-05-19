@@ -1,8 +1,9 @@
 import React from 'react'
 import CardData from './Component/CardData'
 import TableStuEntry from './Component/TableStuEntry'
-import MejorPirChart from './Component/MejorPirChart'
+// import MejorPirChart from './Component/MejorPirChart1'
 import BGImag from '../assets/image/sru_libIamge.png'
+import MejorPieChart from './Component/MejorPieChart'
 
 function Dashbaord() {
     const cardDataShow =
@@ -99,7 +100,8 @@ function Dashbaord() {
                     <div className="w-full h-full flex flex-col sm:flex-row gap-5">
                         {/* Chart Data Mejor Visitor  */}
                         <div className="chart-data flex justify-center items-center h-full bg-secondary rounded-[20px] md:bg-none">
-                            <MejorPirChart />
+                            {/* <MejorPirChart /> */}
+                            <MejorPieChart/ >
                         </div>
                         {/* Chart Data Mejor Visitor  */}
                         <div className="flex-1 w-full hidden sm:block weekly-visitor  bg-secondary rounded-[20px] p-5">
