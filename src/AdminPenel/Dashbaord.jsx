@@ -99,9 +99,9 @@ function Dashbaord() {
                     {/* Card Pirchart And Weekly visitor  */}
                     <div className="w-full h-full flex flex-col sm:flex-row gap-5">
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="chart-data flex justify-center items-center h-full bg-secondary rounded-[20px] md:bg-none">
+                        <div className="chart-data flex justify-center items-center w-[304px]  h-full bg-secondary rounded-[20px] md:bg-none">
                             {/* <MejorPirChart /> */}
-                            <MejorPieChart/ >
+                            <MejorPieChart />
                         </div>
                         {/* Chart Data Mejor Visitor  */}
                         <div className="flex-1 w-full hidden sm:block weekly-visitor  bg-secondary rounded-[20px] p-5">
