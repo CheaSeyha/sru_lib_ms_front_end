@@ -11,6 +11,7 @@ function MejorPieChart() {
           height="100%"
           series={[34, 26, 73, 35, 56]}
           options={{
+            noData: "No Data",
             labels: ['CS', 'PA', 'BUS', 'MATH', 'ENG'],
             stroke: {
               show: false

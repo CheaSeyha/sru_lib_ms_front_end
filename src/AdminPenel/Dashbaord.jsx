@@ -99,7 +99,7 @@ function Dashbaord() {
                     {/* Card Pirchart And Weekly visitor  */}
                     <div className="w-full h-full flex flex-col sm:flex-row gap-5">
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="chart-data flex flex-col w-[304px]  h-full bg-secondary rounded-[20px] md:bg-none p-5">
+                        <div className="chart-data flex flex-col w-full sm:w-[250px] xl:w-[304px] h-[405px] xl:h-full bg-secondary rounded-[20px] md:bg-none p-5">
                             {/* <MejorPirChart /> */}
                             <div className="cardTittle h-[46px] w-full flex">
                                 <p>Total Mejor Visitor</p>
@@ -109,7 +109,7 @@ function Dashbaord() {
                             </div>
                         </div>
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="flex-1 w-full hidden sm:block weekly-visitor  bg-secondary rounded-[20px] p-5">
+                        <div className="flex-1 w-full sm:block weekly-visitor  bg-secondary rounded-[20px] p-5">
                             Test s
                         </div>
                     </div>
