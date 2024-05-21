@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 function WeeklyVisitorChart() {
-    const WeelyVisitorData = [25, 64, 24, 50, 34, 60, 78];
+    const WeelyVisitorData = [25, 64, 24, 6, 34, 60, 78];
     // Reverse the WeelyVisitorData array to display from low to high
     const reversedData = [...WeelyVisitorData].reverse();
+
+    // Initial state with default heights set to 0
+    const [heights, setHeights] = useState(new Array(7).fill(0));
+
+    // Update heights on component mount
+    useEffect(() => {
+        // Animation for line-bg elements on mount
+        const animateLineBG = () => {
+            setHeights(WeelyVisitorData);
+        };
+        animateLineBG();
+
+        // Clean up function to remove animation on unmount (optional)
+        return () => setHeights(new Array(7).fill(0));
+    }, [WeelyVisitorData]);
 
     return (
         <>
@@ -25,7 +40,7 @@ function WeeklyVisitorChart() {
                     <div className="line flex justify-between h-full">
                         {reversedData.map((data, index) => {
                             // Calculate height percentage
-                            const heightPercentage = data + "%";
+                            const heightPercentage = heights[index] + "%";
                             return (
                                 <motion.div
                                     key={index}
@@ -34,9 +49,12 @@ function WeeklyVisitorChart() {
                                     initial="rest"
                                     animate="rest"
                                 >
-                                    <div
+                                    <motion.div
                                         className="line-value w-[18px] bg-[#82B4FF] rounded-full absolute transition duration-300 group-hover:bg-accent"
-                                        style={{ height: heightPercentage }}
+                                        initial={{ height: 0 }}
+                                        animate={{ height: heightPercentage }}
+                                        transition={{ duration: 0.5, delay: index * 0.1, ease: "easeInOut" }} // Adding staggered animation
+                                        style={{ originY: 1 }} // Animation starts from bottom
                                     />
                                     <motion.div
                                         className="tool-tip-data w-[18px] absolute z-40"
