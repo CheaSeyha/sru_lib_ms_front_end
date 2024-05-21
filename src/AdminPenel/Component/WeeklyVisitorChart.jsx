@@ -21,6 +21,9 @@ function WeeklyVisitorChart() {
         return () => setHeights(new Array(7).fill(0));
     }, [WeelyVisitorData]);
 
+    // Define an array with the data
+    const daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
     return (
         <>
             <div className="text-title w-full h-[46px]">
@@ -38,7 +41,7 @@ function WeeklyVisitorChart() {
                 </div>
                 <div className="flex-1 line-chart w-full h-full">
                     <div className="line flex justify-between h-full">
-                        {reversedData.map((data, index) => {
+                        {WeelyVisitorData.map((data, index) => {
                             // Calculate height percentage
                             const heightPercentage = heights[index] + "%";
                             return (
@@ -76,27 +79,12 @@ function WeeklyVisitorChart() {
             <div className="x-xis-data-dayOfWeek-container flex space-x-5">
                 <div className="flex-1 line-chart w-full h-full ps-[45px]">
                     <div className="x-xis-data-dayOfWeek flex justify-between h-full py-5">
-                        <div className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
-                            <p>Mo</p>
-                        </div>
-                        <div className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
-                            <p>Tu</p>
-                        </div>
-                        <div className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
-                            <p>We</p>
-                        </div>
-                        <div className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
-                            <p>Th</p>
-                        </div>
-                        <div className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
-                            <p>Fr</p>
-                        </div>
-                        <div className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
-                            <p>Sa</p>
-                        </div>
-                        <div className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
-                            <p>Su</p>
-                        </div>
+                        {/* Loop through the array and generate JSX elements */}
+                        {daysOfWeek.map((day, index) => (
+                            <div key={index} className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
+                                <p>{day}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
