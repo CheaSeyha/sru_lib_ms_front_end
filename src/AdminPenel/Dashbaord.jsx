@@ -4,6 +4,7 @@ import TableStuEntry from './Component/TableStuEntry'
 // import MejorPirChart from './Component/MejorPirChart1'
 import BGImag from '../assets/image/sru_libIamge.png'
 import MejorPieChart from './Component/MejorPieChart'
+import WeeklyVisitorChart from './Component/WeeklyVisitorChart'
 
 function Dashbaord() {
     const cardDataShow =
@@ -62,6 +63,7 @@ function Dashbaord() {
             }
         ]
 
+        const WeelyVisitorData = [25, 64, 24, 6, 34, 15, 48]
     return (
         <>
             <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
@@ -109,8 +111,10 @@ function Dashbaord() {
                             </div>
                         </div>
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="flex-1 w-full sm:block weekly-visitor  bg-secondary rounded-[20px] p-5">
-                            Test s
+                        <div className="flex-1 w-full h-full">
+                            <div className="weekly-visitor-container bg-secondary w-full h-[342px] flex flex-col rounded-[20px] p-5">
+                                <WeeklyVisitorChart WeelyVisitorData={WeelyVisitorData} />
+                            </div>
                         </div>
                     </div>
                     {/* Card Pirchart And Weekly visitor  */}
