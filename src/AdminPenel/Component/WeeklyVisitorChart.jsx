@@ -78,7 +78,7 @@ function WeeklyVisitorChart() {
                                         }}
                                         transition={{ duration: 0.3 }}
                                     >
-                                        <p className='w-fit rounded-lg px-2 bg-[#5c78a1] text-center'>{data}</p>
+                                        <p className='w-fit rounded-lg px-2 bg-[#5c78a1] text-center text-white'>{data}</p>
                                     </motion.div>
                                 </motion.div>
                             );
