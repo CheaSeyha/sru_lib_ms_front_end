@@ -5,6 +5,7 @@ import TableStuEntry from './Component/TableStuEntry'
 import BGImag from '../assets/image/sru_libIamge.png'
 import MejorPieChart from './Component/MejorPieChart'
 import WeeklyVisitorChart from './Component/WeeklyVisitorChart'
+import RadialBarChart from './Component/RadialBarChart'
 
 function Dashbaord() {
     const cardDataShow =
@@ -63,7 +64,7 @@ function Dashbaord() {
             }
         ]
 
-        const WeelyVisitorData = [25, 64, 24, 6, 34, 15, 48]
+    const WeelyVisitorData = [25, 64, 24, 6, 34, 15, 48]
     return (
         <>
             <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
@@ -94,7 +95,7 @@ function Dashbaord() {
                 <div className="flex-1 flex flex-col md:flex-col xl:flex-row container-main-cotent text-accent gap-5">
                     <div className="table-chart flex gap-5">
                         {/* table List Of Student name  */}
-                        <div className="table-container table-stu-entry w-full md:w-full xl:w-[670px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">
+                        <div className="table-container table-stu-entry w-full md:w-full xl:w-[450px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">
                             <TableStuEntry />
                         </div>
                         {/* table List Of Student name  */}
@@ -112,9 +113,16 @@ function Dashbaord() {
                             </div>
                         </div>
                         {/* Chart Data Mejor Visitor  */}
-                        <div className="flex-1 w-full h-full">
-                            <div className="weekly-visitor-container bg-secondary w-full h-[342px] flex flex-col rounded-[20px] p-5">
+                        <div className="flex-1 flex flex-col w-full h-full gap-5">
+                            <div className="flex-1  weekly-visitor-container bg-secondary w-full h-full flex flex-col rounded-[20px] p-5">
                                 <WeeklyVisitorChart WeelyVisitorData={WeelyVisitorData} />
+                            </div>
+                            <div className="flex flex-col book-avaible w-full h-[190px] p-5 bg-secondary rounded-[20px]">
+                                <p className='p-0'>Total Book of This Month</p>
+                                <div className="flex-1 container-redail grid grid-cols-2 h-full items-center">
+                                    <RadialBarChart totalBook={2345} borrowBook={231} bookLange="Khmer" />
+                                    <RadialBarChart totalBook={4535} borrowBook={243} bookLange="English" />
+                                </div>
                             </div>
                         </div>
                     </div>

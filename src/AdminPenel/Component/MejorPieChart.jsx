@@ -1,9 +1,7 @@
-import React from 'react';
+import React from 'react'
 import Chart from 'react-apexcharts';
 
 function MejorPieChart() {
-  const labels = ['CS', 'PA', 'BUS', 'MATH', 'ENG'];
-
   return (
     <>
       <div className="PieChart-Uni flex justify-center w-full h-full bg-secondary rounded-[20px]">
@@ -14,62 +12,51 @@ function MejorPieChart() {
           series={[34, 26, 73, 35, 56]}
           options={{
             noData: "No Data",
-            labels: labels,
+            labels: ['CS', 'PA', 'BUS', 'MATH', 'ENG'],
             stroke: {
               show: false
             },
-            // show % on piechart 
-            dataLabels: {
+            dataLabels: {// show % on piechart 
               enabled: false
             },
-            // Color of pie chart 
-            colors: ['#3B82F6', '#F59E0B', '#1442B8', '#B83B14', '#14B842'],
-            // Show Text in Total amount of student 
-            plotOptions: {
+            color: ['#3B82F6', '#F59E0B', '#1442B8', '#B83B14', '#14B842'],// Color of pie chart 
+            plotOptions: {// Show Text in Total amount of student 
               pie: {
                 donut: {
-                  size: '73%',
-                  labels: {
+                  size: 73,
+                  labels: {//show total amount of vitsitor
                     value: {
                       color: "#82B4FF",
                     },
                     show: true,
-                    //Text 'Total Mejor'
-                    total: {
+                    total: {//Text 'Totoal Mejor'
                       label: "Total",
                       color: "#82B4FF",
                       show: true,
-                      formatter: () => labels.length // Display total number of labels
+                      foraformatter: () => labels.length // Display total number of labels
                     }
                   }
                 }
               }
             },
             legend: {
-              //set number make text label show vertical 
-              width: 100,
-              //make text position 
-              horizontalAlign: "left",
-              //show label under piechart
-              position: "bottom",
-              //show number mix number first
-              inverseOrder: true,
+              width: 100,//set number make text label show vitical 
+              horizontalAlign: "left",//make text position 
+              position: "bottom",//show label under piechart
+              inverseOrder: true, //show number mix number first
               labels: {
-                //Text Total Color
-                colors: "text-accent",
-                //change color of label like piechart color
-                useSeriesColors: false,
-                formatter: function(val, opts) {
-                  // Show the total number of labels in the legend
-                  return `${val} (Total Labels: ${labels.length})`;
-                }
-              }
+                colors: "text-accent",//Text Total Color
+                useSeriesColors: false,//change color of lable like piechart color
+              },
             },
           }}
         />
       </div>
     </>
-  );
+
+
+
+  )
 }
 
-export default MejorPieChart;
+export default MejorPieChart

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 function WeeklyVisitorChart() {
-    const WeelyVisitorData = [25, 64, 24, 6, 34, 60, 78];
+    const WeelyVisitorData = [25, 64, 24, 45, 34, 60, 78];
     // Reverse the WeelyVisitorData array to display from low to high
     const reversedData = [...WeelyVisitorData].reverse();
 
@@ -41,9 +41,7 @@ function WeeklyVisitorChart() {
                 <div className="yxis-data w-fit h-full">
                     <ul className='flex flex-col justify-between h-full'>
                         <li>100</li>
-                        <li>75</li>
                         <li>50</li>
-                        <li>25</li>
                         <li>0</li>
                     </ul>
                 </div>
