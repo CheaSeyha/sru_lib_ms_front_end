@@ -9,6 +9,9 @@ function WeeklyVisitorChart() {
     // Initial state with default heights set to 0
     const [heights, setHeights] = useState(new Array(7).fill(0));
 
+    // State to track the active bar on mobile devices
+    const [activeIndex, setActiveIndex] = useState(null);
+
     // Update heights on component mount
     useEffect(() => {
         // Animation for line-bg elements on mount
@@ -19,10 +22,15 @@ function WeeklyVisitorChart() {
 
         // Clean up function to remove animation on unmount (optional)
         return () => setHeights(new Array(7).fill(0));
-    }, [WeelyVisitorData]);
+    }, []); // Removed WeelyVisitorData from dependencies
 
     // Define an array with the data
     const daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+    // Handler to toggle active index on click/tap
+    const handleBarClick = (index) => {
+        setActiveIndex(activeIndex === index ? null : index);
+    };
 
     return (
         <>
@@ -44,19 +52,21 @@ function WeeklyVisitorChart() {
                         {WeelyVisitorData.map((data, index) => {
                             // Calculate height percentage
                             const heightPercentage = heights[index] + "%";
+                            const isActive = activeIndex === index;
                             return (
                                 <motion.div
                                     key={index}
                                     className="line-bg group flex items-end w-[18px] h-full bg-primary rounded-full relative cursor-pointer"
                                     whileHover="hover"
                                     initial="rest"
-                                    animate="rest"
+                                    animate={isActive ? "hover" : "rest"}
+                                    onClick={() => handleBarClick(index)} // Handle click/tap event
                                 >
                                     <motion.div
                                         className="line-value w-[18px] bg-[#82B4FF] rounded-full absolute transition duration-300 group-hover:bg-accent"
                                         initial={{ height: 0 }}
                                         animate={{ height: heightPercentage }}
-                                        transition={{ duration: 0.5, delay: index * 0.1, ease: "easeInOut" }} // Adding staggered animation
+                                        transition={{ duration: 0.3, delay: index * 0.1, ease: "easeInOut" }} // Adding staggered animation
                                         style={{ originY: 1 }} // Animation starts from bottom
                                     />
                                     <motion.div
@@ -78,7 +88,7 @@ function WeeklyVisitorChart() {
             </div>
             <div className="x-xis-data-dayOfWeek-container flex space-x-5">
                 <div className="flex-1 line-chart w-full h-full ps-[45px]">
-                    <div className="x-xis-data-dayOfWeek flex justify-between h-full py-5">
+                    <div className="x-xis-data-dayOfWeek flex justify-between h-full pt-5">
                         {/* Loop through the array and generate JSX elements */}
                         {daysOfWeek.map((day, index) => (
                             <div key={index} className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
