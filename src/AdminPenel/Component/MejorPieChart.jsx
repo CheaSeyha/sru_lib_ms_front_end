@@ -29,12 +29,16 @@ function MejorPieChart() {
                       color: "#82B4FF",
                     },
                     show: true,
-                    total: {//Text 'Totoal Mejor'
-                      label: "Total",
-                      color: "#82B4FF",
+                    total: {
+                      label: 'Total',
+                      color: '#82B4FF',
                       show: true,
-                      foraformatter: () => labels.length // Display total number of labels
+                      formatter: () => {
+                        const labels = ['CS', 'PA', 'BUS', 'MATH', 'ENG']; // Your labels
+                        return labels.length.toString(); // Convert the length of labels to string
+                      }
                     }
+                    
                   }
                 }
               }
