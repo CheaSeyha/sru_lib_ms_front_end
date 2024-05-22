@@ -69,7 +69,7 @@ function Dashbaord() {
         <>
             <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
                 {/* Header contetn */}
-                <div className='flex flex-col w-full h-fit bg-secondary sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-[20px] p-[20px] text-white gap-5 xl:gap-0' style={{ backgroundImage: `url(${""})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-[20px] p-[20px] text-white gap-5 xl:gap-0' style={{ backgroundImage: `url(${BGImag})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className="tittle flex justify-between">
                         <div className="sruText">
                             <p className="sm:text-[30px] xl:text-[30px] font-bold" >SRU LIBRARY</p>
