@@ -39,8 +39,8 @@ function Sidebar() {
                         <img src={imageProfile} alt="logo sru" />
                     </div>
                     <div className="user-name font-sans text-light-text ps-2 blok sm:hidden lg:block">
-                        <p className='font-bold'>USER NAME</p>
-                        <p className='text-[10px]'>USER ROLE</p>
+                        <p className='font-bold'>JOHN SEY</p>
+                        <p className='text-[10px]'>ADMIN</p>
                     </div>
                 </header>
                 {/* User Frofile  */}

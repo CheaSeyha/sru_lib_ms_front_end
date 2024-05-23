@@ -8,12 +8,12 @@ i18next.use(i18nextBrowserLanguagedetector).use(initReactI18next).init({
     resources:{
         en:{
             translation:{
-                sruText: "SRU LIBRARY"
+                sruText: "SRU LIBRARY MANAGEMENT"
             }
         },
         kh:{
             translation:{
-                sruText: "ប័ណ្ណាល័យសកលវិទ្យាល័យស្វយរៀង"
+                sruText: "ប្រព័ន្ធគ្រប់គ្រងប័ណ្ណាល័សកលវិទ្យាល័យស្វាយរៀង"
             }
         }
     }
