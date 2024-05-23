@@ -2,7 +2,7 @@ import React from 'react'
 import CardData from './Component/CardData'
 import TableStuEntry from './Component/TableStuEntry'
 
-import BGImag from '../../assets/image/sru_libIamge.png'
+import BGImag from '../../assets/image/sru_lib_Vector1.jpg'
 import MejorPieChart from './Component/MejorPieChart'
 import WeeklyVisitorChart from './Component/WeeklyVisitorChart'
 import RadialBarChart from './Component/RadialBarChart'
@@ -72,8 +72,8 @@ function Dashbaord() {
                 <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-[20px] p-[20px] text-white gap-5 xl:gap-0' style={{ backgroundImage: `url(${BGImag})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className="tittle flex justify-between">
                         <div className="sruText">
-                            <p className="sm:text-[30px] xl:text-[30px] font-bold" >SRU LIBRARY</p>
-                            <p className="text-[10px] xl:text-[12px] font-bold" >MANAGEMENT</p>
+                            <p className="sm:text-[30px] xl:text-[30px] font-bold shadow-lg" >SRU LIBRARY</p>
+                            <p className="text-[10px] xl:text-[12px] font-bold shadow-lg" >MANAGEMENT</p>
                         </div>
                         <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
                     </div>
