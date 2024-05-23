@@ -1,8 +1,8 @@
 import React from 'react'
 import CardData from './Component/CardData'
 import TableStuEntry from './Component/TableStuEntry'
-// import MejorPirChart from './Component/MejorPirChart1'
-import BGImag from '../assets/image/sru_libIamge.png'
+
+import BGImag from '../../assets/image/sru_libIamge.png'
 import MejorPieChart from './Component/MejorPieChart'
 import WeeklyVisitorChart from './Component/WeeklyVisitorChart'
 import RadialBarChart from './Component/RadialBarChart'

@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminPanel from './AdminPenel/AdminPanel'
+import AdminPanel from './ComponentLayer/AdminPanel/AdminPanel'
 
 function App() {
   return (

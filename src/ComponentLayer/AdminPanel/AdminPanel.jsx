@@ -1,10 +1,10 @@
 import React from 'react';
-import Sidebar from '../layout/SideBar';
+import Sidebar from '../../layout/SideBar';
 import { Route, Routes } from 'react-router-dom';
-import Dashbaord from '../AdminPenel/Dashbaord';
-import QRStudentEntry from './QRStudentEntry';
-import { HideSideBarProvidor } from '../Context/HideSidebarContext';
-import SideBarToggle from '../layout/Component/SideBarToggle'
+import Dashbaord from '../AdminPanel/Dashbaord';
+import QRStudentEntry from '../QrEntry/QRStudentEntry';
+import { HideSideBarProvidor } from '../../Context/HideSidebarContext';
+import SideBarToggle from '../../layout/Component/SideBarToggle'
 function AdminPanel() {
     return (
         //This cotext ise for show and hide sidebar
