@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    @font-face {
-      font-family: 'Opensans';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url(/fonts/Roboto.woff2) format('woff2');
-    }
-  }
+
+@font-face {
+  font-family: "NotoSansKhmer-Regular";
+  src: local("NotoSansKhmer-Regular"),
+  url('./assets/font-fam/NotoSansKhmer-Regular.ttf') format('truetypes');
+
+  font-family: "OpenSans-Regular";
+  src: local("OpenSans-Regular"),
+  url("./assets/font-fam/OpenSans-Regular.ttf") format('truetypes')
+}

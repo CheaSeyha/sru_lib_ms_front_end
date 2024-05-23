@@ -3,7 +3,14 @@ import { root } from "postcss";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {},
+  theme: {
+    extend:{
+      fontFamily:{
+        NotoSanKhmer:["NotoSansKhmer-Regular"],
+        OpenSans:["OpenSans-Regular"]
+      }
+    }
+  },
   plugins: [require("daisyui")],
   daisyui: {
     themes: [

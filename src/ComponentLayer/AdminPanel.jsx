@@ -6,6 +6,7 @@ import QRStudentEntry from './QrEntry/QRStudentEntry';
 import { HideSideBarProvidor } from '../Context/HideSidebarContext';
 import SideBarToggle from '../layout/Component/SideBarToggle'
 function AdminPanel() {
+
     return (
         //This cotext ise for show and hide sidebar
         <HideSideBarProvidor>

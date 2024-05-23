@@ -3,7 +3,7 @@ import AdminPanel from './ComponentLayer/AdminPanel'
 
 function App() {
   return (
-    <div className='bg-base-300'>
+    <div className='bg-base-300 font-OpenSans'>
       <AdminPanel />
     </div>
   )
