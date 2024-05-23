@@ -7,8 +7,16 @@
   font-family: "NotoSansKhmer-Regular";
   src: local("NotoSansKhmer-Regular"),
   url('./assets/font-fam/NotoSansKhmer-Regular.ttf') format('truetypes');
+}
 
+@font-face {
   font-family: "OpenSans-Regular";
   src: local("OpenSans-Regular"),
-  url("./assets/font-fam/OpenSans-Regular.ttf") format('truetypes')
+  url("./assets/font-fam/OpenSans-Regular.ttf") format('truetypes');
+}
+
+@font-face {
+  font-family: "Moul-Regular";
+  src: local("Moul-Regular"),
+  url("./assets/font-fam/Moul-Regular.ttf") format('truetypes')
 }

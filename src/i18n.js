@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 
 i18next.use(i18nextBrowserLanguagedetector).use(initReactI18next).init({
     debug:true,
-    lng: "en",
+    lng: "kh",
     resources:{
         en:{
             translation:{
