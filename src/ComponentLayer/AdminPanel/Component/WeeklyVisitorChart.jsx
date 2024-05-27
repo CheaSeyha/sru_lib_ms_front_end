@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-function WeeklyVisitorChart() {
-    const WeelyVisitorData = [25, 64, 24, 45, 34, 60, 78];
+function WeeklyVisitorChart({WeelyVisitorData}) {
+    // const WeelyVisitorData = [25, 64, 24, 45, 34, 60, 78];
     // Reverse the WeelyVisitorData array to display from low to high
     const reversedData = [...WeelyVisitorData].reverse();
 

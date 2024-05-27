@@ -1,7 +1,12 @@
 import React from 'react'
 import Chart from 'react-apexcharts';
 
-function MejorPieChart() {
+function MejorPieChart({DataMejorVisitor}) {
+
+  // Extract labels and series data from DataMejorVisitor
+  const labelData = DataMejorVisitor.map(item => item.mejorName);
+  const seriesData = DataMejorVisitor.map(item => item.totalAmount);
+
   return (
     <>
       <div className="PieChart-Uni flex justify-center w-full h-full bg-secondary rounded-[20px]">
@@ -9,10 +14,10 @@ function MejorPieChart() {
           type='donut'
           width="100%"
           height="100%"
-          series={[34, 26, 73, 35, 56]}
+          series={seriesData}
           options={{
             noData: "No Data",
-            labels: ['CS', 'PA', 'BUS', 'MATH', 'ENG'],
+            labels: labelData,
             stroke: {
               show: false
             },
@@ -34,7 +39,7 @@ function MejorPieChart() {
                       color: '#82B4FF',
                       show: true,
                       formatter: () => {
-                        const labels = ['CS', 'PA', 'BUS', 'MATH', 'ENG']; // Your labels
+                        const labels = labelData; // Your labels
                         return labels.length.toString(); // Convert the length of labels to string
                       }
                     }

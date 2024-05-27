@@ -1,7 +1,6 @@
 import React from 'react'
 import CardData from './Component/CardData'
 import TableStuEntry from './Component/TableStuEntry'
-
 import BGImag from '../../assets/image/sru_lib_Vector1.jpg'
 import MejorPieChart from './Component/MejorPieChart'
 import WeeklyVisitorChart from './Component/WeeklyVisitorChart'
@@ -65,7 +64,7 @@ function Dashbaord() {
             }
         ]
 
-    const WeelyVisitorData = [25, 64, 24, 6, 34, 15, 48]
+    const WeelyVisitorData = [25, 64, 24, 23, 34, 15, 48]
 
     const {t} = useTranslation()
 
@@ -78,7 +77,7 @@ function Dashbaord() {
                     <div className="tittle flex justify-between">
                         <div className="sruText">
                             <p className="sm:text-[30px] xl:text-[30px] font-NotoSanKhmer" >{t("sruText")}</p>
-                            <p className="text-[10px] xl:text-[12px] font-bold" >WELCOME BACK JOHNSEY</p>
+                            <p className="text-[10px] xl:text-[12px] font-bold" >WELCOME BACK USER JOHNSEY</p>
                         </div>
                         <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
                     </div>
@@ -114,7 +113,7 @@ function Dashbaord() {
                                 <p>Total Mejor Visitor</p>
                             </div>
                             <div className="pieChart-container flex-1 w-full h-full">
-                                <MejorPieChart />
+                                <MejorPieChart DataMejorVisitor={DataMejorVisitor} />
                             </div>
                         </div>
                         {/* Chart Data Mejor Visitor  */}
