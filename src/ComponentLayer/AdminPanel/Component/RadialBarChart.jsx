@@ -28,6 +28,11 @@ const RadialBarChart = ({ bookLange, totalBook, borrowBook }) => {
           tooltip:{
             enabled: true,
             y: {
+              title: {
+                formatter: function () {
+                  return 'Borrow book';
+                }
+              },
               formatter: function () {
                 return `${borrowBook}`;
               }
