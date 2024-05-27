@@ -13,7 +13,7 @@ const RadialBarChart = ({ bookLange, totalBook, borrowBook }) => {
             radialBar: {
               dataLabels: {
                 value: {
-                  color: "#FFFFFF",
+                  color: "#A855F7",
                   formatter: function (val) {
                     return `${totalBook}`;
                   }

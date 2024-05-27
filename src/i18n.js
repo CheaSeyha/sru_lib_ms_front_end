@@ -13,7 +13,7 @@ i18next.use(i18nextBrowserLanguagedetector).use(initReactI18next).init({
         },
         kh:{
             translation:{
-                sruText: "ប្រព័ន្ធគ្រប់គ្រងប័ណ្ណាល័សកលវិទ្យាល័យស្វាយរៀង"
+                sruText: "ប្រព័ន្ធគ្រប់គ្រងប័ណ្ណាល័យសកលវិទ្យាល័យស្វាយរៀង"
             }
         }
     }
