@@ -1,14 +1,16 @@
 import React from 'react'
+import { useScanResultID } from '../../Context/ScanResultIDContext'
 
-function FormConfirmEntry({ scanResultID }) {
-    
+function FormConfirmEntry() {
+    //Call data from context to show Id of student after scan
+    const {scanResultID} = useScanResultID()
     return (
         <>
             <div className="flex-1 flex flex-col confirmForm w-full h-full bg-secondary rounded-[20px] p-5 overflow-auto scrollbar-hide">
                 {/* form data of student  */}
                 <div className="form-data space-y-2 text-accent">
                     <div className="flex-1 headConfirmForm text-accent h-[46px] flex justify-between">
-                        <p className='font-bold'>Student ID <span className='text-blue-400'></span></p>
+                        <p className='font-bold'>Student ID <span className='text-blue-400'>{scanResultID ? scanResultID : ""}</span></p>
                         {/* <BtnGredient btnType="Offline Mode" /> */}
                     </div>
                     <div className="inputbox space-y-2">

@@ -1,11 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
 import { Scanner } from '@yudiel/react-qr-scanner'
+import { useScanResultID } from '../../Context/ScanResultIDContext'
 function CameraScanQR() {
 
     const [stopScan, setStopScan] = useState(false)
     const [muteAudio, setMuteAudio] = useState(true)
-    const [scanResultID, setScanResultID] = useState(0)
+    //set id of studetn from scan qr using context 
+    const {scanResultID, setScanResultID} = useScanResultID()
+    // const [scanResultID, setScanResultID] = useState(0)
     const handleScanResult = (result) => {
         if (result[0].format === "qr_code") {
             const rawValue = result[0].rawValue;
@@ -16,7 +19,7 @@ function CameraScanQR() {
                 // Check if the URL contains the 'name' parameter
                 const getStudentID = url.searchParams.get('name');
                 setScanResultID(getStudentID)
-                console.log(getStudentID)
+                console.log(scanResultID)
                 setStopScan(true)
             } catch (error) {
                 // Scanned text is not a valid URL
