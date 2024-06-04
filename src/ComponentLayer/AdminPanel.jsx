@@ -28,7 +28,7 @@ function AdminPanel() {
                     {/* Always render the Sidebar component */}
 
 
-                    <section className="flex-1 p-5 xl:h-full overflow-y-auto sm:overscroll-y-none">
+                    <section className="flex-1 p-5 xl:h-full overflow-y-auto sm:overscroll-y-none scrollbar-hide">
                         {/* This will make the content area take up the remaining space */}
                         <Routes>
                             <Route path="/" element={<Dashbaord />} />

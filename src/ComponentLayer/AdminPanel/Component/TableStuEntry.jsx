@@ -60,20 +60,52 @@ export default function TableStuEntry() {
                 entryTime: "7:20",
                 purpose: "Read book",
                 status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
+            },
+            {
+                stuName: "John Wick",
+                mejor: "CS",
+                studyYear: 4,
+                entryTime: "7:20",
+                purpose: "Read book",
+                status: true
             }
         ]
     return (
         <>
-            <div className="flex flex-col w-full h-full space-y-5">
+            <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
                 <div className="text-table w-full h-[45px] flex justify-between">
                     <p>Student Entry To Day </p>
                     <BtnGredient btnType="Guest Entry" Icon={<UserRoundPlus />} />
                 </div>
-                <div className="flex-1 w-full h-full overflow-auto">
+                <div className="flex-1 w-full h-full overflow-auto scrollbar-hide">
                     <table className="table tectav">
                         {/* head */}
                         <thead className='text-accent'>
-                            <tr>
+                            <tr>    
                                 <th>NO</th>
                                 <th>Student Name</th>
                                 <th>Mejor</th>

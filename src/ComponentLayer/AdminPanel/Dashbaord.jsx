@@ -96,7 +96,7 @@ function Dashbaord() {
                 </div>
                 {/* Header contetn */}
                 {/* Main Content  */}
-                <div className="flex-1 flex flex-col md:flex-col xl:flex-row container-main-cotent text-accent gap-5">
+                <div className="flex-1 flex flex-col md:flex-col xl:flex-row container-main-cotent text-accent gap-5 overflow-y-auto scrollbar-hide">
                     <div className="table-chart flex gap-5">
                         {/* table List Of Student name  */}
                         <div className="table-container table-stu-entry w-full md:w-full xl:w-[450px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">

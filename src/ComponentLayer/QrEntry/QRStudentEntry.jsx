@@ -1,10 +1,10 @@
 import { Scanner } from '@yudiel/react-qr-scanner'
 import React, { useState } from 'react'
-
+import BtnGredient from '../AdminPanel/Component/BtnGredient'
 function QRStudentEntry() {
     const [stopScan, setStopScan] = useState(false)
-    const [muteAudio,setMuteAudio] = useState(true)
-    const [scanResultID,setScanResultID] = useState(0)
+    const [muteAudio, setMuteAudio] = useState(true)
+    const [scanResultID, setScanResultID] = useState(0)
     const handleScanResult = (result) => {
         if (result[0].format === "qr_code") {
             const rawValue = result[0].rawValue;
@@ -32,10 +32,11 @@ function QRStudentEntry() {
 
     return (
         <div className='w-full h-full'>
-            <div className="ScanQR-ConfirmForm w-[390px] h-full rounded-[20px]">
+            <div className="flex flex-col space-y-5 ScanQR-ConfirmForm w-[390px] h-full rounded-[20px]">
+                {/* Show Scan Camera  */}
                 <div className="flex flex-col CamScanQR bg-secondary w-f h-fit rounded-[20px] p-5">
                     <div className="headerCamScanQR text-accent h-[46px] flex justify-between mb-2">
-                        <p>Scan Your QR Here</p>
+                        <p className='font-bold'>Scan QR Here</p>
                         <button className="btn text-accent" onClick={() => handleScanCam()}>Start</button>
                     </div>
                     <div className="w-[350px] h-[350px] overflow-hidden rounded-lg">
@@ -59,12 +60,61 @@ function QRStudentEntry() {
                                 <Scanner
                                     onScan={(result) => handleScanResult(result)}
                                     paused={stopScan}
-                                    components={{audio:muteAudio,torch:true}}
+                                    components={{ audio: muteAudio, torch: true }}
                                 />
                             )
                         }
                     </div>
                 </div>
+                {/* Show Scan Camera  */}
+                {/* Form Show Stundet infor after scan  */}
+                <div className="flex-1 flex flex-col confirmForm w-full h-full bg-secondary rounded-[20px] p-5 overflow-auto scrollbar-hide">
+                    <div className="headConfirmForm text-accent h-[46px] flex justify-between">
+                        <p className='font-bold'>Student ID</p>
+                        <BtnGredient btnType="Offline Mode"/>
+                    </div>
+                    <div className="formContainer space-y-2 text-accent">
+                        <div className="inputbox space-y-2">
+                            <label htmlFor="studentName">Student Name</label>
+                            <input type="text" id='studentName' placeholder="Student Name" className="input input-bordered bg-primary w-full" />
+                        </div>
+                        <div className="inputbox space-y-2">
+                            <label htmlFor="mejor">Mejor</label>
+                            <input type="text" id='mejor' placeholder="Major" className="input input-bordered bg-primary w-full" />
+                        </div>
+                        <div className="inputbox space-y-2">
+                            <label htmlFor="yearStudy">Year Of Study</label>
+                            <input type="text" id='yearStudy' placeholder="Year Of Study" className="input input-bordered bg-primary w-full" />
+                        </div>
+
+                    </div>
+                    <div className="checkPurpose space-y-5 grid mt-5">
+                        <p className='font-bold text-accent'>Entry Purepose</p>
+                        <div className='grid grid-cols-3 space-y-3'>
+                            <div className="container-checkbox flex items-center gap-2">
+                                <input type="checkbox" id='readbook' className="checkbox checkbox-sm checkbox-primary" />
+                                <label htmlFor="readbook" className='label-text text-accent cursor-pointer hover:text-blue-300'>Read Book</label>
+                            </div>
+                            <div className="container-checkbox flex items-center gap-2">
+                                <input type="checkbox" id='assigment' className="checkbox checkbox-sm checkbox-primary" />
+                                <label htmlFor="assigment" className='label-text text-accent cursor-pointer hover:text-blue-300'>Assigment</label>
+                            </div>
+                            <div className="container-checkbox flex items-center gap-2">
+                                <input type="checkbox" id='usePC' className="checkbox checkbox-sm checkbox-primary" />
+                                <label htmlFor="usePC" className='label-text text-accent cursor-pointer hover:text-blue-300'>USE PC</label>
+                            </div>
+                            <div className="container-checkbox flex items-center gap-2">
+                                <input type="checkbox" id='other' className="checkbox checkbox-sm checkbox-primary" />
+                                <label htmlFor="other" className='label-text text-accent cursor-pointer hover:text-blue-300'>Other</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-1 container-button h-full items-end mt-5 grid grid-cols-2 gap-2">
+                        <button className="btn btn-primary">Entry</button>
+                        <button className="btn btn-outline border-blue-400 text-accent">Cancel</button>
+                    </div>
+                </div>
+                {/* Form Show Stundet infor after scan  */}
             </div>
         </div>
     )
