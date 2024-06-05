@@ -19,7 +19,7 @@ function CameraScanQR() {
                 // Check if the URL contains the 'name' parameter
                 const getStudentID = url.searchParams.get('name');
                 setScanResultID(getStudentID)
-                console.log(scanResultID)
+                console.log(getStudentID)
                 setStopScan(true)
             } catch (error) {
                 // Scanned text is not a valid URL
