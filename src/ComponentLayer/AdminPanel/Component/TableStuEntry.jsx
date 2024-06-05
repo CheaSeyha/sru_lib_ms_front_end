@@ -84,14 +84,6 @@ export default function TableStuEntry() {
                 entryTime: "7:20",
                 purpose: "Read book",
                 status: true
-            },
-            {
-                stuName: "John Wick",
-                mejor: "CS",
-                studyYear: 4,
-                entryTime: "7:20",
-                purpose: "Read book",
-                status: true
             }
         ]
     return (
@@ -101,7 +93,7 @@ export default function TableStuEntry() {
                     <p>Student Entry To Day </p>
                     <BtnGredient btnType="Guest Entry" Icon={<UserRoundPlus />} />
                 </div>
-                <div className="flex-1 w-full h-full overflow-auto scrollbar-hide">
+                <div className="flex-1 w-full h-full overflow-auto scrollbar-hide grid items-end">
                     <table className="table tectav">
                         {/* head */}
                         <thead className='text-accent'>

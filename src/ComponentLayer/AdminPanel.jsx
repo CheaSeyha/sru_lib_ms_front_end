@@ -6,20 +6,15 @@ import QRStudentEntry from './QrEntry/QRStudentEntry';
 import SideBarToggle from '../layout/Component/SideBarToggle';
 
 function AdminPanel() {
-    const pathLocation = useLocation();
+    const GetLinkPath = useLocation().pathname
 
     return (
         <main className="flex h-screen sm:h-screen relative">
-            {/* Check if the current path is not "/QRStudentEntry" */}
-            {pathLocation.pathname !== "/QRStudentEntry" && (
-                <>
-                    <div className="sideBarToggle absolute p-10 w-full flex flex-col sm:hidden items-end z-50">
-                        {/* for hide or show sidebar when in mobile view  */}
-                        <SideBarToggle />
-                    </div>
-                    <Sidebar />
-                </>
-            )}
+            <div className={`sideBarToggle ${GetLinkPath ==="/QRStudentEntry" ? "hidden" : "block"} absolute p-10 w-full flex flex-col sm:hidden items-end z-50`}>
+                {/* for hide or show sidebar when in mobile view  */}
+                <SideBarToggle />
+            </div>
+            <Sidebar />
             {/* Always render the Sidebar component */}
             <section className="flex-1 p-5 xl:h-full overflow-y-auto sm:overscroll-y-none scrollbar-hide">
                 {/* This will make the content area take up the remaining space */}

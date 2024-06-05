@@ -3,6 +3,7 @@ import imageProfile from '../assets/logo/sru_logo.png'
 import SidebarMenuButton from '../layout/Component/SidebarMenuButton'
 import { useHideSideBar } from '../Context/HideSidebarContext';
 import { useThemeSwitch } from '../Context/ThemeSwitchContext';
+import { useLocation } from 'react-router-dom';
 
 function Sidebar() {
     // State to track the current theme
@@ -10,6 +11,9 @@ function Sidebar() {
     const { theme, toggleTheme } = useThemeSwitch()
     // For disble and enable side bar on mobile screen 
     const { isHideSideBar } = useHideSideBar()
+    //Get The Link Path To Know Is In /QRStudentEntry if true then hide the sidebar 
+    const GetLinkPath = useLocation().pathname
+
     const BtnMenu =
         [
             {
@@ -25,7 +29,15 @@ function Sidebar() {
         ]
     return (
         <>
-            <section className={`z-50 sidebar ${isHideSideBar ? 'translate-x-0' : 'translate-x-[-250px]'} sm:translate-x-0 transition-transform ease-in-out delay-150 sm:left-0 absolute sm:relative sm:right-0  w-[223px] sm:w-fit lg:w-[223px] h-[100vh] shadow-xl bg-secondary text-accent`}>
+            <section className={`
+                z-50 sidebar 
+                ${isHideSideBar ? 'translate-x-0' : 'translate-x-[-250px]'}
+                ${GetLinkPath === "/QRStudentEntry" ? 'absolute translate-x-[-250px]' : 'absolute sm:relative translate-x-0 sm:translate-x-0'}
+                 transition-transform ease-in-out 
+                delay-150 sm:left-0 sm:right-0  
+                w-[223px] sm:w-fit lg:w-[223px] h-[100vh] shadow-xl 
+                bg-secondary text-accent
+            `}>
                 {/* Sidebar header  */}
                 {/* User Frofile  */}
                 <header className='header-sidebar shadow-md bg-primary w-full h-[100px] p-[10px] lg:ps-[14px] bg-light-bg-sec flex items-center rounded-br-[50px] sm:rounded-br-[20px] lg:rounded-br-[50px] transition-transform ease-in-out duration-300'>
