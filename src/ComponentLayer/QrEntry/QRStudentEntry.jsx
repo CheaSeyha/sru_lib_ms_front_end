@@ -18,7 +18,7 @@ function QRStudentEntry() {
                     <FormConfirmEntry />
                     {/* Form Show Stundet infor after scan  */}
                 </div>
-                <div className="flex flex-col  data-of-entry w-full h-full border-collapse space-y-5">
+                <div className="flex flex-col data-of-entry-table w-full h-full border-collapse space-y-5">
                     <div className="student-entry-card w-full h-[104px] grid grid-flow-col gap-5">
                         <CardDataOfStudentEntry amountData={17} bgIcon="bg-[#00FF29]" cardType="Entry" cardTypeDetail="Total Entry Today" iconCard={<DoorOpen className='w-full h-full text-accent' />} bgColor="from-[#00C31F] to-[#1F9EB2]" />
                         <CardDataOfStudentEntry amountData={2} bgIcon="bg-[#00D1FF]" cardType="Exit" cardTypeDetail="Total Exit Today" iconCard={<LogOut className='w-full h-full text-accent' />} bgColor="from-[#00A4C8] to-[#C0C0C0]" />
