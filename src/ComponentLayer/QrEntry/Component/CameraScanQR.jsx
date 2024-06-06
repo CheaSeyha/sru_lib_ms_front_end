@@ -37,12 +37,12 @@ function CameraScanQR() {
 
     return (
         <>
-            <div className="flex flex-col CamScanQR bg-secondary w-f h-fit rounded-[20px] p-5">
+            <div className="flex flex-col CamScanQR bg-secondary w-[390px] h-fit rounded-[20px] p-5">
                 <div className="headerCamScanQR text-accent h-[46px] flex justify-between mb-2">
                     <p className='font-bold'>Scan QR Here</p>
                     <button className="btn text-accent" onClick={() => handleScanCam()}>Start</button>
                 </div>
-                <div className="w-[350px] h-[350px] overflow-hidden rounded-lg">
+                <div className="w-full h-full overflow-hidden rounded-lg">
                     {stopScan &&
                         (
                             <div className="scanSuccess w-full h-full bg-primary rounded-lg flex flex-col justify-center items-center text-accent">
