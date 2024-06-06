@@ -6,7 +6,7 @@ function FormConfirmEntry() {
     const {scanResultID} = useScanResultID()
     return (
         <>
-            <div className="flex-1 flex flex-col confirmForm w-full h-full bg-secondary rounded-[20px] p-5 overflow-auto scrollbar-hide">
+            <div className="flex-1 flex flex-col confirmForm w-full h-fit bg-secondary rounded-[20px] p-5 overflow-auto scrollbar-hide">
                 {/* form data of student  */}
                 <div className="form-data space-y-2 text-accent">
                     <div className="flex-1 headConfirmForm text-accent h-[46px] flex justify-between">
@@ -30,7 +30,7 @@ function FormConfirmEntry() {
                 {/* check purepose to entry from  */}
                 <div className="check-purepose text-accent mt-5">
                     <p className='font-bold'>Entry Purpose</p>
-                    <div className="container-check-purepose grid grid-cols-3 gap-5 pt-5">
+                    <div className="container-check-purepose grid lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-5">
                         <div className="check-purepose flex items-center space-x-2">
                             <input type="checkbox" id='read_book' className="checkbox checkbox-primary checkbox-sm" />
                             <label htmlFor="read_book" className='label-text text-accent'>Read Book</label>
