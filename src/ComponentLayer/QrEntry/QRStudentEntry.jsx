@@ -10,7 +10,7 @@ function QRStudentEntry() {
     return (
         <ScanResultIDProvider>
             <div className='w-full h-fit md:h-full flex flex-row space-x-5'>
-                <div className="flex-none flex flex-col space-y-5 ScanQR-ConfirmForm w-[290px] xl:w-[390px] rounded-[20px]">
+                <div className="flex-none flex flex-col space-y-5 ScanQR-ConfirmForm w-full md:w-[290px] xl:w-[390px] rounded-[20px]">
                     {/* <!-- Show Scan Camera  --> */}
                     <CameraScanQR />
                     {/* <!-- Form Show Student info after scan  --> */}
