@@ -15,15 +15,15 @@ function FormConfirmEntry() {
                     </div>
                     <div className="inputbox space-y-2">
                         <label htmlFor="studentName">Student Name</label>
-                        <input type="text" id='studentName' placeholder="Student Name" className="input input-bordered bg-primary w-full" />
+                        <input readOnly={true} type="text" id='studentName' placeholder="Student Name" className="input input-bordered bg-primary w-full" />
                     </div>
                     <div className="inputbox space-y-2">
                         <label htmlFor="mejor">Mejor</label>
-                        <input type="text" id='mejor' placeholder="Major" className="input input-bordered bg-primary w-full" />
+                        <input readOnly={true}  type="text" id='mejor' placeholder="Major" className="input input-bordered bg-primary w-full" />
                     </div>
                     <div className="inputbox space-y-2">
                         <label htmlFor="yearStudy">Year Of Study</label>
-                        <input type="text" id='yearStudy' placeholder="Year Of Study" className="input input-bordered bg-primary w-full" />
+                        <input readOnly={true}  type="text" id='yearStudy' placeholder="Year Of Study" className="input input-bordered bg-primary w-full" />
                     </div>
                 </div>
                 {/* form data of student  */}
