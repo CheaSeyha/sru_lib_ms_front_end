@@ -203,7 +203,7 @@ function HeadTextForTableData() {
     ];
     return (
         <>
-            <div className="flex flex-col table-container w-full space-y-5 h-full bg-secondary rounded-[20px] p-5 text-accent overflow-hidden">
+            <div className="hidden sm:flex flex-col table-container w-full space-y-5 h-full bg-secondary rounded-[20px] p-5 text-accent overflow-auto">
                 <div className="header-text flex justify-between w-full h-[46px]">
                     <p className="font-bold">Recent Student Entry</p>
                     <div className="container-button-date-time-back flex space-x-3">

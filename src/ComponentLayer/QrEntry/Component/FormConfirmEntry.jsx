@@ -32,20 +32,20 @@ function FormConfirmEntry() {
                     <p className='font-bold'>Entry Purpose</p>
                     <div className="container-check-purepose grid lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-5">
                         <div className="check-purepose flex items-center space-x-2">
-                            <input type="checkbox" id='read_book' className="checkbox border-blue-500 checkbox-sm" />
-                            <label htmlFor="read_book" className='label-text text-blue-500'>Read Book</label>
+                            <input type="checkbox" id='read_book' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
+                            <label htmlFor="read_book" className='label-text text-[#32E2FF]'>Read Book</label>
                         </div>
                         <div className="check-purepose flex items-center space-x-2">
-                            <input type="checkbox" id='assigment' className="checkbox border-blue-500 checkbox-sm" />
-                            <label htmlFor="assigment" className='label-text text-blue-500'>Assigment</label>
+                            <input type="checkbox" id='assigment' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
+                            <label htmlFor="assigment" className='label-text text-[#32E2FF]'>Assigment</label>
                         </div>
                         <div className="check-purepose flex items-center space-x-2">
-                            <input type="checkbox" id='usePC' className="checkbox border-blue-500 checkbox-sm" />
-                            <label htmlFor="usePC" className='label-text text-blue-500'>USE PC</label>
+                            <input type="checkbox" id='usePC' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
+                            <label htmlFor="usePC" className='label-text text-[#32E2FF]'>USE PC</label>
                         </div>
                         <div className="check-purepose flex items-center space-x-2">
-                            <input type="checkbox" id='other' className="checkbox border-blue-500 checkbox-sm" />
-                            <label htmlFor="other" className='label-text text-blue-500'>Other</label>
+                            <input type="checkbox" id='other' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
+                            <label htmlFor="other" className='label-text text-[#32E2FF]'>Other</label>
                         </div>
                     </div>
                 </div>
