@@ -2,12 +2,16 @@ import React from 'react'
 import { useState } from 'react'
 import { Scanner } from '@yudiel/react-qr-scanner'
 import { useScanResultID } from '../../Context/ScanResultIDContext'
+import { useNavigate } from 'react-router-dom'
+import { Undo2 } from 'lucide-react';
+
+
 function CameraScanQR() {
 
     const [stopScan, setStopScan] = useState(false)
     const [muteAudio, setMuteAudio] = useState(true)
     //set id of studetn from scan qr using context 
-    const {scanResultID, setScanResultID} = useScanResultID()
+    const { scanResultID, setScanResultID } = useScanResultID()
     // const [scanResultID, setScanResultID] = useState(0)
     const handleScanResult = (result) => {
         if (result[0].format === "qr_code") {
@@ -35,12 +39,20 @@ function CameraScanQR() {
         setScanResultID(null)
     }
 
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate(-1); // This will navigate to the previous URL in the history stack
+    };
     return (
         <>
             <div className="flex flex-col CamScanQR bg-secondary w-full h-fit rounded-[20px] p-5">
                 <div className="headerCamScanQR text-accent h-[46px] flex justify-between mb-2">
                     <p className='text-[#32E2FF] font-semibold'>Scan Your Card Here</p>
-                    <button className="btn text-accent" onClick={() => handleScanCam()}>Start</button>
+                    {/* <button className="btn text-accent" onClick={() => handleScanCam()}>Start</button> */}
+                    <button className="block sm:hidden back-button px-5 rounded-[10px] border hover:border-blue-400 transition-colors ease-in-out duration-300 group" onClick={handleBack}>
+                        <Undo2 className="text-current group-hover:text-blue-400 transition-colors ease-in-out duration-300" />
+                    </button>
                 </div>
                 <div className="w-full h-full overflow-hidden rounded-lg">
                     {stopScan &&
