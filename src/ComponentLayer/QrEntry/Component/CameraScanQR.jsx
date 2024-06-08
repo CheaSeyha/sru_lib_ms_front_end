@@ -1,12 +1,15 @@
 import React from 'react'
 import { useState } from 'react'
 import { Scanner } from '@yudiel/react-qr-scanner'
+import { useDevices } from '@yudiel/react-qr-scanner'
 import { useScanResultID } from '../../Context/ScanResultIDContext'
 import { useNavigate } from 'react-router-dom'
 import { Undo2 } from 'lucide-react';
 
 
 function CameraScanQR() {
+    const devices = useDevices()
+    const [deviceId, setDeviceId] = useState("")
 
     const [stopScan, setStopScan] = useState(false)
     const [muteAudio, setMuteAudio] = useState(true)
@@ -49,6 +52,14 @@ function CameraScanQR() {
             <div className="flex flex-col CamScanQR bg-secondary w-full h-fit rounded-[20px] p-5">
                 <div className="headerCamScanQR text-accent h-[46px] flex justify-between mb-2">
                     <p className='text-[#32E2FF] font-semibold'>Scan Your Card Here</p>
+                    <select onChange={(e) => setDeviceId(e.target.value)}>
+                        <option value={undefined}>Select a device</option>
+                        {devices.map((device, index) => (
+                            <option key={index} value={device.deviceId}>
+                                {device.label}
+                            </option>
+                        ))}
+                    </select>
                     {/* <button className="btn text-accent" onClick={() => handleScanCam()}>Start</button> */}
                     <button className="block sm:hidden back-button px-5 rounded-[10px] border hover:border-blue-400 transition-colors ease-in-out duration-300 group" onClick={handleBack}>
                         <Undo2 className="text-current group-hover:text-blue-400 transition-colors ease-in-out duration-300" />
@@ -73,6 +84,9 @@ function CameraScanQR() {
                         ) ||
                         (
                             <Scanner
+                                constraints={{
+                                    deviceId: deviceId
+                                }}
                                 onScan={(result) => handleScanResult(result)}
                                 paused={stopScan}
                                 components={{ audio: muteAudio, torch: true }}
