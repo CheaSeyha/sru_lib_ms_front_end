@@ -52,8 +52,8 @@ function CameraScanQR() {
             <div className="flex flex-col CamScanQR bg-secondary w-full h-fit rounded-[20px] p-5">
                 <div className="headerCamScanQR text-accent h-[46px] flex justify-between mb-2">
                     <p className='text-[#32E2FF] font-semibold'>Scan Your Card Here</p>
-                    <select onChange={(e) => setDeviceId(e.target.value)}>
-                        <option value={undefined}>Select a device</option>
+                    <select onChange={(e) => setDeviceId(e.target.value)} className='select bg-base-300'>
+                        <option disabled={true} value={undefined}>Select a device</option>
                         {devices.map((device, index) => (
                             <option key={index} value={device.deviceId}>
                                 {device.label}

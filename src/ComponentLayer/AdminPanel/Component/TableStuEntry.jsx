@@ -86,18 +86,19 @@ export default function TableStuEntry() {
                 status: true
             }
         ]
+
     return (
         <>
             <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
                 <div className="text-table w-full h-[45px] flex justify-between">
                     <p>Student Entry To Day </p>
-                    <BtnGredient btnType="Guest Entry" Icon={<UserRoundPlus />} />
+                    <BtnGredient btnType="Guest Entry"  Icon={<UserRoundPlus />} />
                 </div>
                 <div className="flex-1 w-full h-full overflow-auto scrollbar-hide grid items-end">
                     <table className="table tectav">
                         {/* head */}
                         <thead className='text-accent'>
-                            <tr>    
+                            <tr>
                                 <th>NO</th>
                                 <th>Student Name</th>
                                 <th>Mejor</th>

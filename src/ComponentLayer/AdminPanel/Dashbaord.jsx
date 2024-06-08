@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CardData from './Component/CardData'
 import TableStuEntry from './Component/TableStuEntry'
 import BGImag from '../../assets/image/sru_lib_Vector1.jpg'
@@ -6,6 +6,7 @@ import MejorPieChart from './Component/MejorPieChart'
 import WeeklyVisitorChart from './Component/WeeklyVisitorChart'
 import RadialBarChart from './Component/RadialBarChart'
 import { useTranslation } from 'react-i18next'
+import Modal from '../../layout/Component/Modal'
 
 function Dashbaord() {
     const cardDataShow =
@@ -63,11 +64,10 @@ function Dashbaord() {
                 totalAmount: 6,
             }
         ]
-        
+
     const WeelyVisitorData = [25, 64, 24, 23, 34, 15, 48]
 
-    const {t} = useTranslation()
-
+    const { t } = useTranslation()
 
     return (
         <>
