@@ -65,7 +65,7 @@ function Dashbaord() {
             }
         ]
 
-    const WeelyVisitorData = [25, 64, 24, 23, 34, 15, 48]
+    const WeelyVisitorData = [25, 9, 24, 23, 34, 15, 48]
 
     const { t } = useTranslation()
 

@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-function WeeklyVisitorChart({WeelyVisitorData}) {
+function WeeklyVisitorChart({ WeelyVisitorData }) {
     // const WeelyVisitorData = [25, 64, 24, 45, 34, 60, 78];
     // Reverse the WeelyVisitorData array to display from low to high
     const reversedData = [...WeelyVisitorData].reverse();
-
+    //to get the virtical number Min and Max of Amount of Entry on Chart
+    const [yxisData, setYxisData] = useState([]);
     // Initial state with default heights set to 0
     const [heights, setHeights] = useState(new Array(7).fill(0));
 
     // State to track the active bar on mobile devices
     const [activeIndex, setActiveIndex] = useState(null);
+
+    //to get the virtical number Min and Max of Amount of Entry on Chart
+    const yxisNum = () => {
+        const maxNum = Math.max(...WeelyVisitorData);
+        if (maxNum <= 100) {
+            setYxisData([100, 50, 0]);
+        } else if (maxNum <= 500) {
+            setYxisData([500, 250, 0]);
+        } else {
+            setYxisData([1000, 500, 0]);
+        }
+    }
 
     // Update heights on component mount
     useEffect(() => {
@@ -19,11 +32,15 @@ function WeeklyVisitorChart({WeelyVisitorData}) {
             setHeights(WeelyVisitorData);
         };
         animateLineBG();
-
         // Clean up function to remove animation on unmount (optional)
         return () => setHeights(new Array(7).fill(0));
     }, []); // Removed WeelyVisitorData from dependencies
 
+    useEffect(() => {
+        yxisNum();
+    }, [WeelyVisitorData]);
+
+    const getMaxYxisNum = Math.max(...yxisData);
     // Define an array with the data
     const daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
@@ -40,16 +57,16 @@ function WeeklyVisitorChart({WeelyVisitorData}) {
             <div className="flex-1 chart-line w-full h-full flex space-x-5">
                 <div className="yxis-data w-fit h-full">
                     <ul className='flex flex-col justify-between h-full'>
-                        <li>100</li>
-                        <li>50</li>
-                        <li>0</li>
+                        {yxisData.map((number, index) => (
+                            <li key={index}>{number}</li>
+                        ))}
                     </ul>
                 </div>
                 <div className="flex-1 line-chart w-full h-full">
                     <div className="line flex justify-between h-full">
                         {WeelyVisitorData.map((data, index) => {
                             // Calculate height percentage
-                            const heightPercentage = heights[index] + "%";
+                            const heightPercentage = heights[index] / getMaxYxisNum * 100 + "%";
                             const isActive = activeIndex === index;
                             return (
                                 <motion.div
