@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-const RadialBarChart = ({ bookLange, totalBook, borrowBook }) => {
+const RadialBarChart = ({ bookLange, totalBook, bookAvaible }) => {
+
+  const borrowBook = totalBook - bookAvaible
   const remainBookPercent = (totalBook - borrowBook) / totalBook * 100
 
   return (
     <>
-      <ReactApexChart 
+      <ReactApexChart
         options={{
           colors: ["#A855F7"],
           plotOptions: {
@@ -25,7 +27,7 @@ const RadialBarChart = ({ bookLange, totalBook, borrowBook }) => {
             },
           },
           labels: [bookLange],
-          tooltip:{
+          tooltip: {
             enabled: true,
             y: {
               title: {
@@ -38,9 +40,9 @@ const RadialBarChart = ({ bookLange, totalBook, borrowBook }) => {
               }
             }
           }
-        }} 
+        }}
         series={[remainBookPercent.toFixed(2)]} // Pass the percentage value as series data
-        type="radialBar" 
+        type="radialBar"
         height={160} />
     </>
   );

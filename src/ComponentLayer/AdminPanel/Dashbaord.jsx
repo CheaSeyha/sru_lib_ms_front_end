@@ -43,7 +43,6 @@ function Dashbaord() {
                 }
             ]
         )
-
     const [dataMejorVisitor, setDataMejorVisitor] = useState(
         [
             {
@@ -68,20 +67,19 @@ function Dashbaord() {
             }
         ]
     )
-
+    //data for book card
+    const [bookAviable, setBookAviable] = useState([])
     const [weelyVisitorData, setWeelyVisitorData] = useState([])
 
     const getDataApi = async () => {
         const respone = await axios.get("/dashboard")
+        //get data from api set to state
         setWeelyVisitorData(respone.data.weeklyVisitor.days.map(dayval => dayval.count))
-        return respone.data.weeklyVisitor.days.map(dayval => dayval.count)
+        setBookAviable(respone.data.totalBookOfThisMonth)
     }
 
     useEffect(() => {
-        const showdata = async () => {
-            console.log(await getDataApi())
-        }
-        showdata()
+        getDataApi()
     }, [])
 
     const { t } = useTranslation()
@@ -145,8 +143,9 @@ function Dashbaord() {
                             <div className="flex flex-col book-avaible w-full h-[190px] p-5 bg-secondary rounded-[20px]">
                                 <p className='p-0'>Total Book of This Month</p>
                                 <div className="flex-1 container-redail grid grid-cols-2 h-full items-center">
-                                    <RadialBarChart totalBook={2345} borrowBook={231} bookLange="Khmer" />
-                                    <RadialBarChart totalBook={4535} borrowBook={243} bookLange="English" />
+                                    {bookAviable.map((e, index) => (
+                                        <RadialBarChart key={index} totalBook={e.totalBook} bookAvaible={e.available} bookLange={e.language} />
+                                    ))}
                                 </div>
                             </div>
                         </div>
