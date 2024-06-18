@@ -2,47 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 function WeeklyVisitorChart({ WeelyVisitorData }) {
-    // const WeelyVisitorData = [25, 64, 24, 45, 34, 60, 78];
-    // Reverse the WeelyVisitorData array to display from low to high
-    const reversedData = [...WeelyVisitorData].reverse();
-    //to get the virtical number Min and Max of Amount of Entry on Chart
-    const [yxisData, setYxisData] = useState([]);
-    // Initial state with default heights set to 0
-    const [heights, setHeights] = useState(new Array(7).fill(0));
+    // State for y-axis data and heights
+    const [yxisData, setYxisData] = useState([1000, 500, 0]); // Default values for y-axis data
+    const [heights, setHeights] = useState(new Array(7).fill(0)); // Initial heights set to 0
 
-    // State to track the active bar on mobile devices
+    // State for active index of bar
     const [activeIndex, setActiveIndex] = useState(null);
 
-    //to get the virtical number Min and Max of Amount of Entry on Chart
-    const yxisNum = () => {
-        const maxNum = Math.max(...WeelyVisitorData);
-        if (maxNum <= 100) {
-            setYxisData([100, 50, 0]);
-        } else if (maxNum <= 500) {
-            setYxisData([500, 250, 0]);
-        } else {
-            setYxisData([1000, 500, 0]);
-        }
-    }
-
-    // Update heights on component mount
+    // Calculate y-axis data based on WeelyVisitorData
     useEffect(() => {
-        // Animation for line-bg elements on mount
-        const animateLineBG = () => {
-            setHeights(WeelyVisitorData);
+        const yxisNum = () => {
+            const maxNum = Math.max(...WeelyVisitorData);
+            if (maxNum <= 50) {
+                setYxisData([50, 25, 0]);
+            } else if (maxNum <= 100) {
+                setYxisData([100, 50, 0]);
+            } else if (maxNum <= 500) {
+                setYxisData([500, 250, 0]);
+            } else {
+                setYxisData([1000, 500, 0]);
+            }
         };
-        animateLineBG();
-        // Clean up function to remove animation on unmount (optional)
-        return () => setHeights(new Array(7).fill(0));
-    }, []); // Removed WeelyVisitorData from dependencies
-
-    useEffect(() => {
         yxisNum();
     }, [WeelyVisitorData]);
 
+    // Update heights when WeelyVisitorData changes
+    useEffect(() => {
+        setHeights(WeelyVisitorData);
+    }, [WeelyVisitorData]);
+
+    // Get maximum value from y-axis data
     const getMaxYxisNum = Math.max(...yxisData);
-    // Define an array with the data
-    const daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
     // Handler to toggle active index on click/tap
     const handleBarClick = (index) => {
@@ -66,7 +56,7 @@ function WeeklyVisitorChart({ WeelyVisitorData }) {
                     <div className="line flex justify-between h-full">
                         {WeelyVisitorData.map((data, index) => {
                             // Calculate height percentage
-                            const heightPercentage = heights[index] / getMaxYxisNum * 100 + "%";
+                            const heightPercentage = heights[index] ? `${(heights[index] / getMaxYxisNum) * 100}%` : '0%'; // Ensure heights[index] is defined
                             const isActive = activeIndex === index;
                             return (
                                 <motion.div
@@ -105,7 +95,7 @@ function WeeklyVisitorChart({ WeelyVisitorData }) {
                 <div className="flex-1 line-chart w-full h-full ps-[45px]">
                     <div className="x-xis-data-dayOfWeek flex justify-between h-full pt-5">
                         {/* Loop through the array and generate JSX elements */}
-                        {daysOfWeek.map((day, index) => (
+                        {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day, index) => (
                             <div key={index} className="data-dayOfWeek group flex items-end rounded-full relative cursor-pointer">
                                 <p>{day}</p>
                             </div>
