@@ -13,13 +13,6 @@ function CameraScanQR() {
 
     const { scanResultID, setScanResultID } = useScanResultID();
 
-    useEffect(() => {
-        if (devices.length > 0) {
-            const backCamera = devices.find(device => device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear')) || devices[0];
-            setDeviceId(backCamera.deviceId);
-        }
-    }, [devices]);
-
     const handleScanResult = (result) => {
         if (result[0].format === "qr_code") {
             const rawValue = result[0].rawValue;

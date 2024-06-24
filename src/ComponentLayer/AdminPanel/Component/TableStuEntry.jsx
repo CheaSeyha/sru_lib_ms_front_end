@@ -98,8 +98,8 @@ export default function TableStuEntry() {
                         <p>Guest Entry</p>
                     </BtnGredient>
                 </div>
-                <div className="flex-1 w-full h-full overflow-auto scrollbar-hide grid items-start">
-                    <table className="table tectav">
+                <div className="flex-1 w-full h-full overflow-auto 2xl:scrollbar-hide grid items-start">
+                    <table className="table tectav overflow-auto">
                         {/* head */}
                         <thead className='text-accent'>
                             <tr>

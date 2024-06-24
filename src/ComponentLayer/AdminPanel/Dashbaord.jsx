@@ -1,162 +1,118 @@
-import React, { useEffect, useState } from 'react'
-import CardData from './Component/CardData'
-import TableStuEntry from './Component/TableStuEntry'
-import BGImag from '../../assets/image/sru_lib_Vector1.jpg'
-import MejorPieChart from './Component/MejorPieChart'
-import WeeklyVisitorChart from './Component/WeeklyVisitorChart'
-import RadialBarChart from './Component/RadialBarChart'
-import { useTranslation } from 'react-i18next'
-import Modal from '../../layout/Component/Modal'
-import axios from '../../api/axios'
+import React, { useEffect, useState } from 'react';
+import CardData from './Component/CardData';
+import TableStuEntry from './Component/TableStuEntry';
+import BGImag from '../../assets/image/sru_lib_Vector1.jpg';
+import MejorPieChart from './Component/MejorPieChart';
+import WeeklyVisitorChart from './Component/WeeklyVisitorChart';
+import RadialBarChart from './Component/RadialBarChart';
+import { useTranslation } from 'react-i18next';
+import axios from '../../api/axios';
 
 function Dashbaord() {
-    const [cardDataShow, setCardDataShow] = useState
-        (
-            [
-                {
-                    cardType: "Entry Today",
-                    amount: 47,
-                    iconCard: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 15 15" id="Figure-Walking--Streamline-Core" height={40} width={40} ><desc>{"Figure Walking Streamline Icon: https://streamlinehq.com"}</desc><g id="figure-walking"><path id="Vector 5007 (Stroke)" fill="#2859c5" fillRule="evenodd" d="M7.2122142857142855 8.903892857142857C7.596642857142857 9.107357142857142 7.743214285714286 9.583928571428572 7.53975 9.968357142857144L5.177249999999999 14.430857142857143C4.973785714285714 14.815178571428572 4.497214285714286 14.961857142857141 4.112892857142857 14.758285714285714C3.728464285714286 14.554821428571428 3.5818928571428574 14.078249999999999 3.785357142857143 13.693928571428572L6.147857142857143 9.231428571428571C6.351321428571429 8.847107142857144 6.8278928571428565 8.70042857142857 7.2122142857142855 8.903892857142857Z" clipRule="evenodd" strokeWidth={1} /><path id="Union" fill="#8fbffa" fillRule="evenodd" d="M8.94375 2.25C8.94375 3.4097142857142857 8.003571428571428 4.349892857142857 6.84375 4.349892857142857S4.74375 3.4097142857142857 4.74375 2.25C4.74375 1.0901785714285714 5.683928571428571 0.15000000000000002 6.84375 0.15000000000000002S8.94375 1.0901785714285714 8.94375 2.25ZM7.316785714285714 5.0327142857142855C7.346035714285714 5.054785714285715 7.3741071428571425 5.079107142857143 7.4005714285714275 5.105571428571428L9.269892857142857 6.974892857142857H10.78125C11.216142857142858 6.974892857142857 11.568642857142857 7.327500000000001 11.568642857142857 7.762392857142857S11.216142857142858 8.549892857142856 10.78125 8.549892857142856H8.94375C8.734821428571427 8.549892857142856 8.534571428571429 8.466857142857142 8.386928571428571 8.319214285714285L7.63125 7.563535714285714V8.943642857142857L8.743071428571428 9.777535714285714C9.337178571428572 10.223035714285713 9.736714285714285 10.880357142857141 9.858857142857142 11.612785714285714L10.245535714285714 13.932857142857141C10.317 14.361857142857144 10.027178571428571 14.767607142857141 9.598178571428571 14.839071428571428C9.16917857142857 14.910535714285713 8.763428571428571 14.620714285714286 8.691964285714286 14.191714285714285L8.305285714285715 11.871749999999999C8.249785714285714 11.53875 8.068178571428572 11.240035714285714 7.798178571428571 11.037428571428572L6.37125 9.967392857142856C6.172928571428572 9.81867857142857 6.0562499999999995 9.585214285714285 6.0562499999999995 9.337392857142857V7.0533214285714285L5.0062500000000005 7.6832142857142856V9.074892857142858C5.0062500000000005 9.509785714285714 4.65375 9.862392857142858 4.21875 9.862392857142858S3.4313571428571428 9.509785714285714 3.4313571428571428 9.074892857142858V7.237392857142857C3.4313571428571428 6.960749999999999 3.5764285714285715 6.704464285714286 3.8136428571428573 6.562178571428571L6.427499999999999 4.993821428571429C6.531642857142857 4.9287857142857145 6.652178571428571 4.887535714285714 6.781392857142857 4.877357142857143C6.970071428571428 4.862464285714285 7.161214285714285 4.915821428571428 7.316785714285714 5.032821428571428Z" clipRule="evenodd" strokeWidth={1} /></g></svg>,
-                    analytic: 36.5,
-                    colorBG: "bg-[#00F0FF]"
-                },
-                {
-                    cardType: "Book Borrow Today",
-                    amount: 4,
-                    iconCard: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 15 15" id="Figure-Walking--Streamline-Core" height={40} width={40} ><desc>{"Figure Walking Streamline Icon: https://streamlinehq.com"}</desc><g id="figure-walking"><path id="Vector 5007 (Stroke)" fill="#2859c5" fillRule="evenodd" d="M7.2122142857142855 8.903892857142857C7.596642857142857 9.107357142857142 7.743214285714286 9.583928571428572 7.53975 9.968357142857144L5.177249999999999 14.430857142857143C4.973785714285714 14.815178571428572 4.497214285714286 14.961857142857141 4.112892857142857 14.758285714285714C3.728464285714286 14.554821428571428 3.5818928571428574 14.078249999999999 3.785357142857143 13.693928571428572L6.147857142857143 9.231428571428571C6.351321428571429 8.847107142857144 6.8278928571428565 8.70042857142857 7.2122142857142855 8.903892857142857Z" clipRule="evenodd" strokeWidth={1} /><path id="Union" fill="#8fbffa" fillRule="evenodd" d="M8.94375 2.25C8.94375 3.4097142857142857 8.003571428571428 4.349892857142857 6.84375 4.349892857142857S4.74375 3.4097142857142857 4.74375 2.25C4.74375 1.0901785714285714 5.683928571428571 0.15000000000000002 6.84375 0.15000000000000002S8.94375 1.0901785714285714 8.94375 2.25ZM7.316785714285714 5.0327142857142855C7.346035714285714 5.054785714285715 7.3741071428571425 5.079107142857143 7.4005714285714275 5.105571428571428L9.269892857142857 6.974892857142857H10.78125C11.216142857142858 6.974892857142857 11.568642857142857 7.327500000000001 11.568642857142857 7.762392857142857S11.216142857142858 8.549892857142856 10.78125 8.549892857142856H8.94375C8.734821428571427 8.549892857142856 8.534571428571429 8.466857142857142 8.386928571428571 8.319214285714285L7.63125 7.563535714285714V8.943642857142857L8.743071428571428 9.777535714285714C9.337178571428572 10.223035714285713 9.736714285714285 10.880357142857141 9.858857142857142 11.612785714285714L10.245535714285714 13.932857142857141C10.317 14.361857142857144 10.027178571428571 14.767607142857141 9.598178571428571 14.839071428571428C9.16917857142857 14.910535714285713 8.763428571428571 14.620714285714286 8.691964285714286 14.191714285714285L8.305285714285715 11.871749999999999C8.249785714285714 11.53875 8.068178571428572 11.240035714285714 7.798178571428571 11.037428571428572L6.37125 9.967392857142856C6.172928571428572 9.81867857142857 6.0562499999999995 9.585214285714285 6.0562499999999995 9.337392857142857V7.0533214285714285L5.0062500000000005 7.6832142857142856V9.074892857142858C5.0062500000000005 9.509785714285714 4.65375 9.862392857142858 4.21875 9.862392857142858S3.4313571428571428 9.509785714285714 3.4313571428571428 9.074892857142858V7.237392857142857C3.4313571428571428 6.960749999999999 3.5764285714285715 6.704464285714286 3.8136428571428573 6.562178571428571L6.427499999999999 4.993821428571429C6.531642857142857 4.9287857142857145 6.652178571428571 4.887535714285714 6.781392857142857 4.877357142857143C6.970071428571428 4.862464285714285 7.161214285714285 4.915821428571428 7.316785714285714 5.032821428571428Z" clipRule="evenodd" strokeWidth={1} /></g></svg>,
-                    analytic: 23.3,
-                    colorBG: "bg-[#0094FF]"
-                },
-                {
-                    cardType: "Book Sponsor",
-                    amount: 45,
-                    iconCard: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 15 15" id="Figure-Walking--Streamline-Core" height={40} width={40} ><desc>{"Figure Walking Streamline Icon: https://streamlinehq.com"}</desc><g id="figure-walking"><path id="Vector 5007 (Stroke)" fill="#2859c5" fillRule="evenodd" d="M7.2122142857142855 8.903892857142857C7.596642857142857 9.107357142857142 7.743214285714286 9.583928571428572 7.53975 9.968357142857144L5.177249999999999 14.430857142857143C4.973785714285714 14.815178571428572 4.497214285714286 14.961857142857141 4.112892857142857 14.758285714285714C3.728464285714286 14.554821428571428 3.5818928571428574 14.078249999999999 3.785357142857143 13.693928571428572L6.147857142857143 9.231428571428571C6.351321428571429 8.847107142857144 6.8278928571428565 8.70042857142857 7.2122142857142855 8.903892857142857Z" clipRule="evenodd" strokeWidth={1} /><path id="Union" fill="#8fbffa" fillRule="evenodd" d="M8.94375 2.25C8.94375 3.4097142857142857 8.003571428571428 4.349892857142857 6.84375 4.349892857142857S4.74375 3.4097142857142857 4.74375 2.25C4.74375 1.0901785714285714 5.683928571428571 0.15000000000000002 6.84375 0.15000000000000002S8.94375 1.0901785714285714 8.94375 2.25ZM7.316785714285714 5.0327142857142855C7.346035714285714 5.054785714285715 7.3741071428571425 5.079107142857143 7.4005714285714275 5.105571428571428L9.269892857142857 6.974892857142857H10.78125C11.216142857142858 6.974892857142857 11.568642857142857 7.327500000000001 11.568642857142857 7.762392857142857S11.216142857142858 8.549892857142856 10.78125 8.549892857142856H8.94375C8.734821428571427 8.549892857142856 8.534571428571429 8.466857142857142 8.386928571428571 8.319214285714285L7.63125 7.563535714285714V8.943642857142857L8.743071428571428 9.777535714285714C9.337178571428572 10.223035714285713 9.736714285714285 10.880357142857141 9.858857142857142 11.612785714285714L10.245535714285714 13.932857142857141C10.317 14.361857142857144 10.027178571428571 14.767607142857141 9.598178571428571 14.839071428571428C9.16917857142857 14.910535714285713 8.763428571428571 14.620714285714286 8.691964285714286 14.191714285714285L8.305285714285715 11.871749999999999C8.249785714285714 11.53875 8.068178571428572 11.240035714285714 7.798178571428571 11.037428571428572L6.37125 9.967392857142856C6.172928571428572 9.81867857142857 6.0562499999999995 9.585214285714285 6.0562499999999995 9.337392857142857V7.0533214285714285L5.0062500000000005 7.6832142857142856V9.074892857142858C5.0062500000000005 9.509785714285714 4.65375 9.862392857142858 4.21875 9.862392857142858S3.4313571428571428 9.509785714285714 3.4313571428571428 9.074892857142858V7.237392857142857C3.4313571428571428 6.960749999999999 3.5764285714285715 6.704464285714286 3.8136428571428573 6.562178571428571L6.427499999999999 4.993821428571429C6.531642857142857 4.9287857142857145 6.652178571428571 4.887535714285714 6.781392857142857 4.877357142857143C6.970071428571428 4.862464285714285 7.161214285714285 4.915821428571428 7.316785714285714 5.032821428571428Z" clipRule="evenodd" strokeWidth={1} /></g></svg>,
-                    analytic: 47.5,
-                    colorBG: "bg-[#00FFD1]"
-                },
-                {
-                    cardType: "Total Entry Of This Month",
-                    amount: 3452,
-                    iconCard: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 15 15" id="Figure-Walking--Streamline-Core" height={40} width={40} ><desc>{"Figure Walking Streamline Icon: https://streamlinehq.com"}</desc><g id="figure-walking"><path id="Vector 5007 (Stroke)" fill="#2859c5" fillRule="evenodd" d="M7.2122142857142855 8.903892857142857C7.596642857142857 9.107357142857142 7.743214285714286 9.583928571428572 7.53975 9.968357142857144L5.177249999999999 14.430857142857143C4.973785714285714 14.815178571428572 4.497214285714286 14.961857142857141 4.112892857142857 14.758285714285714C3.728464285714286 14.554821428571428 3.5818928571428574 14.078249999999999 3.785357142857143 13.693928571428572L6.147857142857143 9.231428571428571C6.351321428571429 8.847107142857144 6.8278928571428565 8.70042857142857 7.2122142857142855 8.903892857142857Z" clipRule="evenodd" strokeWidth={1} /><path id="Union" fill="#8fbffa" fillRule="evenodd" d="M8.94375 2.25C8.94375 3.4097142857142857 8.003571428571428 4.349892857142857 6.84375 4.349892857142857S4.74375 3.4097142857142857 4.74375 2.25C4.74375 1.0901785714285714 5.683928571428571 0.15000000000000002 6.84375 0.15000000000000002S8.94375 1.0901785714285714 8.94375 2.25ZM7.316785714285714 5.0327142857142855C7.346035714285714 5.054785714285715 7.3741071428571425 5.079107142857143 7.4005714285714275 5.105571428571428L9.269892857142857 6.974892857142857H10.78125C11.216142857142858 6.974892857142857 11.568642857142857 7.327500000000001 11.568642857142857 7.762392857142857S11.216142857142858 8.549892857142856 10.78125 8.549892857142856H8.94375C8.734821428571427 8.549892857142856 8.534571428571429 8.466857142857142 8.386928571428571 8.319214285714285L7.63125 7.563535714285714V8.943642857142857L8.743071428571428 9.777535714285714C9.337178571428572 10.223035714285713 9.736714285714285 10.880357142857141 9.858857142857142 11.612785714285714L10.245535714285714 13.932857142857141C10.317 14.361857142857144 10.027178571428571 14.767607142857141 9.598178571428571 14.839071428571428C9.16917857142857 14.910535714285713 8.763428571428571 14.620714285714286 8.691964285714286 14.191714285714285L8.305285714285715 11.871749999999999C8.249785714285714 11.53875 8.068178571428572 11.240035714285714 7.798178571428571 11.037428571428572L6.37125 9.967392857142856C6.172928571428572 9.81867857142857 6.0562499999999995 9.585214285714285 6.0562499999999995 9.337392857142857V7.0533214285714285L5.0062500000000005 7.6832142857142856V9.074892857142858C5.0062500000000005 9.509785714285714 4.65375 9.862392857142858 4.21875 9.862392857142858S3.4313571428571428 9.509785714285714 3.4313571428571428 9.074892857142858V7.237392857142857C3.4313571428571428 6.960749999999999 3.5764285714285715 6.704464285714286 3.8136428571428573 6.562178571428571L6.427499999999999 4.993821428571429C6.531642857142857 4.9287857142857145 6.652178571428571 4.887535714285714 6.781392857142857 4.877357142857143C6.970071428571428 4.862464285714285 7.161214285714285 4.915821428571428 7.316785714285714 5.032821428571428Z" clipRule="evenodd" strokeWidth={1} /></g></svg>,
-                    analytic: -4,
-                    colorBG: "bg-[#00FF38]"
-                }
-            ]
-        )
-    const [dataMejorVisitor, setDataMejorVisitor] = useState(
-        [
-            {
-                mejorName: "CS",
-                totalAmount: 28,
-            },
-            {
-                mejorName: "PA",
-                totalAmount: 12,
-            },
-            {
-                mejorName: "BUS",
-                totalAmount: 6,
-            },
-            {
-                mejorName: "MATH",
-                totalAmount: 6,
-            },
-            {
-                mejorName: "ENG",
-                totalAmount: 6,
-            }
-        ]
-    )
-    //data for book card
-    const [bookAviable, setBookAviable] = useState([])
-    const [weelyVisitorData, setWeelyVisitorData] = useState([])
+    const [cardDataShow, setCardDataShow] = useState([]);
+    const [dataMejorVisitor, setDataMejorVisitor] = useState([]);
+    const [bookAviable, setBookAviable] = useState([]);
+    const [weelyVisitorData, setWeelyVisitorData] = useState([]);
+    const [loading, setLoading] = useState(true); // Loading state
 
     const getDataApi = async () => {
-        const respone = await axios.get("/dashboard")
-        //get data from api set to state
-        setWeelyVisitorData(respone.data.weeklyVisitor.days.map(dayval => dayval.count))
-        setBookAviable(respone.data.totalBookOfThisMonth)
-    }
+        setLoading(true); // Set loading to true before API call
+        try {
+            const response = await axios.get("/dashboard");
+            // Get data from API and set to state
+            setWeelyVisitorData(response.data.weeklyVisitor.days.map(dayval => dayval.count));
+            setCardDataShow(response.data.cardData);
+            setBookAviable(response.data.bookAvailable);
+            setDataMejorVisitor(response.data.totalMajorVisitor);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false); // Set loading to false after data is fetched
+        }
+    };
 
     useEffect(() => {
-        getDataApi()
-    }, [])
+        getDataApi();
+    }, []);
 
-    const { t } = useTranslation()
+    const { t } = useTranslation();
 
     return (
         <>
-            <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
-                {/* Header contetn */}
-                <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-[20px] p-[20px] text-white gap-5 xl:gap-0'
-                    style={{
-                        backgroundImage: `linear-gradient(to bottom, #002032bb, #00203200), url(${BGImag})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center'
-                    }}>    <div className="tittle flex justify-between">
-                        <div className="sruText">
-                            <p className="sm:text-[30px] xl:text-[30px] font-NotoSanKhmer" >{t("sruText")}</p>
-                            <p className="text-[10px] xl:text-[12px] font-bold" >WELCOME BACK JOHNSEY</p>
-                        </div>
-                        <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
-                    </div>
-                    <div className="showCard flex-1 grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-[20px] place-items-end">
-                        {cardDataShow.map((e, index) => (
-                            <CardData
-                                key={index}
-                                cardType={e.cardType}
-                                amount={e.amount}
-                                iconCard={e.iconCard}
-                                colorBG={e.colorBG}
-                                analytic={e.analytic}
-                            />
-                        ))}
-                    </div>
-                </div>
-                {/* Header contetn */}
-                {/* Main Content  */}
-                <div className="flex-1 flex flex-col md:flex-col xl:flex-row container-main-cotent text-accent gap-5 overflow-y-auto scrollbar-hide">
-                    <div className="table-chart flex gap-5">
-                        {/* table List Of Student name  */}
-                        <div className="table-container table-stu-entry w-full md:w-full xl:w-[450px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">
-                            <TableStuEntry />
-                        </div>
-                        {/* table List Of Student name  */}
-                    </div>
-                    {/* Card Pirchart And Weekly visitor  */}
-                    <div className="w-full flex flex-col sm:flex-row h-[1000px] sm:h-[500px] xl:h-full gap-5">
-                        {/* Chart Data Mejor Visitor  */}
-                        <div className="chart-data flex flex-col w-full sm:w-[250px] xl:w-[304px] h-[405px] sm:h-full bg-secondary rounded-[20px] md:bg-none p-5">
-                            {/* <MejorPirChart /> */}
-                            <div className="cardTittle h-[46px] w-full flex">
-                                <p>Total Mejor Visitor</p>
+            {loading ? (
+                <main className='flex justify-center w-full h-fit xl:h-full space-y-5'>
+                    <span className="loading loading-dots text-accent loading-lg"></span>
+                </main>
+            ) : (
+                <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
+                    {/* Header content */}
+                    <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-[20px] p-[20px] text-white gap-5 xl:gap-0'
+                        style={{
+                            backgroundImage: `linear-gradient(to bottom, #002032bb, #00203200), url(${BGImag})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                        }}>
+                        <div className="tittle flex justify-between">
+                            <div className="sruText">
+                                <p className="sm:text-[30px] xl:text-[30px] font-NotoSanKhmer">{t("sruText")}</p>
+                                <p className="text-[10px] xl:text-[12px] font-bold">WELCOME BACK JOHNSEY</p>
                             </div>
-                            <div className="pieChart-container flex-1 w-full h-full">
-                                <MejorPieChart DataMejorVisitor={dataMejorVisitor} />
-                            </div>
+                            <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
                         </div>
-                        {/* Chart Data Mejor Visitor  */}
-                        <div className="flex-1 flex flex-col w-full h-full gap-5">
-                            <div className="flex-1  weekly-visitor-container bg-secondary w-full h-full flex flex-col rounded-[20px] p-5">
-                                <WeeklyVisitorChart WeelyVisitorData={weelyVisitorData} />
+                        <div className="showCard flex-1 grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-[20px] place-items-end">
+                            {cardDataShow.map((e, index) => (
+                                <CardData
+                                    key={index}
+                                    cardType={e.cardType}
+                                    amount={e.amount}
+                                    analytic={e.analytic}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    {/* Header content */}
+                    {/* Main Content */}
+                    <div className="flex-1 flex flex-col md:flex-col xl:flex-row container-main-content text-accent gap-5 overflow-y-auto scrollbar-hide">
+                        <div className="table-chart flex gap-5">
+                            {/* table List Of Student name */}
+                            <div className="table-container table-stu-entry w-full md:w-full xl:w-[450px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">
+                                <TableStuEntry />
                             </div>
-                            <div className="flex flex-col book-avaible w-full h-[190px] p-5 bg-secondary rounded-[20px]">
-                                <p className='p-0'>Total Book of This Month</p>
-                                <div className="flex-1 container-redail grid grid-cols-2 h-full items-center">
-                                    {bookAviable.map((e, index) => (
-                                        <RadialBarChart key={index} totalBook={e.totalBook} bookAvaible={e.available} bookLange={e.language} />
-                                    ))}
+                            {/* table List Of Student name */}
+                        </div>
+                        {/* Card Piechart And Weekly visitor */}
+                        <div className="w-full flex flex-col sm:flex-row h-[1000px] sm:h-[500px] xl:h-full gap-5">
+                            {/* Chart Data Mejor Visitor */}
+                            <div className="chart-data flex flex-col w-full sm:w-[250px] xl:w-[304px] h-[405px] sm:h-full bg-secondary rounded-[20px] md:bg-none p-5">
+                                <div className="cardTitle h-[46px] w-full flex">
+                                    <p>Total Mejor Visitor</p>
+                                </div>
+                                <div className="pieChart-container flex-1 w-full h-full">
+                                    <MejorPieChart DataMejorVisitor={dataMejorVisitor} />
+                                </div>
+                            </div>
+                            {/* Chart Data Mejor Visitor */}
+                            <div className="flex-1 flex flex-col w-full h-full gap-5">
+                                <div className="flex-1 weekly-visitor-container bg-secondary w-full h-full flex flex-col rounded-[20px] p-5">
+                                    <WeeklyVisitorChart WeelyVisitorData={weelyVisitorData} />
+                                </div>
+                                <div className="flex flex-col book-available w-full h-[190px] p-5 bg-secondary rounded-[20px]">
+                                    <p className='p-0'>Total Book of This Month</p>
+                                    <div className="flex-1 container-radial grid grid-cols-2 h-full items-center">
+                                        {bookAviable.map((e, index) => (
+                                            <RadialBarChart key={index} bookLange={e.language} totalBook={e.totalBook} bookAvaible={e.available} />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        {/* Card Piechart And Weekly visitor */}
                     </div>
-                    {/* Card Pirchart And Weekly visitor  */}
-                </div>
-                {/* Main Content  */}
-            </main>
+                    {/* Main Content */}
+                </main>
+            )}
         </>
-
-    )
+    );
 }
 
-export default Dashbaord
+export default Dashbaord;

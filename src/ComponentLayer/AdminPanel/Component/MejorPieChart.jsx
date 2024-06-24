@@ -1,10 +1,19 @@
-import React from 'react'
+import React from 'react';
 import Chart from 'react-apexcharts';
 
-function MejorPieChart({DataMejorVisitor}) {
+function MejorPieChart({ DataMejorVisitor }) {
+
+  // Function to abbreviate major names
+  const abbreviateMajorName = (name) => {
+    return name
+      .split(' ')
+      .map(word => word[0].toUpperCase())
+      .join('');
+  };
 
   // Extract labels and series data from DataMejorVisitor
-  const labelData = DataMejorVisitor.map(item => item.mejorName);
+  const fullNamelabelData = DataMejorVisitor.map(item => item.majorName); // Use majorName instead of mejorName
+  const labelData = DataMejorVisitor.map(item => abbreviateMajorName(item.majorName));
   const seriesData = DataMejorVisitor.map(item => item.totalAmount);
 
   return (
@@ -16,20 +25,22 @@ function MejorPieChart({DataMejorVisitor}) {
           height="100%"
           series={seriesData}
           options={{
-            noData: "No Data",
+            noData: {
+              text: "No Data",
+            },
             labels: labelData,
             stroke: {
               show: false
             },
-            dataLabels: {// show % on piechart 
+            dataLabels: {
               enabled: false
             },
-            color: ['#3B82F6', '#F59E0B', '#1442B8', '#B83B14', '#14B842'],// Color of pie chart 
-            plotOptions: {// Show Text in Total amount of student 
+            colors: ['#3B82F6', '#F59E0B', '#1442B8', '#B83B14', '#14B842'], // Color of pie chart
+            plotOptions: {
               pie: {
                 donut: {
-                  size: 73,
-                  labels: {//show total amount of vitsitor
+                  size: '73%',
+                  labels: {
                     value: {
                       color: "#82B4FF",
                     },
@@ -43,29 +54,32 @@ function MejorPieChart({DataMejorVisitor}) {
                         return labels.length.toString(); // Convert the length of labels to string
                       }
                     }
-                    
                   }
                 }
               }
             },
             legend: {
-              width: 100,//set number make text label show vitical 
-              horizontalAlign: "left",//make text position 
-              position: "bottom",//show label under piechart
-              inverseOrder: true, //show number mix number first
+              width: 80, // Set number to make text label show vertical
+              horizontalAlign: "left", // Change text position
+              position: "bottom", // Show label under pie chart
+              inverseOrder: true, // Show number mix number first
               labels: {
-                colors: "text-accent",//Text Total Color
-                useSeriesColors: false,//change color of lable like piechart color
+                colors: "text-accent", // Text total color
+                useSeriesColors: false, // Change color of label like pie chart color
               },
             },
+            tooltip: {
+              y: {
+                formatter: function (val, { seriesIndex }) {
+                  return `${fullNamelabelData[seriesIndex]}: ${val}`;
+                }
+              }
+            }
           }}
         />
       </div>
     </>
-
-
-
-  )
+  );
 }
 
-export default MejorPieChart
+export default MejorPieChart;

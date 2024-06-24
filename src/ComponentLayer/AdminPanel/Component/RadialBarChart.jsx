@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 const RadialBarChart = ({ bookLange, totalBook, bookAvaible }) => {
+  // Ensure the values are valid numbers
+  const validTotalBook = totalBook || 0;
+  const validBookAvaible = bookAvaible || 0;
 
-  const borrowBook = totalBook - bookAvaible
-  const remainBookPercent = (totalBook - borrowBook) / totalBook * 100
+  const borrowBook = validTotalBook - validBookAvaible;
+  const remainBookPercent = validTotalBook > 0 ? ((validTotalBook - borrowBook) / validTotalBook) * 100 : 0;
 
   return (
     <>
@@ -17,7 +20,7 @@ const RadialBarChart = ({ bookLange, totalBook, bookAvaible }) => {
                 value: {
                   color: "#A855F7",
                   formatter: function (val) {
-                    return `${totalBook}`;
+                    return `${validTotalBook}/${borrowBook}`;
                   }
                 }
               },
