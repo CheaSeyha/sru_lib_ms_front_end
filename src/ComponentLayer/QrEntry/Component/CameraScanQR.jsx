@@ -62,9 +62,9 @@ function CameraScanQR() {
                         </button>
                     </div>
                 </div>
-                <div className="w-full h-fit overflow-hidden p-0 rounded-lg bg-yellow-200">
+                <div className="w-full sm:h-[190px] md:h-[190px] lg:h-[250px] xl:h-[350px] overflow-hidden p-0 rounded-lg">
                     {stopScan ? (
-                        <div className="scanSuccess w-full h-full bg-primary rounded-lg flex flex-col justify-center items-center text-accent">
+                        <div className="scanSuccess w-full h-full bg-primary rounded-lg flex flex-col justify-center items-center text-center text-accent p-5">
                             <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-scan-face">
                                 <path d="M3 7V5a2 2 0 0 1 2-2h2" />
                                 <path d="M17 3h2a2 2 0 0 1 2 2v2" />
@@ -82,7 +82,7 @@ function CameraScanQR() {
                             constraints={{ deviceId }}
                             onScan={(result) => handleScanResult(result)}
                             paused={stopScan}
-                            components={{ audio: muteAudio, torch: true }}
+                            components={{ audio: false, torch: true }}
                         />
                     )}
                 </div>

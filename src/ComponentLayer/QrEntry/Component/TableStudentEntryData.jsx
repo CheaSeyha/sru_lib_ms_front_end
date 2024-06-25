@@ -239,7 +239,7 @@ function HeadTextForTableData() {
                                         <th>{e.id}</th>
                                         <td>{e.stuName}</td>
                                         <td>{e.gender}</td>
-                                        <td>{e.major}</td>
+                                        <td>{e.mejor}</td>
                                         <td>{e.studyYear}</td>
                                         <td>{e.entryTimes}</td>
                                         <td>{e.exitTimes}</td>
