@@ -20,7 +20,7 @@ const RadialBarChart = ({ bookLange, totalBook, bookAvaible }) => {
                 value: {
                   color: "#A855F7",
                   formatter: function (val) {
-                    return `${validTotalBook}/${borrowBook}`;
+                    return `${validTotalBook}/${bookAvaible}`;
                   }
                 }
               },

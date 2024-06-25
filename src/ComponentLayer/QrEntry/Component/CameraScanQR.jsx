@@ -3,14 +3,15 @@ import { Scanner } from '@yudiel/react-qr-scanner';
 import { useDevices } from '@yudiel/react-qr-scanner';
 import { useScanResultID } from '../../Context/ScanResultIDContext';
 import { useNavigate } from 'react-router-dom';
-import { Undo2 } from 'lucide-react';
+import { Undo2, Settings, X } from 'lucide-react';
+import Modal from '../../../layout/Component/Modal';
 
 function CameraScanQR() {
     const devices = useDevices();
     const [deviceId, setDeviceId] = useState("");
     const [stopScan, setStopScan] = useState(false);
     const [muteAudio, setMuteAudio] = useState(true);
-
+    const [showModal, setShowModal] = useState(false)
     const { scanResultID, setScanResultID } = useScanResultID();
 
     const handleScanResult = (result) => {
@@ -41,24 +42,27 @@ function CameraScanQR() {
         navigate(-1);
     };
 
+    const handleMuteAudioCamera = () => {
+        muteAudio ? setMuteAudio(false) : setMuteAudio(true)
+        console.log(muteAudio)
+    }
+
+    useEffect(() => {
+        // This will re-render the Scanner component when muteAudio changes
+    }, [muteAudio]);
     return (
         <>
             <div className="flex flex-col CamScanQR bg-secondary w-full h-fit rounded-[20px] p-5">
-                <div className="headerCamScanQR text-accent h-[46px] flex justify-between mb-2">
+                <div className="headerCamScanQR text-accent h-[46px] flex justify-between items-center mb-2">
                     <p className='text-[#32E2FF] font-semibold'>Scan Your Card Here</p>
-                    <select onChange={(e) => setDeviceId(e.target.value)} className='select bg-base-300' value={deviceId}>
-                        <option disabled={true} value={undefined}>Select a device</option>
-                        {devices.map((device, index) => (
-                            <option key={index} value={device.deviceId}>
-                                {device.label}
-                            </option>
-                        ))}
-                    </select>
-                    <button className="block sm:hidden back-button px-5 rounded-[10px] border hover:border-blue-400 transition-colors ease-in-out duration-300 group" onClick={handleBack}>
-                        <Undo2 className="text-current group-hover:text-blue-400 transition-colors ease-in-out duration-300" />
-                    </button>
+                    <div className='flex gap-5'>
+                        <button className="text-accent hover:text-blue-400" onClick={() => setShowModal(true)}><Settings /></button>
+                        <button className="block sm:hidden back-button px-5 h-[46px] rounded-[10px] border hover:border-blue-400 transition-colors ease-in-out duration-300 group" onClick={handleBack}>
+                            <Undo2 className="text-current group-hover:text-blue-400 transition-colors ease-in-out duration-300" />
+                        </button>
+                    </div>
                 </div>
-                <div className="w-full h-full overflow-hidden rounded-lg">
+                <div className="w-full h-fit overflow-hidden p-0 rounded-lg bg-yellow-200">
                     {stopScan ? (
                         <div className="scanSuccess w-full h-full bg-primary rounded-lg flex flex-col justify-center items-center text-accent">
                             <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-scan-face">
@@ -82,6 +86,28 @@ function CameraScanQR() {
                         />
                     )}
                 </div>
+
+                {/* Modal ------------------------------------- */}
+                <Modal isVisible={showModal} key={"setting camera"}>
+                    <div className="container w-full h-full space-y-5">
+                        <div className="header-modal flex items-center justify-between text-accent">
+                            <p>Change Camera</p>
+                            <button onClick={() => setShowModal(false)} className="btnClose w-[46px] text-accent h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out">
+                                <X />
+                            </button>
+                        </div>
+                        <div className="body-modal text-accent">
+                            <select id='chnageCam' onChange={(e) => setDeviceId(e.target.value)} className='select bg-base-300 border w-full' value={deviceId}>
+                                <option disabled={true} value={undefined}>Select a device</option>
+                                {devices.map((device, index) => (
+                                    <option key={index} value={device.deviceId}>
+                                        {device.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         </>
     );
