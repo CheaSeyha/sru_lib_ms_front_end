@@ -1,13 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useScanResultID } from '../../Context/ScanResultIDContext';
 import axios from '../../../api/axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 function FormConfirmEntry() {
-    // Call data from context to show Id of student after scan
-    const { scanResultID } = useScanResultID();
+    const { scanResultID, setScanResultID } = useScanResultID();
     const [stuName, setStuName] = useState('');
     const [major, setMajor] = useState('');
     const [yearStudy, setYearStudy] = useState('');
+    const [checkPurpose, setCheckPurpose] = useState('');
+
+    // Create a ref to store all checkbox elements
+    const checkboxesRef = useRef([]);
+
+    const handleCheckPurpose = (event) => {
+        const { id, checked } = event.target;
+        const value = id.replace('_', ' ');
+
+        setCheckPurpose(prevValue => {
+            const values = prevValue ? prevValue.split(', ') : [];
+            if (checked) {
+                if (!values.includes(value)) {
+                    values.push(value);
+                }
+            } else {
+                const index = values.indexOf(value);
+                if (index > -1) {
+                    values.splice(index, 1);
+                }
+            }
+            return values.join(', ');
+        });
+    };
 
     const getDataApi = async () => {
         if (scanResultID) {
@@ -17,19 +41,46 @@ function FormConfirmEntry() {
                 setMajor(response.data.majorId);
                 setYearStudy(response.data.generation);
             } catch (error) {
-                console.log("Error");
+                console.log("Error fetching student data");
             }
         }
     };
 
+    const handleEntryExit = () => {
+        if (scanResultID === 0) {
+            toast.error("Please wait untill scan success")
+        } else if (checkPurpose === '') {
+            toast.error("Please Check Purepose")
+        } else {
+            handleClearFormData()
+        }
+        // Additional logic for entry/exit can be added here
+    };
+
+    const handleClearFormData = () => {
+        toast.success("Student ID " + scanResultID + " Entry Success")
+        setStuName('');
+        setMajor('');
+        setYearStudy('');
+        setCheckPurpose('');
+        //set ScanResult to 0 to make the component in CemeraScanQR Continue Scan 
+        setScanResultID(0)
+        // Uncheck all checkboxes
+        checkboxesRef.current.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+    };
+
     useEffect(() => {
         getDataApi();
+        checkboxesRef.current.forEach(checkbox => {
+            checkbox.disabled = scanResultID === 0;
+        });
     }, [scanResultID]);
 
     return (
         <>
             <div className="flex-1 flex flex-col confirmForm w-full h-fit bg-secondary rounded-[20px] p-5 overflow-auto scrollbar-hide">
-                {/* form data of student  */}
                 <div className="form-data space-y-2 text-accent">
                     <div className="flex-1 headConfirmForm text-accent h-[46px] flex justify-between">
                         <p className='font-bold'>Student ID <span className='text-blue-400'>{scanResultID || ""}</span></p>
@@ -68,36 +119,32 @@ function FormConfirmEntry() {
                         />
                     </div>
                 </div>
-                {/* form data of student  */}
-                {/* check purpose to entry form */}
                 <div className="check-purpose text-accent mt-5">
                     <p className='font-bold'>Entry Purpose</p>
                     <div className="container-check-purpose grid lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-5">
                         <div className="check-purpose flex items-center space-x-2">
-                            <input type="checkbox" id='read_book' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
-                            <label htmlFor="read_book" className='label-text text-[#32E2FF]'>Read Book</label>
+                            <input type="checkbox" id='Read_Book' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[0] = el} />
+                            <label htmlFor="Read_Book" className='label-text text-[#32E2FF]'>Read Book</label>
                         </div>
                         <div className="check-purpose flex items-center space-x-2">
-                            <input type="checkbox" id='assignment' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
-                            <label htmlFor="assignment" className='label-text text-[#32E2FF]'>Assignment</label>
+                            <input type="checkbox" id='Assignment' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[1] = el} />
+                            <label htmlFor="Assignment" className='label-text text-[#32E2FF]'>Assignment</label>
                         </div>
                         <div className="check-purpose flex items-center space-x-2">
-                            <input type="checkbox" id='usePC' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
-                            <label htmlFor="usePC" className='label-text text-[#32E2FF]'>Use PC</label>
+                            <input type="checkbox" id='Use_PC' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[2] = el} />
+                            <label htmlFor="Use_PC" className='label-text text-[#32E2FF]'>Use PC</label>
                         </div>
                         <div className="check-purpose flex items-center space-x-2">
-                            <input type="checkbox" id='other' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" />
-                            <label htmlFor="other" className='label-text text-[#32E2FF]'>Other</label>
+                            <input type="checkbox" id='Other' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[3] = el} />
+                            <label htmlFor="Other" className='label-text text-[#32E2FF]'>Other</label>
                         </div>
                     </div>
                 </div>
-                {/* check purpose to entry form */}
-                {/* confirm button */}
                 <div className="flex-1 container-button h-full items-end mt-5 grid grid-cols-2 gap-2">
-                    <button className="btn btn-primary">Entry</button>
-                    <button className="btn btn-outline border-blue-400 text-accent">Cancel</button>
+                    <button className="btn btn-primary" onClick={handleEntryExit}>Entry</button>
+                    <button className="btn btn-outline border-blue-400 text-accent" onClick={handleClearFormData}>Cancel</button>
                 </div>
-                {/* confirm button */}
+                <Toaster position='bottom-center' />
             </div>
         </>
     );

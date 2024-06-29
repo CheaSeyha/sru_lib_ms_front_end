@@ -21,7 +21,6 @@ function CameraScanQR() {
                 const url = new URL(rawValue);
                 const getStudentID = url.searchParams.get('name');
                 setScanResultID(getStudentID);
-                console.log(getStudentID);
                 setStopScan(true);
             } catch (error) {
                 alert("Student Not Exist OR Wrong QR Code Type");
@@ -50,6 +49,13 @@ function CameraScanQR() {
     useEffect(() => {
         // This will re-render the Scanner component when muteAudio changes
     }, [muteAudio]);
+
+    useEffect(() => {//Execute when scanResultID change 
+        //setStopScan to false to show the cemera for scan again
+        if (scanResultID === 0) {
+            setStopScan(false)
+        }
+    }, [scanResultID])
     return (
         <>
             <div className="flex flex-col CamScanQR bg-secondary w-full h-fit rounded-[20px] p-5">
@@ -82,7 +88,7 @@ function CameraScanQR() {
                             constraints={{ deviceId }}
                             onScan={(result) => handleScanResult(result)}
                             paused={stopScan}
-                            components={{ audio: false, torch: true }}
+                            components={{ audio: true, torch: true }}
                         />
                     )}
                 </div>
