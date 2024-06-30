@@ -2,7 +2,7 @@ import React from 'react'
 import { Undo2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DateTimeCard from './DateTimeCard';
-function HeadTextForTableData() {
+function HeadTextForTableData({ studentEntryData }) {
 
     const navigate = useNavigate();
 
@@ -10,197 +10,6 @@ function HeadTextForTableData() {
         navigate(-1); // This will navigate to the previous URL in the history stack
     };
 
-
-    //fake data 
-    const fakeDataStudent = [
-        {
-            id: '200435',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: false,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: false,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: false,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: false,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: false,
-        },
-        {
-            id: '200246',
-            stuName: 'John Wicks',
-            gender: 'M',
-            mejor: 'CS',
-            studyYear: '04',
-            entryTimes: '07:20 AM',
-            exitTimes: 'N/A',
-            activity: 'Read Book',
-            status: true,
-        }
-    ];
     return (
         <>
             <div className="hidden sm:flex flex-col table-container w-full space-y-5 h-full bg-secondary rounded-[20px] p-5 text-accent overflow-auto">
@@ -220,33 +29,27 @@ function HeadTextForTableData() {
                             <thead className='text-accent'>
                                 <tr>
                                     <th>#</th>
-                                    <th>ID</th>
-                                    <th>Student Name</th>
-                                    <th>Gender</th>
-                                    <th>Major</th>
-                                    <th>Study Year</th>
+                                    <th>Studetn ID</th>
                                     <th>Entry Times</th>
-                                    <th>Exit Times</th>
-                                    <th>Purpose</th>
+                                    <th>Exiting Times</th>
+                                    <th>Entry Purpose</th>
+                                    <th>Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {/* row 1 */}
-                                {fakeDataStudent.map((e, index) => (
+                                {studentEntryData.map((e, index) => (
                                     <tr key={index} className="hover:bg-primary">
                                         <th>{index}</th>
-                                        <th>{e.id}</th>
-                                        <td>{e.stuName}</td>
-                                        <td>{e.gender}</td>
-                                        <td>{e.mejor}</td>
-                                        <td>{e.studyYear}</td>
-                                        <td>{e.entryTimes}</td>
-                                        <td>{e.exitTimes}</td>
-                                        <td>{e.activity}</td>
+                                        <th>{e.studentId}</th>
+                                        <th>{e.entryTimes}</th>
+                                        <th>{e.exitingTimes === null ? "N/A" : e.exitingTimes}</th>
+                                        <th>{e.purpose}</th>
+                                        <th>{e.date}</th>
                                         <td className='text-white'>
-                                            <span className={`w-fit h-fit px-3 rounded-lg ${e.status ? 'bg-blue-600' : 'bg-red-600'}`}>
-                                                {e.status ? "IN" : "OUT"}
+                                            <span className={`w-fit h-fit px-3 rounded-lg ${e.exitingTimes === null ? 'bg-blue-600' : 'bg-red-600'}`}>
+                                                {e.exitingTimes === null ? "IN" : "OUT"}
                                             </span>
                                         </td>
                                     </tr>

@@ -5,6 +5,7 @@ import { useScanResultID } from '../../Context/ScanResultIDContext';
 import { useNavigate } from 'react-router-dom';
 import { Undo2, Settings, X } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal';
+import toast from 'react-hot-toast';
 
 function CameraScanQR() {
     const devices = useDevices();
@@ -23,7 +24,7 @@ function CameraScanQR() {
                 setScanResultID(getStudentID);
                 setStopScan(true);
             } catch (error) {
-                alert("Student Not Exist OR Wrong QR Code Type");
+                toast.error("Student Not Found Or Wrong QR Code")
             }
         } else {
             console.log("QR Code Not Exist Or Wrong QR Code");
