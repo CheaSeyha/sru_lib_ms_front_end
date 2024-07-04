@@ -30,10 +30,11 @@ function HeadTextForTableData({ studentEntryData }) {
                                 <tr>
                                     <th>#</th>
                                     <th>Studetn ID</th>
+                                    <th>Studetn Name</th>
+                                    <th>Mejor Name</th>
                                     <th>Entry Times</th>
                                     <th>Exiting Times</th>
                                     <th>Entry Purpose</th>
-                                    <th>Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -41,12 +42,13 @@ function HeadTextForTableData({ studentEntryData }) {
                                 {/* row 1 */}
                                 {studentEntryData.map((e, index) => (
                                     <tr key={index} className="hover:bg-primary">
-                                        <th>{index}</th>
-                                        <th>{e.studentId}</th>
-                                        <th>{e.entryTimes}</th>
-                                        <th>{e.exitingTimes === null ? "N/A" : e.exitingTimes}</th>
-                                        <th>{e.purpose}</th>
-                                        <th>{e.date}</th>
+                                        <th>{index + 1}</th>
+                                        <td>{e.studentId}</td>
+                                        <td>{e.studentName}</td>
+                                        <td>{e.major}</td>
+                                        <td>{e.entryTimes}</td>
+                                        <td>{e.exitingTimes === null ? "N/A" : e.exitingTimes}</td>
+                                        <td>{e.purpose}</td>
                                         <td className='text-white'>
                                             <span className={`w-fit h-fit px-3 rounded-lg ${e.exitingTimes === null ? 'bg-blue-600' : 'bg-red-600'}`}>
                                                 {e.exitingTimes === null ? "IN" : "OUT"}
@@ -57,6 +59,11 @@ function HeadTextForTableData({ studentEntryData }) {
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div className="join self-end">
+                    <button className="join-item btn btn-md">«</button>
+                    <button className="join-item btn btn-md">1</button>
+                    <button className="join-item btn btn-md">»</button>
                 </div>
             </div>
 

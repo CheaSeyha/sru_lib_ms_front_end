@@ -81,7 +81,7 @@ function CameraScanQR() {
                                 <path d="M9 9h.01" />
                                 <path d="M15 9h.01" />
                             </svg>
-                            <p className='flex'>Student ID {scanResultID} <span className='text-yellow-200'></span></p>
+                            <p className='flex'>Scan Success<span className='text-yellow-200'></span></p>
                             <p>Please Check Your Purpose</p>
                         </div>
                     ) : (

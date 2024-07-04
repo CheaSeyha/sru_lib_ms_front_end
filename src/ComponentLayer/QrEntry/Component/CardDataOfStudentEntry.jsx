@@ -1,7 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { DoorOpen, LogOut, UsersRound } from 'lucide-react';
 
+function CardDataOfStudentEntry({ cardType, amountData }) {
+    const [cardTypeDetail,setcardTypeDetail] = useState("Total Entry Today")
+    const [bgIcon, setBgicon] = useState("bg-[#00FF29]")
+    const [bgColor, setBgColor] = useState("from-[#00C31F] to-[#1F9EB2]")
+    const [iconCard, setIconCard] = useState(<DoorOpen className='w-full h-full text-white' />)
+    // bgIcon="bg-[#00FF29]"
+    // bgIcon="bg-[#00D1FF]" 
+    //  bgIcon="bg-[#C5F3B3]"
+    useEffect(() => {
+        switch (cardType) {
+            case "Exit":
+                setBgicon("bg-[#00D1FF]")
+                setIconCard(<LogOut className='w-full h-full text-white' />)
+                setBgColor("from-[#00A4C8] to-[#C0C0C0]")
+                setcardTypeDetail("Total Exit Today")
+                break;
+            case "Total":
+                setBgicon("bg-[#C5F3B3]")
+                setIconCard(<UsersRound className='w-full h-full text-white' />)
+                setBgColor("from-[#C0C0C0] to-[#50FF00]")
+                setcardTypeDetail("Total Student Entry")
+                break;
+        }
+    }, [cardType])
 
-function CardDataOfStudentEntry({ bgIcon, bgColor, iconCard, cardType, cardTypeDetail, amountData }) {
     return (
         <>
             <div className={`container-card-data cursor-pointer drop-shadow-md w-full xl:h-[104px] flex rounded-[20px] bg-gradient-to-r ${bgColor} p-3 sm:p-5`}>

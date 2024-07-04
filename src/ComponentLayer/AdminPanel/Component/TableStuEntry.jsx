@@ -76,12 +76,8 @@ export default function TableStuEntry() {
     };
 
     const getStuEnry = async () => {
-        const response = await axios.get('/att', {
-            params: {
-                limit: 10 // Adjust this parameter based on the API documentation
-            }
-        });
-        setEntryTableData(response.data);
+        const response = await axios.get('/entry');
+        setEntryTableData(response.data.attendDetail);
     }
 
     useEffect(() => {
@@ -105,6 +101,7 @@ export default function TableStuEntry() {
                             <tr>
                                 <th>NO</th>
                                 <th>Student ID</th>
+                                <th>Student Name</th>
                                 <th>Entry Times</th>
                                 <th>Exiting Times</th>
                                 <th>Purpose</th>
@@ -117,10 +114,15 @@ export default function TableStuEntry() {
                                 <tr key={index} className='hover:bg-primary cursor-pointer active:bg-primary'>
                                     <th>{index + 1}</th>
                                     <td>{entry.studentId}</td>
+                                    <td>{entry.studentName}</td>
                                     <td>{entry.entryTimes}</td>
-                                    <td>{entry.exitingTimes}</td>
+                                    <td>{entry.exitingTimes === null ? "N/A" : entry.exitingTimes}</td>
                                     <td>{entry.purpose}</td>
-                                    <td><span className={`${entry.exitingTimes ? "bg-blue-400 " : "bg-red-400 "}px-2 rounded-lg text-white`}>{entry.status ? "IN" : "OUT"}</span></td>
+                                    <td className='text-white'>
+                                        <span className={`w-fit h-fit px-3 rounded-lg ${entry.exitingTimes === null ? 'bg-blue-600' : 'bg-red-600'}`}>
+                                            {entry.exitingTimes === null ? "IN" : "OUT"}
+                                        </span>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

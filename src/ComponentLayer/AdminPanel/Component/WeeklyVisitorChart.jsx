@@ -42,7 +42,7 @@ function WeeklyVisitorChart({ WeelyVisitorData }) {
     return (
         <>
             <div className="text-title w-full h-[46px]">
-                <p>Weekly Visitor</p>
+                <p>Number of participants last week.</p>
             </div>
             <div className="flex-1 chart-line w-full h-full flex space-x-5">
                 <div className="yxis-data w-fit h-full">

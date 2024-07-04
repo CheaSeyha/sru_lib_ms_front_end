@@ -72,20 +72,16 @@ function FormConfirmEntry() {
     // Function to handle submission of entry/exit data
     const handleSubmitEntryExit = async () => {
         // Async function to save attendance data
+        // Function to handle submission of entry/exit data
         const saveAttendance = async () => {
-            // Prepare payload with data to submit
-            const payload = {
-                studentId: stuEntryInfor.studentId,
-                entryTimes: "08:07:01",
-                purpose: checkPurpose,
-                date: "2024-06-22"
-            };
-
-            console.log("Payload:", payload); // Log the payload before sending
-
             try {
                 // Send POST request to save attendance data
-                const response = await axios.post("/att", payload);
+                const response = await axios.post('/entry', null, {
+                    params: {
+                        studentId: Number(stuEntryInfor.studentId),
+                        purpose: checkPurpose
+                    }
+                });
                 return response.data; // Resolve promise with response data
             } catch (error) {
                 throw error; // Throw the error to be caught by the calling function
