@@ -7,22 +7,24 @@ import { Undo2, Settings, X } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal';
 import toast from 'react-hot-toast';
 
-function CameraScanQR() {
+function CameraScanQR({stopScan}) {
     const devices = useDevices();
     const [deviceId, setDeviceId] = useState("");
-    const [stopScan, setStopScan] = useState(false);
     const [muteAudio, setMuteAudio] = useState(true);
     const [showModal, setShowModal] = useState(false)
     const { scanResultID, setScanResultID } = useScanResultID();
 
     const handleScanResult = (result) => {
+        //check scan is type qr code
         if (result[0].format === "qr_code") {
+            //get value from scan
             const rawValue = result[0].rawValue;
             try {
                 const url = new URL(rawValue);
+                //Extrack student id from link url
                 const getStudentID = url.searchParams.get('name');
+                //set Student id to context (global var)
                 setScanResultID(getStudentID);
-                setStopScan(true);
             } catch (error) {
                 toast.error("Student Not Found Or Wrong QR Code")
             }
@@ -31,32 +33,12 @@ function CameraScanQR() {
         }
     };
 
-    const handleScanCam = () => {
-        setStopScan(false);
-        setScanResultID(null);
-    };
-
     const navigate = useNavigate();
 
     const handleBack = () => {
         navigate(-1);
     };
 
-    const handleMuteAudioCamera = () => {
-        muteAudio ? setMuteAudio(false) : setMuteAudio(true)
-        console.log(muteAudio)
-    }
-
-    useEffect(() => {
-        // This will re-render the Scanner component when muteAudio changes
-    }, [muteAudio]);
-
-    useEffect(() => {//Execute when scanResultID change 
-        //setStopScan to false to show the cemera for scan again
-        if (scanResultID === 0) {
-            setStopScan(false)
-        }
-    }, [scanResultID])
     return (
         <>
             <div className="flex flex-col CamScanQR bg-secondary w-full h-fit rounded-[20px] p-5">
@@ -89,7 +71,9 @@ function CameraScanQR() {
                             constraints={{ deviceId }}
                             onScan={(result) => handleScanResult(result)}
                             paused={stopScan}
-                            components={{ audio: true, torch: true }}
+                            scanDelay={1000}
+                            allowMultiple={true}
+                            components={{ audio: true, torch: true}}
                         />
                     )}
                 </div>
