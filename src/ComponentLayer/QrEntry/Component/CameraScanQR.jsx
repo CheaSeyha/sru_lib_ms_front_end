@@ -7,7 +7,7 @@ import { Undo2, Settings, X } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal';
 import toast from 'react-hot-toast';
 
-function CameraScanQR({stopScan}) {
+function CameraScanQR({ stopScan }) {
     const devices = useDevices();
     const [deviceId, setDeviceId] = useState("");
     const [muteAudio, setMuteAudio] = useState(true);
@@ -15,18 +15,24 @@ function CameraScanQR({stopScan}) {
     const { scanResultID, setScanResultID } = useScanResultID();
 
     const handleScanResult = (result) => {
-        //check scan is type qr code
+        // Check if the scan is of type QR code
         if (result[0].format === "qr_code") {
-            //get value from scan
+            // Get the value from the scan
             const rawValue = result[0].rawValue;
             try {
                 const url = new URL(rawValue);
-                //Extrack student id from link url
+                // Extract the student ID from the URL
                 const getStudentID = url.searchParams.get('name');
-                //set Student id to context (global var)
-                setScanResultID(getStudentID);
+
+                if (getStudentID) {
+                    // Set student ID to context (global var)
+                    setScanResultID(getStudentID);
+                } else {
+                    // Notify user that the QR code is wrong or student not found
+                    toast.error("Student Not Found Or Wrong QR Code");
+                }
             } catch (error) {
-                toast.error("Student Not Found Or Wrong QR Code")
+                toast.error("Student Not Found Or Wrong QR Code");
             }
         } else {
             console.log("QR Code Not Exist Or Wrong QR Code");
@@ -73,7 +79,7 @@ function CameraScanQR({stopScan}) {
                             paused={stopScan}
                             scanDelay={1000}
                             allowMultiple={true}
-                            components={{ audio: true, torch: true}}
+                            components={{ audio: true, torch: true }}
                         />
                     )}
                 </div>

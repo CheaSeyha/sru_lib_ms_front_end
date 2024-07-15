@@ -141,25 +141,25 @@ function FormConfirmEntry({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
                 <div className="check-purpose text-accent mt-5">
                     <p className='font-bold'>Entry Purpose</p>
                     <div className="container-check-purpose grid lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-5">
-                        <div className="check-purpose flex items-center space-x-2">
+                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info" data-tip="Check this box if you are reading materials.">
                             <input type="checkbox" id='Read_Book' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[0] = el} />
-                            <label htmlFor="Read_Book" className='label-text text-[#32E2FF]'>Read Book</label>
+                            <label htmlFor="Read_Book" className='label-text text-[#32E2FF]'>Reading</label>
                         </div>
-                        <div className="check-purpose flex items-center space-x-2">
+                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info z-20" data-tip="Check this box if you are working on an assignment.">
                             <input type="checkbox" id='Assignment' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[1] = el} />
                             <label htmlFor="Assignment" className='label-text text-[#32E2FF]'>Assignment</label>
                         </div>
-                        <div className="check-purpose flex items-center space-x-2">
+                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info" data-tip="Check this box if you will be using a PC for your task.">
                             <input type="checkbox" id='Use_PC' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[2] = el} />
                             <label htmlFor="Use_PC" className='label-text text-[#32E2FF]'>Use PC</label>
                         </div>
-                        <div className="check-purpose flex items-center space-x-2">
+                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info">
                             <input type="checkbox" id='Other' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[3] = el} />
                             <label htmlFor="Other" className='label-text text-[#32E2FF]'>Other</label>
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 container-button h-full items-end mt-5 grid grid-cols-2 gap-2">
+                <div className="flex-1 container-button h-full items-end mt-5 grid grid-cols-2 gap-2" data-tip="Check this box if your task falls under any other purpose not listed above.">
                     <button className="btn btn-primary hover:border-white" onClick={handleSaveEntry} >Entry</button>
                     <button className="btn btn-outline border-blue-400 text-accent" onClick={handleClearFormData}>Cancel</button>
                 </div>

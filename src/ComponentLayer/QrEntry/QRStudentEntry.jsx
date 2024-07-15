@@ -40,11 +40,16 @@ function QRStudentEntry() {
             try {
                 const result = await axios.get(`entry/check?studentId=${scanResultID}`);
                 if (result.data === "exited" || result.data === "new attend!") {
-                    setStopScan(true);
                     const studentResult = await axios.get(`/student/${scanResultID}`);
-                    setStuEntryInfor(studentResult.data);
-                    setDisCheckPur(false); // Enable check purpose
-                    startTimeout();
+                    if(studentResult.data === ""){
+                        toast.error("Can't not find a student data")
+                        handleClearFormData()
+                    }else{
+                        setStopScan(true)
+                        setStuEntryInfor(studentResult.data);
+                        setDisCheckPur(false); // Enable check purpose
+                        startTimeout();
+                    } 
                 } else {
                     await toast.promise(
                         axios.put(`entry?studentId=${scanResultID}`),
@@ -127,7 +132,7 @@ function QRStudentEntry() {
     }, [scanResultID]);
 
     return (
-        <div className='w-full h-fit sm:h-full flex flex-col-reverse sm:flex-row space-x-0 sm:space-x-5 overflow-auto'>
+        <div className='z-30 w-full h-fit sm:h-full flex flex-col-reverse sm:flex-row space-x-0 sm:space-x-5 overflow-auto'>
             <div className="flex flex-col space-y-5 ScanQR-ConfirmForm w-full sm:w-[230px] lg:w-[290px] xl:w-[390px] rounded-[20px]">
                 <CameraScanQR stopScan={stopScan} />
                 <FormConfirmEntry
