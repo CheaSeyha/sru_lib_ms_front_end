@@ -5,7 +5,7 @@ import DateTimeCard from './DateTimeCard';
 
 function HeadTextForTableData({ studentEntryData }) {
     const navigate = useNavigate();
-    const [recordsPerPage] = useState(15); // Number of records per page
+    const [recordsPerPage] = useState(16); // Number of records per page
     const [currentPage, setCurrentPage] = useState(1);
     const [filter, setFilter] = useState('all'); // Default filter
 
