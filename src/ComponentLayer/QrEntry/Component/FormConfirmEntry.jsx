@@ -116,13 +116,13 @@ function FormConfirmEntry({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
                         />
                     </div>
                     <div className="inputbox space-y-2">
-                        <label htmlFor="majorName">Mejor Name</label>
+                        <label htmlFor="majorName">Major Name</label>
                         <input
                             readOnly={true}
                             type="text"
                             value={stuEntryInfor.majorName}
                             id='majorName'
-                            placeholder="Mejor Name"
+                            placeholder="Major Name"
                             className="input input-bordered bg-primary w-full"
                         />
                     </div>
