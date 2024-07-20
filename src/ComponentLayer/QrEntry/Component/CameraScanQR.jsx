@@ -79,7 +79,7 @@ function CameraScanQR({ stopScan }) {
                             paused={stopScan}
                             scanDelay={1000}
                             allowMultiple={true}
-                            components={{ audio: true, torch: true }}
+                            components={{ audio: false, torch: true }}
                         />
                     )}
                 </div>

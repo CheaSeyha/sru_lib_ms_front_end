@@ -26,69 +26,6 @@ function FormConfirmEntry({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
             return values.join(', ');
         });
     };
-
-    // // Function to handle submission of entry/exit data
-    // const handleSubmitEntryExit = async () => {
-    //     // Async function to save attendance data
-    //     // Function to handle submission of entry/exit data
-    //     const saveAttendance = async () => {
-    //         try {
-    //             // Send POST request to save attendance data
-    //             const response = await axios.post('/entry', null, {
-    //                 params: {
-    //                     studentId: Number(stuEntryInfor.studentId),
-    //                     purpose: checkPurpose
-    //                 }
-    //             });
-    //             return response.data; // Resolve promise with response data
-    //         } catch (error) {
-    //             throw error; // Throw the error to be caught by the calling function
-    //         }
-    //     };
-
-    //     // Validation checks before submitting data
-    //     if (scanResultID === 0) {
-    //         toast.error("Please wait until scan success"); // Display error toast if scanResultID is 0
-    //     } else if (checkPurpose === '') {
-    //         toast.error("Please check purpose"); // Display error toast if checkPurpose is empty
-    //     } else {
-    //         try {
-    //             // Use toast.promise to handle submission with loading, success, and error states
-    //             await toast.promise(
-    //                 saveAttendance(),
-    //                 {
-    //                     loading: 'Submitting...', // Display loading message during submission
-    //                     success: (response) => {
-    //                         // Display success toast upon successful submission
-    //                         toast.success(`Student ID ${stuEntryInfor.studentId} Entry Success`);
-    //                         console.log("Data submitted successfully:", response); // Log successful response
-    //                     },
-    //                     error: (error) => {
-    //                         // Error handling based on different error scenarios
-    //                         if (error.response) {
-    //                             const status = error.response.status;
-    //                             if (status === 500) {
-    //                                 toast.error("Server error. Please try again later.");
-    //                             } else {
-    //                                 toast.error(`Error ${status}. Please try again later.`);
-    //                             }
-    //                         } else if (error.request) {
-    //                             toast.error("No response from server. Please check your network connection.");
-    //                         } else {
-    //                             toast.error("An unexpected error occurred. Please try again later.");
-    //                         }
-    //                     }
-    //                 }
-    //             );
-    //             handleClearFormData(); // Clear form data after successful submission
-    //         } catch (error) {
-    //             // Handle any additional error handling or retry logic if needed
-    //             console.error("Error submitting entry/exit data:", error);
-    //             toast.error("Failed to submit data. Please try again later.");
-    //         }
-    //     }
-    // };
-
     useEffect(() => {//Disble enale Check Purpose
         checkboxesRef.current.forEach(checkbox => {
             checkbox.disabled = disCheckPur;

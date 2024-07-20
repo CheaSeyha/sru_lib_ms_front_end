@@ -92,7 +92,7 @@ function WeeklyVisitorChart({ WeelyVisitorData }) {
                 </div>
             </div>
             <div className="x-xis-data-dayOfWeek-container flex space-x-5">
-                <div className="flex-1 line-chart w-full h-full ps-[45px]">
+                <div className="flex-1 line-chart w-full h-full ps-[37px]">
                     <div className="x-xis-data-dayOfWeek flex justify-between h-full pt-5">
                         {/* Loop through the array and generate JSX elements */}
                         {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day, index) => (

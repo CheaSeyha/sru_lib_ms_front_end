@@ -41,15 +41,15 @@ function QRStudentEntry() {
                 const result = await axios.get(`entry/check?studentId=${scanResultID}`);
                 if (result.data === "exited" || result.data === "new attend!") {
                     const studentResult = await axios.get(`/student/${scanResultID}`);
-                    if(studentResult.data === ""){
+                    if (studentResult.data === "") {
                         toast.error("Can't not find a student data")
                         handleClearFormData()
-                    }else{
+                    } else {
                         setStopScan(true)
                         setStuEntryInfor(studentResult.data);
                         setDisCheckPur(false); // Enable check purpose
                         startTimeout();
-                    } 
+                    }
                 } else {
                     await toast.promise(
                         axios.put(`entry?studentId=${scanResultID}`),
@@ -104,7 +104,10 @@ function QRStudentEntry() {
     // Save entry
     const handleSaveEntry = () => {
         clearTimeout(timeoutId); // Clear timeout when saving entry
-        if (checkPurpose === "") {
+        if (scanResultID === 0) {
+            toast.error("Please scan your card before entry...")
+        }
+        else if (checkPurpose === "") {
             toast.error("Please select an entry purpose.");
         } else {
             axios.post('/entry', null, {

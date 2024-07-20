@@ -104,7 +104,6 @@ function HeadTextForTableData({ studentEntryData }) {
                     <div className="min-h-full overflow-y-auto">
                         <div className="relative">
                             <table className="table min-w-full">
-                                {/* sticky head */}
                                 <thead className="sticky top-0 bg-secondary text-accent">
                                     <tr>
                                         <th>#</th>
@@ -117,30 +116,26 @@ function HeadTextForTableData({ studentEntryData }) {
                                         <th>Status</th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    {/* rows */}
+                                    {currentRecords.map((e, index) => (
+                                        <tr key={index} className="hover:bg-primary">
+                                            <th>{(currentPage - 1) * recordsPerPage + index + 1}</th>
+                                            <td>{e.studentId}</td>
+                                            <td>{e.studentName}</td>
+                                            <td>{e.major}</td>
+                                            <td>{e.entryTimes}</td>
+                                            <td>{e.exitingTimes === null ? "N/A" : e.exitingTimes}</td>
+                                            <td>{e.purpose}</td>
+                                            <td className='text-white'>
+                                                <span className={`w-fit h-fit px-3 rounded-lg ${e.exitingTimes === null ? 'bg-blue-600' : 'bg-red-600'}`}>
+                                                    {e.exitingTimes === null ? "IN" : "OUT"}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
                             </table>
-                            <div className="overflow-x-auto">
-                                <table className="table min-w-full">
-                                    <tbody>
-                                        {/* rows */}
-                                        {currentRecords.map((e, index) => (
-                                            <tr key={index} className="hover:bg-primary">
-                                                <th>{(currentPage - 1) * recordsPerPage + index + 1}</th>
-                                                <td>{e.studentId}</td>
-                                                <td>{e.studentName}</td>
-                                                <td>{e.major}</td>
-                                                <td>{e.entryTimes}</td>
-                                                <td>{e.exitingTimes === null ? "N/A" : e.exitingTimes}</td>
-                                                <td>{e.purpose}</td>
-                                                <td className='text-white'>
-                                                    <span className={`w-fit h-fit px-3 rounded-lg ${e.exitingTimes === null ? 'bg-blue-600' : 'bg-red-600'}`}>
-                                                        {e.exitingTimes === null ? "IN" : "OUT"}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
