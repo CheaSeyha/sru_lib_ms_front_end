@@ -76,9 +76,14 @@ export default function TableStuEntry() {
     };
 
     const getStuEnry = async () => {
-        const response = await axios.get('/entry');
-        setEntryTableData(response.data.attendDetail);
-    }
+        try {
+            const response = await axios.get('/entry');
+            const limitedData = response.data.attendDetail.slice(0, 10); // Limit to first 16 records
+            setEntryTableData(limitedData);
+        } catch (error) {
+            console.error('Error fetching student entry data:', error);
+        }
+    };
 
     useEffect(() => {
         getStuEnry()

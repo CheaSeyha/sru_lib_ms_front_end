@@ -54,8 +54,8 @@ function Dashbaord() {
                         }}>
                         <div className="tittle flex justify-between">
                             <div className="sruText">
-                                <p className="sm:text-[30px] xl:text-[30px] font-NotoSanKhmer">{t("sruText")}</p>
-                                <p className="text-[10px] xl:text-[12px] font-bold">WELCOME BACK JOHNSEY</p>
+                                <p className="sm:text-[30px] xl:text-[30px] font-moul">{t("sruText")}</p>
+                                <p className="text-[10px] xl:text-[15px] font-bold font-noto">WELCOME BACK JOHNSEY</p>
                             </div>
                             <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
                         </div>

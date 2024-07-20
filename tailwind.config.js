@@ -4,14 +4,15 @@ import { root } from "postcss";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend:{
-      fontFamily:{
-        NotoSanKhmer:["NotoSansKhmer-Regular"],
-        OpenSans:["OpenSans-Regular"]
-      }
-    }
+    extend: {
+      fontFamily: {
+        noto: ["NotoSansKhmer-Regular", "sans-serif"],
+        open: ["OpenSans-Regular", "sans-serif"],
+        moul: ["Moul-Regular", "sans-serif"],
+      },
+    },
   },
-  plugins: [require("daisyui"),require('tailwind-scrollbar-hide')],
+  plugins: [require("daisyui"), require("tailwind-scrollbar-hide")],
   daisyui: {
     themes: [
       {
