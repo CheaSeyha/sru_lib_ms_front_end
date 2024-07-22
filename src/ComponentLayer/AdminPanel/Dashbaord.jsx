@@ -40,7 +40,7 @@ function Dashbaord() {
     return (
         <>
             {loading ? (
-                <main className='flex justify-center items-center w-full h-fit xl:h-full space-y-5'>
+                <main className='flex justify-center items-center w-full h-full space-y-5'>
                     <span className="loading loading-dots text-accent loading-lg"></span>
                 </main>
             ) : (
