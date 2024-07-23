@@ -5,28 +5,45 @@ import Modal from '../../../layout/Component/Modal';
 import axios from '../../../api/axios';
 import useScanEntry from '../../Hook/useScanEntry';
 import toast from 'react-hot-toast';
-
+import { Search } from 'lucide-react';
 export default function TableStuEntry() {
     // State variables
-    const [checkStuEntry, setCheckStuEntry] = useState(false);
+    const [disbleEntryBtn, setDisbleEntryBTN] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isStudent, setIsStudent] = useState(true);
+    const [checkRadio, setCheckRadio] = useState(true);
     const [studentID, setStudentID] = useState('');
     const [guestName, setGuestName] = useState('');
     const [gender, setGender] = useState('');
     const [position, setPosition] = useState('');
     const [studentIDError, setStudentIDError] = useState(false);
+    const [studentIDErrorMsx, setStudentIDErrorMsx] = useState("Student ID is required");
     const [guestNameError, setGuestNameError] = useState(false);
     const [genderError, setGenderError] = useState(false);
     const [positionError, setPositionError] = useState(false);
     const [formErrorMessage, setFormErrorMessage] = useState('');
+    const [areDisabled, setAreDisabled] = useState(true);//set disbale enable checkbox for check purepose
 
     // Toggle modal visibility
     const handleOpenModal = () => setIsModalVisible(true);
-    const handleCloseModal = () => setIsModalVisible(false);
+    const handleCloseModal = () => {
+        setCheckRadio(true)
+        setIsModalVisible(false);
+        clearForm();
+    };
+
 
     // Handle radio button changes
-    const handleRadioChange = (event) => setIsStudent(event.target.value === 'student');
+    const handleRadioChange = (event) => {
+        setCheckRadio(event.target.value === 'student')
+        if (checkRadio) {
+            setDisbleEntryBTN(false)
+            console.log("enable")
+        } else {
+            setDisbleEntryBTN(true)
+            clearForm()
+        }
+    };
+
 
     // Handle input changes
     const handleStudentIDChange = (event) => setStudentID(event.target.value);
@@ -45,8 +62,8 @@ export default function TableStuEntry() {
     }
 
     // Function to get form values based on entry type
-    function getFormValues(isStudent, studentID, guestName, gender, position, entryPurpose) {
-        if (isStudent) {
+    function getFormValues(checkRadio, studentID, guestName, gender, position, entryPurpose) {
+        if (checkRadio) {
             return {
                 studentID,
                 entryPurpose
@@ -61,49 +78,90 @@ export default function TableStuEntry() {
         }
     }
 
-    // Validate and check student entry by ID
-    const checkStuEntryByID = async () => {
-        let hasError = false;
-
-        // Reset errors
-        setStudentIDError(false);
+    //Clear Form Modal 
+    const clearForm = () => {
+        setDisbleEntryBTN(true)
         setGuestNameError(false);
         setGenderError(false);
         setPositionError(false);
-        setFormErrorMessage('');
+        setStudentIDError(false)
+        setStudentIDErrorMsx("Student ID is required")
+        setStudentID('');
+        setGuestName('');
+        setGender('');
+        setPosition('');
+        setAreDisabled(true); // Disable checkboxes
+        setFormErrorMessage("")
+    };
 
-        // Validate fields
-        if (isStudent && studentID.trim() === '') {
-            setStudentIDError(true);
-            hasError = true;
-        }
-        if (!isStudent) {
+    const { checkPurpose, setCheckPurpose, } = useScanEntry()
+
+    const handleCheckPurpose = (event) => {
+        const { id, checked } = event.target;
+        const value = id.replace('_', ' ');
+
+        setCheckPurpose(prevValue => {
+            const values = prevValue ? prevValue.split(', ') : [];
+            if (checked) {
+                if (!values.includes(value)) {
+                    values.push(value);
+                }
+            } else {
+                const index = values.indexOf(value);
+                if (index > -1) {
+                    values.splice(index, 1);
+                }
+            }
+            return values.join(', ');
+        });
+    };
+
+    // Validate and check student entry by ID
+    const handleEntry = async () => {
+        if (!checkRadio) {
             if (guestName.trim() === '') {
                 setGuestNameError(true);
-                hasError = true;
             }
             if (gender.trim() === '') {
                 setGenderError(true);
-                hasError = true;
             }
             if (position.trim() === '') {
                 setPositionError(true);
-                hasError = true;
             }
+        } else {
+            //Save Data Of Student Entry
+            const saveEntry = await axios.post('/entry', null, {
+                params: {
+                    studentId: Number(studentID),
+                    purpose: checkPurpose
+                }
+            })
+            console.log(saveEntry.data)
         }
 
-        if (hasError) return; // Exit if validation fails
-
-        try {
-            const response = await axios.get(`/student/${studentID}`);
-            if (response.data) {
-                console.log(response.data)
-            }
-        } catch (error) {
-            console.error('Error fetching student data:', error);
-            setFormErrorMessage("Failed to fetch student data. Please check the student ID.");
-        }
     };
+
+    //search studetn exit or not 
+    const handelSearchStudent = async () => {
+        if (studentID !== "") {
+            try {
+                var response = await axios.get(`/student/${studentID}`);
+                if (response.data) {
+                    setDisbleEntryBTN(false)//Enable Button Entry
+                    setAreDisabled(false)//enable check box
+                    setStudentIDError(false)
+                } else {
+                    setStudentIDErrorMsx(`Student ID ${studentID} Not Found, Try Different ID...`)
+                    setStudentIDError(true)
+                    setStudentID("")
+                }
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+            }
+        } else {
+            setStudentIDError(true)
+        }
+    }
 
     const { studetnEntryData } = useScanEntry();
 
@@ -164,7 +222,7 @@ export default function TableStuEntry() {
                                 value="student"
                                 className="radio radio-accent"
                                 onChange={handleRadioChange}
-                                checked={isStudent}
+                                checked={checkRadio}
                             />
                             <label htmlFor="studentRadio">Student</label>
                             <input
@@ -174,7 +232,7 @@ export default function TableStuEntry() {
                                 value="guest"
                                 className="radio radio-accent"
                                 onChange={handleRadioChange}
-                                checked={!isStudent}
+                                checked={!checkRadio}
                             />
                             <label htmlFor="guestRadio">Guest Entry</label>
                         </div>
@@ -185,24 +243,27 @@ export default function TableStuEntry() {
                             <X />
                         </button>
                     </div>
-                    {isStudent ? (
+                    {checkRadio ? (
                         <div className="form-entry grid gap-2">
-                            <label htmlFor="studentID">Student ID</label>
-                            <input
-                                type="text"
-                                id='studentID'
-                                value={studentID}
-                                onChange={handleStudentIDChange}
-                                placeholder="Student ID"
-                                className={`input input-bordered w-full bg-base-300 ${studentIDError ? 'border-red-500' : ''}`}
-                            />
+                            <label htmlFor="studentID">Student ID*</label>
+                            <div className="flex gap-2">
+                                <input
+                                    type="number"
+                                    id='studentID'
+                                    value={studentID}
+                                    onChange={handleStudentIDChange}
+                                    placeholder="Student ID"
+                                    className={`input input-bordered w-full bg-base-300 ${studentIDError ? 'border-red-500' : ''}`}
+                                />
+                                <button onClick={handelSearchStudent} className="btn text-accent"><Search /></button>
+                            </div>
                             {studentIDError && (
-                                <p className="text-red-500 text-sm mt-1">Student ID is required</p>
+                                <p className="text-red-500 text-sm mt-1">{studentIDErrorMsx}</p>
                             )}
                         </div>
                     ) : (
                         <div className="form-entry grid gap-2">
-                            <label htmlFor="guestName">Guest Name</label>
+                            <label htmlFor="guestName">Guest Name*</label>
                             <input
                                 type="text"
                                 id="guestName"
@@ -212,10 +273,10 @@ export default function TableStuEntry() {
                                 className={`input input-bordered w-full bg-base-300 ${guestNameError ? 'border-red-500' : ''}`}
                             />
                             {guestNameError && (
-                                <p className="text-red-500 text-sm mt-1">Guest Name is required</p>
+                                <p className="text-red-500 text-sm mt-1">Guest Name is required*</p>
                             )}
 
-                            <label htmlFor="gender">Select Gender</label>
+                            <label htmlFor="gender">Select Gender*</label>
                             <select
                                 id="gender"
                                 value={gender}
@@ -230,7 +291,7 @@ export default function TableStuEntry() {
                                 <p className="text-red-500 text-sm mt-1">Gender is required</p>
                             )}
 
-                            <label htmlFor="position">Select Position</label>
+                            <label htmlFor="position">Select Position*</label>
                             <select
                                 id="position"
                                 value={position}
@@ -254,6 +315,8 @@ export default function TableStuEntry() {
                                     type="checkbox"
                                     id='read_book'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
+                                    disabled={areDisabled}
+                                    onChange={handleCheckPurpose}
                                 />
                                 <label htmlFor="read_book" className='label-text text-[#32E2FF]'>Read Book</label>
                             </div>
@@ -262,6 +325,8 @@ export default function TableStuEntry() {
                                     type="checkbox"
                                     id='assignment'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
+                                    disabled={areDisabled}
+                                    onChange={handleCheckPurpose}
                                 />
                                 <label htmlFor="assignment" className='label-text text-[#32E2FF]'>Assignment</label>
                             </div>
@@ -270,6 +335,8 @@ export default function TableStuEntry() {
                                     type="checkbox"
                                     id='usePC'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
+                                    disabled={areDisabled}
+                                    onChange={handleCheckPurpose}
                                 />
                                 <label htmlFor="usePC" className='label-text text-[#32E2FF]'>Use PC</label>
                             </div>
@@ -278,6 +345,8 @@ export default function TableStuEntry() {
                                     type="checkbox"
                                     id='other'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
+                                    disabled={areDisabled}
+                                    onChange={handleCheckPurpose}
                                 />
                                 <label htmlFor="other" className='label-text text-[#32E2FF]'>Other</label>
                             </div>
@@ -287,10 +356,11 @@ export default function TableStuEntry() {
                         <p className="text-red-500 text-sm mt-1">{formErrorMessage}</p>
                     )}
                     <button
-                        onClick={checkStuEntryByID}
+                        disabled={disbleEntryBtn}
+                        onClick={handleEntry}
                         className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] hover:from-[#00D9FF] hover:to-[#a5cef3] transition-all ease-in-out duration-300"
                     >
-                        {checkStuEntry ? "Entry" : "Check"}
+                        Entry
                     </button>
                 </div>
             </Modal>
