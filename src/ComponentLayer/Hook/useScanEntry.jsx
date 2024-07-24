@@ -139,6 +139,7 @@ function useScanEntry() {
         stuEntryInfor,
         handleClearFormData,
         handleSaveEntry,
+        fetchRecentEntryData
     };
 }
 

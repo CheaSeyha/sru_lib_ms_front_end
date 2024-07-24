@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserRoundPlus, X } from 'lucide-react';
 import BtnGredient from './BtnGredient';
 import Modal from '../../../layout/Component/Modal';
 import axios from '../../../api/axios';
 import useScanEntry from '../../Hook/useScanEntry';
 import toast from 'react-hot-toast';
-import { Search } from 'lucide-react';
+import { Search, ShieldAlert, ShieldCheck } from 'lucide-react';
+import useCheckStudentEntryExit from '../../Hook/useCheckStudentEntryExit'
+
+
+
 export default function TableStuEntry() {
     // State variables
+    const [stuEntryInfor, setstuEntryInfor] = useState({
+        studentName: '',
+        majorName: '',
+        generation: ''
+    })//get student entry after search
     const [disbleEntryBtn, setDisbleEntryBTN] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [checkRadio, setCheckRadio] = useState(true);
@@ -17,11 +26,13 @@ export default function TableStuEntry() {
     const [position, setPosition] = useState('');
     const [studentIDError, setStudentIDError] = useState(false);
     const [studentIDErrorMsx, setStudentIDErrorMsx] = useState("Student ID is required");
+    const [studentIDErrorColor, setStudentIDErrorColor] = useState(true);//Defualt color is red and if false show green
     const [guestNameError, setGuestNameError] = useState(false);
     const [genderError, setGenderError] = useState(false);
     const [positionError, setPositionError] = useState(false);
     const [formErrorMessage, setFormErrorMessage] = useState('');
     const [areDisabled, setAreDisabled] = useState(true);//set disbale enable checkbox for check purepose
+    const [timeoutId, setTimeoutId] = useState(null);
 
     // Toggle modal visibility
     const handleOpenModal = () => setIsModalVisible(true);
@@ -44,6 +55,8 @@ export default function TableStuEntry() {
         }
     };
 
+    const { studetnEntryData, fetchRecentEntryData } = useScanEntry();
+    const { handleCheckScanEntryExit, handleSaveEntry, handleSearchStudent } = useCheckStudentEntryExit()
 
     // Handle input changes
     const handleStudentIDChange = (event) => setStudentID(event.target.value);
@@ -77,7 +90,12 @@ export default function TableStuEntry() {
             };
         }
     }
-
+    const clearAllCheckboxes = () => {
+        const checkboxes = document.querySelectorAll('.container-check-purpose input[type="checkbox"]');
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+    };
     //Clear Form Modal 
     const clearForm = () => {
         setDisbleEntryBTN(true)
@@ -85,13 +103,22 @@ export default function TableStuEntry() {
         setGenderError(false);
         setPositionError(false);
         setStudentIDError(false)
+        setStudentIDErrorColor(true)
         setStudentIDErrorMsx("Student ID is required")
         setStudentID('');
         setGuestName('');
         setGender('');
+        setCheckPurpose("");
         setPosition('');
         setAreDisabled(true); // Disable checkboxes
         setFormErrorMessage("")
+        setstuEntryInfor({
+            studentName: '',
+            majorName: '',
+            generation: ''
+        })
+
+        clearAllCheckboxes()
     };
 
     const { checkPurpose, setCheckPurpose, } = useScanEntry()
@@ -116,6 +143,15 @@ export default function TableStuEntry() {
         });
     };
 
+    const startTimeout = () => {
+        clearTimeout(timeoutId); // Clear previous timeout if any
+        const id = setTimeout(() => {
+            clearForm()
+        }, 3000); // 1 minute timeout
+        setTimeoutId(id); // Save timeout ID to state
+    };
+
+
     // Validate and check student entry by ID
     const handleEntry = async () => {
         if (!checkRadio) {
@@ -129,42 +165,45 @@ export default function TableStuEntry() {
                 setPositionError(true);
             }
         } else {
-            //Save Data Of Student Entry
-            const saveEntry = await axios.post('/entry', null, {
-                params: {
-                    studentId: Number(studentID),
-                    purpose: checkPurpose
-                }
-            })
-            console.log(saveEntry.data)
+            const saveEntry = await handleSaveEntry(studentID, checkPurpose)
+            setStudentIDErrorMsx(`Student ID ${studentID} Entry Success`)
+            setStudentIDErrorColor(false)//show green on text error
+            fetchRecentEntryData()//get new table data
+            clearForm()
+            toast.success("Student Entry Success")
         }
 
     };
 
-    //search studetn exit or not 
     const handelSearchStudent = async () => {
         if (studentID !== "") {
-            try {
-                var response = await axios.get(`/student/${studentID}`);
-                if (response.data) {
+            const searchStu = await handleSearchStudent(studentID)//search student
+
+            setStudentIDError(true)//show Erro 
+            if (searchStu === "not found") {//If student not found
+                setStudentIDErrorMsx(`Student ID ${studentID} NotFound, Try Different ID...`)
+                setStudentID("")
+            } else {// if student found
+
+                const checkEntryExit = await handleCheckScanEntryExit(studentID)
+
+                if (checkEntryExit === "student entry") {//Show Student infor and wait for user check purpose
+                    setstuEntryInfor(searchStu)//get infor of student from searchStu
+                    console.log(stuEntryInfor)
+                    setStudentIDErrorMsx(`Student ID ${studentID} Found, Check Purpose To Entry`)
+                    setStudentIDErrorColor(false)//show green on text error
                     setDisbleEntryBTN(false)//Enable Button Entry
                     setAreDisabled(false)//enable check box
-                    setStudentIDError(false)
-                } else {
-                    setStudentIDErrorMsx(`Student ID ${studentID} Not Found, Try Different ID...`)
-                    setStudentIDError(true)
-                    setStudentID("")
+                } else {//Update Student Exit
+                    setStudentIDErrorMsx(`Student ID ${studentID} Exited Success`)
+                    setStudentIDErrorColor(false)//show green on text error
+                    fetchRecentEntryData()
                 }
-            } catch (error) {
-                console.error('Error fetching student data:', error);
             }
         } else {
             setStudentIDError(true)
         }
-    }
-
-    const { studetnEntryData } = useScanEntry();
-
+    };
     return (
         <>
             <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
@@ -253,13 +292,46 @@ export default function TableStuEntry() {
                                     value={studentID}
                                     onChange={handleStudentIDChange}
                                     placeholder="Student ID"
-                                    className={`input input-bordered w-full bg-base-300 ${studentIDError ? 'border-red-500' : ''}`}
+                                    className={`input input-bordered w-full bg-base-300  ${studentIDError ? (studentIDErrorColor ? "border-red-500" : "border-green-400") : ''}`}
                                 />
                                 <button onClick={handelSearchStudent} className="btn text-accent"><Search /></button>
                             </div>
                             {studentIDError && (
-                                <p className="text-red-500 text-sm mt-1">{studentIDErrorMsx}</p>
+                                <p className={`text-sm mt-1 flex items-center ${studentIDErrorColor ? "text-red-500 " : "text-green-400"}`}>{studentIDErrorColor ? <ShieldAlert /> : <ShieldCheck />}{studentIDErrorMsx} </p>
                             )}
+                            <div className="inputbox space-y-2">
+                                <label htmlFor="studentName">Student Name</label>
+                                <input
+                                    readOnly={true}
+                                    type="text"
+                                    value={stuEntryInfor.studentName}
+                                    id='studentName'
+                                    placeholder="Student Name"
+                                    className="input input-bordered bg-primary w-full"
+                                />
+                            </div>
+                            <div className="inputbox space-y-2">
+                                <label htmlFor="majorName">Major Name</label>
+                                <input
+                                    readOnly={true}
+                                    type="text"
+                                    value={stuEntryInfor.majorName}
+                                    id='majorName'
+                                    placeholder="Major Name"
+                                    className="input input-bordered bg-primary w-full"
+                                />
+                            </div>
+                            <div className="inputbox space-y-2">
+                                <label htmlFor="yearStudy">Generation</label>
+                                <input
+                                    readOnly={true}
+                                    type="text"
+                                    value={stuEntryInfor.generation}
+                                    id='yearStudy'
+                                    placeholder="Generation"
+                                    className="input input-bordered bg-primary w-full"
+                                />
+                            </div>
                         </div>
                     ) : (
                         <div className="form-entry grid gap-2">
