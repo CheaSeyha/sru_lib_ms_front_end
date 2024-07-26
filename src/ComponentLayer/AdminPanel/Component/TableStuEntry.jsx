@@ -10,7 +10,7 @@ import useCheckStudentEntryExit from '../../Hook/useCheckStudentEntryExit'
 
 
 
-export default function TableStuEntry() {
+export default function TableStuEntry({getCardDataApi}) {
     // State variables
     const [stuEntryInfor, setstuEntryInfor] = useState({
         studentName: '',
@@ -37,9 +37,10 @@ export default function TableStuEntry() {
     // Toggle modal visibility
     const handleOpenModal = () => setIsModalVisible(true);
     const handleCloseModal = () => {
+        clearForm();
         setCheckRadio(true)
         setIsModalVisible(false);
-        clearForm();
+
     };
 
 
@@ -151,6 +152,50 @@ export default function TableStuEntry() {
         setTimeoutId(id); // Save timeout ID to state
     };
 
+    let currentIntervalId = null;
+    let currentTimeoutId = null;
+    
+    function showMessageErrorSuccess(studentID, message, countdownDuration = 5) {
+        // Clear existing countdown if any
+        if (currentIntervalId) {
+            clearInterval(currentIntervalId);
+        }
+        if (currentTimeoutId) {
+            clearTimeout(currentTimeoutId);
+        }
+    
+        let remainingTime = countdownDuration;
+    
+        // Function to update the countdown message
+        const updateCountdownMessage = () => {
+            setStudentIDErrorMsx(`${message} ${remainingTime}`);
+        };
+    
+        // Initial setup
+        setStudentIDErrorColor(false); // Show green on text error
+        setStudentID(""); // Clear old student ID after update
+        fetchRecentEntryData();
+    
+        // Start the countdown
+        updateCountdownMessage(); // Initial call to set the message
+        currentIntervalId = setInterval(() => {
+            remainingTime -= 1;
+            if (remainingTime > 0) {
+                updateCountdownMessage();
+            }
+        }, 1000);
+    
+        // Set Student ID error to false after countdown duration
+        currentTimeoutId = setTimeout(() => {
+            clearInterval(currentIntervalId); // Stop the interval
+            setStudentIDError(false); // Show error
+            setStudentIDErrorColor(true)
+            setStudentIDErrorMsx(''); // Clear the message after countdown
+            clearForm()
+            currentIntervalId = null;
+            currentTimeoutId = null;
+        }, countdownDuration * 1000); // Convert seconds to milliseconds
+    }
 
     // Validate and check student entry by ID
     const handleEntry = async () => {
@@ -166,42 +211,46 @@ export default function TableStuEntry() {
             }
         } else {
             const saveEntry = await handleSaveEntry(studentID, checkPurpose)
-            setStudentIDErrorMsx(`Student ID ${studentID} Entry Success`)
-            setStudentIDErrorColor(false)//show green on text error
-            fetchRecentEntryData()//get new table data
-            clearForm()
-            toast.success("Student Entry Success")
+
+            if (saveEntry.status === 'error') {
+                console.log(saveEntry.message)
+            } else {
+                
+                showMessageErrorSuccess(studentID, `Student ID ${studentID} Entry Success.`, 5);
+                console.log("Work")
+                fetchRecentEntryData()//get new table data
+                getCardDataApi()//updatre number card student entry today in dasbaord
+            }
         }
 
     };
 
     const handelSearchStudent = async () => {
         if (studentID !== "") {
-            const searchStu = await handleSearchStudent(studentID)//search student
-
-            setStudentIDError(true)//show Erro 
-            if (searchStu === "not found") {//If student not found
-                setStudentIDErrorMsx(`Student ID ${studentID} NotFound, Try Different ID...`)
-                setStudentID("")
-            } else {// if student found
-
-                const checkEntryExit = await handleCheckScanEntryExit(studentID)
-
-                if (checkEntryExit === "student entry") {//Show Student infor and wait for user check purpose
-                    setstuEntryInfor(searchStu)//get infor of student from searchStu
-                    console.log(stuEntryInfor)
-                    setStudentIDErrorMsx(`Student ID ${studentID} Found, Check Purpose To Entry`)
-                    setStudentIDErrorColor(false)//show green on text error
-                    setDisbleEntryBTN(false)//Enable Button Entry
-                    setAreDisabled(false)//enable check box
-                } else {//Update Student Exit
-                    setStudentIDErrorMsx(`Student ID ${studentID} Exited Success`)
-                    setStudentIDErrorColor(false)//show green on text error
-                    fetchRecentEntryData()
+            const searchStu = await handleSearchStudent(studentID); // search student
+            if (searchStu.status === "not found") { // If student not found
+                
+                setStudentIDErrorMsx(`Student ID ${studentID} Not Found, Try Different ID...`);
+                setStudentID("");
+            } else if (searchStu.status === "success") { // if student found
+                const checkEntryExit = await handleCheckScanEntryExit(studentID);
+                if (checkEntryExit.status === "entry") { // Show Student info and wait for user check purpose
+                    setstuEntryInfor(searchStu.data); // get info of student from searchStu
+                    console.log(stuEntryInfor.data);
+                    setStudentIDErrorMsx(`Student ID ${studentID} Found, Check Purpose To Entry`);
+                    setStudentIDErrorColor(false); // show green on text error
+                    setDisbleEntryBTN(false); // Enable Button Entry
+                    setAreDisabled(false); // enable check box
+                } else { // Update Student Exit
+                    showMessageErrorSuccess(studentID, `Student ID ${studentID} Exited Success.`, 5);
                 }
+            } else {
+                setStudentIDErrorMsx(searchStu.message);
+                setStudentID("");
             }
+            setStudentIDError(true); // show Error 
         } else {
-            setStudentIDError(true)
+            setStudentIDError(true);
         }
     };
     return (

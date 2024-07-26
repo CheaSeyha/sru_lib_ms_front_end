@@ -1,33 +1,37 @@
 import axios from '../../api/axios';
-function useScanEntry(checkPurpose) {
 
+function useScanEntry(checkPurpose) {
 
     const handleSearchStudent = async (studentID) => {
         try {
             const searchResult = await axios.get(`/student/${studentID}`);
-            if (searchResult.data === "") {//not found
-                return "not found"
+            if (!searchResult.data) { // Check for empty or null data
+                return { status: "not found", data: null };
             } else {
-                return searchResult.data
+                return { status: "success", data: searchResult.data };
             }
         } catch (error) {
-            return "Error occurred while search student.";
+            console.error("Error occurred while searching student:", error);
+            return { status: "error", message: "Error occurred while searching student." };
         }
     }
 
     const handleCheckScanEntryExit = async (studentID) => {
-        if (studentID !== "") {
-            try {
-                const result = await axios.get(`entry/check?studentId=${studentID}`);
-                if (result.data === "exited" || result.data === "new attend!") {
-                    return "student entry"
-                } else {
-                    const updateExitTime = await axios.put(`entry?studentId=${studentID}`)
-                    return "student exit";
-                }
-            } catch (error) {
-                return "Error occurred while checking entry/exit.";
+        if (!studentID) {
+            return { status: "error", message: "Invalid student ID." };
+        }
+        
+        try {
+            const result = await axios.get(`entry/check?studentId=${studentID}`);
+            if (result.data === "exited" || result.data === "new attend!") {
+                return { status: "entry", message: "Student entry." };
+            } else {
+                await axios.put(`entry?studentId=${studentID}`);
+                return { status: "exit", message: "Student exit." };
             }
+        } catch (error) {
+            console.error("Error occurred while checking entry/exit:", error);
+            return { status: "error", message: "Error occurred while checking entry/exit." };
         }
     };
 
@@ -40,13 +44,14 @@ function useScanEntry(checkPurpose) {
                 }
             });
 
-            if (saveEntry === "") {
-                return "can not save";
+            if (!saveEntry.data) {
+                return { status: "error", message: "Cannot save entry." };
             } else {
-                return "entry success";
+                return { status: "success", message: "Entry success." };
             }
         } catch (error) {
-            return "Error occurred while saving entry.";
+            console.error("Error occurred while saving entry:", error);
+            return { status: "error", message: "Error occurred while saving entry." };
         }
     };
 

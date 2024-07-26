@@ -31,6 +31,16 @@ function Dashbaord() {
         }
     };
 
+    const getCardDataApi = async () => {
+        try {
+            const response = await axios.get("/dashboard");
+            setCardDataShow(response.data.cardData);
+        } catch (error) {
+            console.error('Error fetching card data:', error);
+        }
+    };
+
+
     useEffect(() => {
         getDataApi();
     }, []);
@@ -76,7 +86,7 @@ function Dashbaord() {
                         <div className="table-chart flex gap-5">
                             {/* table List Of Student name */}
                             <div className="table-container table-stu-entry w-full md:w-full xl:w-[450px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">
-                                <TableStuEntry />
+                                <TableStuEntry getCardDataApi={getCardDataApi} />
                             </div>
                             {/* table List Of Student name */}
                         </div>
