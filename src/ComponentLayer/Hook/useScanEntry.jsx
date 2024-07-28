@@ -18,7 +18,7 @@ function useScanEntry() {
     });
     const [timeoutId, setTimeoutId] = useState(null);
 
-    // Fetch recent entry data
+    // Fetch recent entry ch
     const fetchRecentEntryData = async () => {
         try {
             const response = await axios.get("/entry");

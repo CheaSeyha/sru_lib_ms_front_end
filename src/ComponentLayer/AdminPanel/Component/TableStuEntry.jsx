@@ -48,6 +48,7 @@ export default function TableStuEntry({getCardDataApi}) {
     const handleRadioChange = (event) => {
         setCheckRadio(event.target.value === 'student')
         if (checkRadio) {
+            setAreDisabled(false)
             setDisbleEntryBTN(false)
             console.log("enable")
         } else {
@@ -55,9 +56,10 @@ export default function TableStuEntry({getCardDataApi}) {
             clearForm()
         }
     };
-
+    //useHook
     const { studetnEntryData, fetchRecentEntryData } = useScanEntry();
     const { handleCheckScanEntryExit, handleSaveEntry, handleSearchStudent } = useCheckStudentEntryExit()
+    const { checkPurpose, setCheckPurpose, } = useScanEntry()
 
     // Handle input changes
     const handleStudentIDChange = (event) => setStudentID(event.target.value);
@@ -122,7 +124,7 @@ export default function TableStuEntry({getCardDataApi}) {
         clearAllCheckboxes()
     };
 
-    const { checkPurpose, setCheckPurpose, } = useScanEntry()
+
 
     const handleCheckPurpose = (event) => {
         const { id, checked } = event.target;
@@ -200,15 +202,32 @@ export default function TableStuEntry({getCardDataApi}) {
     // Validate and check student entry by ID
     const handleEntry = async () => {
         if (!checkRadio) {
-            if (guestName.trim() === '') {
-                setGuestNameError(true);
+            const checks = [
+                { condition: guestName.trim() === '', action: () => setGuestNameError(true), reset: () => setGuestNameError(false) },
+                { condition: gender.trim() === '', action: () => setGenderError(true), reset: () => setGenderError(false) },
+                { condition: position.trim() === '', action: () => setPositionError(true), reset: () => setPositionError(false) },
+                { condition: checkPurpose === '', action: () => {
+                    setFormErrorMessage("Please Check Purpose Before Entry");
+                }, reset: () => setFormErrorMessage("") }
+            ];
+            
+            let hasError = false;
+            checks.forEach(check => {
+                if (check.condition) {
+                    check.action();
+                    hasError = true;
+                } else {
+                    check.reset();
+                }
+            });
+            
+            if (!hasError) {
+                setGuestNameError(false);
+                setGenderError(false);
+                setPositionError(false);
+                setFormErrorMessage("");
             }
-            if (gender.trim() === '') {
-                setGenderError(true);
-            }
-            if (position.trim() === '') {
-                setPositionError(true);
-            }
+            
         } else {
             const saveEntry = await handleSaveEntry(studentID, checkPurpose)
 
@@ -231,6 +250,7 @@ export default function TableStuEntry({getCardDataApi}) {
             if (searchStu.status === "not found") { // If student not found
                 
                 setStudentIDErrorMsx(`Student ID ${studentID} Not Found, Try Different ID...`);
+                setStudentIDErrorColor(true)
                 setStudentID("");
             } else if (searchStu.status === "success") { // if student found
                 const checkEntryExit = await handleCheckScanEntryExit(studentID);

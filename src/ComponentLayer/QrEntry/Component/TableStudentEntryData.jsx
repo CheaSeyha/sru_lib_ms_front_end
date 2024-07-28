@@ -24,6 +24,7 @@ function TableStudentEntryData({ studentEntryData }) {
                     <div className="filter-data flex gap-5 items-center">
                         <p>Filter:</p>
                         <select
+                            id='filter'
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
                             className="select select-info border-none"

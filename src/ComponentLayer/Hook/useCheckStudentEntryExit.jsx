@@ -2,7 +2,7 @@ import axios from '../../api/axios';
 
 function useScanEntry(checkPurpose) {
 
-    const handleSearchStudent = async (studentID) => {
+    const handleSearchStudent = async (studentID) => {//This function will return student data if found 
         try {
             const searchResult = await axios.get(`/student/${studentID}`);
             if (!searchResult.data) { // Check for empty or null data
@@ -16,7 +16,7 @@ function useScanEntry(checkPurpose) {
         }
     }
 
-    const handleCheckScanEntryExit = async (studentID) => {
+    const handleCheckScanEntryExit = async (studentID) => {//This func will update exiting time and of student if student already entry 
         if (!studentID) {
             return { status: "error", message: "Invalid student ID." };
         }
@@ -35,7 +35,7 @@ function useScanEntry(checkPurpose) {
         }
     };
 
-    const handleSaveEntry = async (studentID, checkPurpose) => {
+    const handleSaveEntry = async (studentID, checkPurpose) => {//This Func will add student by id to entry 
         try {
             const saveEntry = await axios.post('/entry', null, {
                 params: {

@@ -78,19 +78,19 @@ function FormConfirmEntry({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
                 <div className="check-purpose text-accent mt-5">
                     <p className='font-bold'>Entry Purpose</p>
                     <div className="container-check-purpose grid lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-5">
-                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info" data-tip="Check this box if you are reading materials.">
+                        <div className="check-purpose flex items-center space-x-2 -info">
                             <input type="checkbox" id='Read_Book' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[0] = el} />
                             <label htmlFor="Read_Book" className='label-text text-[#32E2FF]'>Reading</label>
                         </div>
-                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info z-20" data-tip="Check this box if you are working on an assignment.">
+                        <div className="check-purpose flex items-center space-x-2 -info z-20">
                             <input type="checkbox" id='Assignment' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[1] = el} />
                             <label htmlFor="Assignment" className='label-text text-[#32E2FF]'>Assignment</label>
                         </div>
-                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info" data-tip="Check this box if you will be using a PC for your task.">
+                        <div className="check-purpose flex items-center space-x-2 -info">
                             <input type="checkbox" id='Use_PC' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[2] = el} />
                             <label htmlFor="Use_PC" className='label-text text-[#32E2FF]'>Use PC</label>
                         </div>
-                        <div className="check-purpose flex items-center space-x-2 tooltip tooltip-top tooltip-info">
+                        <div className="check-purpose flex items-center space-x-2 -info">
                             <input type="checkbox" id='Other' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[3] = el} />
                             <label htmlFor="Other" className='label-text text-[#32E2FF]'>Other</label>
                         </div>
