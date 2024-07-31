@@ -5,6 +5,9 @@ import Dashbaord from './AdminPanel/Dashbaord';
 import QRStudentEntry from './QrEntry/QRStudentEntry';
 import SideBarToggle from '../layout/Component/SideBarToggle';
 import { ScanResultIDProvider } from './Context/ScanResultIDContext';
+import ScoreStudent from './ScoreStudent/ScoreStudent';
+import BookManagement from './Book/BookManagement';
+import Backup from './Backup/Backup';
 
 function AdminPanel() {
     const GetLinkPath = useLocation().pathname
@@ -23,6 +26,9 @@ function AdminPanel() {
                     <Routes>
                         <Route path="/" element={<Dashbaord />} />
                         <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
+                        <Route path="/BookManagement" element={<BookManagement/>} />
+                        <Route path="/ScoreStudent" element={<ScoreStudent/>} />
+                        <Route path="/Backup" element={<Backup/>} />
                     </Routes>
                 </section>
             </main>
