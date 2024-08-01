@@ -26,9 +26,10 @@ function AdminPanel() {
                     <Routes>
                         <Route path="/" element={<Dashbaord />} />
                         <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
-                        <Route path="/BookManagement" element={<BookManagement/>} />
-                        <Route path="/ScoreStudent" element={<ScoreStudent/>} />
-                        <Route path="/Backup" element={<Backup/>} />
+                        <Route path="/BookManagement/AddBook" element={<BookManagement />} />
+                        <Route path="/BookManagement/BookBorrowed" element={<ScoreStudent />} />
+                        <Route path="/ScoreStudent" element={<ScoreStudent />} />
+                        <Route path="/Backup" element={<Backup />} />
                     </Routes>
                 </section>
             </main>
