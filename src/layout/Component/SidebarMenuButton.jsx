@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { ChevronUp, BookPlus, NotebookPen } from 'lucide-react';
 
-function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton }) {
+function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownButtonData }) {
     const GetLinkPath = useLocation().pathname;
     const [showDropdown, setShowDropdown] = useState(false);//Use for show and hide Dropdown menu button
 
@@ -21,6 +21,20 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton }) {
             }
         }
     }, [GetLinkPath, dropDownButton]);
+
+    // const dropDownButtonData = [
+    //     {
+    //         iconName: <BookPlus className='w-[18px]' />,
+    //         dropDownBtnType: "Add Book",
+    //         urlPath: "/BookManagement/AddBook",
+    //     },
+    //     {
+    //         iconName: <BookPlus className='w-[18px]' />,
+    //         dropDownBtnType: "Book Borrowed",
+    //         urlPath: "/BookManagement/BookBorrowed",
+    //     }
+    // ]
+
 
     return (
         <>
@@ -44,18 +58,14 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton }) {
             {/* drop down menu */}
             <div className={`transition-max-height px-5 sm:px-0 lg:px-5 duration-500 rounded-none sm:rounded-[10px] lg:rounded-none ease-in-out sm:bg-base-300 lg:bg-secondary overflow-hidden ${showDropdown ? 'max-h-40' : 'max-h-0'}`}>
                 <ul className="ul border-s sm:border-s-0 lg:border-s border-accent text-[13px] sm:px-1 lg:px-0">
-                    <NavLink to="/BookManagement/AddBook">
-                        <li className={`li transition-all sm:border-b border-accent  lg:border-none flex items-center gap-1 duration-150 cursor-pointer hover:bg-base-300 w-full h-full py-3 justify-start sm:justify-center lg:justify-start ps-5 sm:ps-0 lg:ps-5 ${GetLinkPath === "/BookManagement/AddBook" ? "text-accent" : "text-neutral"}`}>
-                            <BookPlus className='w-[18px]' />
-                            <p className='block sm:hidden lg:block text-[13px]'>Add Book</p>
-                        </li>
-                    </NavLink>
-                    <NavLink to="/BookManagement/BookBorrowed">
-                        <li className={`li transition-all sm:border-b border-accent  lg:border-none flex items-center gap-1 duration-150 cursor-pointer hover:bg-base-300 w-full h-full py-3 justify-start sm:justify-center lg:justify-start ps-5 sm:ps-0 lg:ps-5 ${GetLinkPath === "/BookManagement/BookBorrowed" ? "text-accent" : "text-neutral"}`}>
-                            <NotebookPen className='w-[18px]' />
-                            <p className='block sm:hidden lg:block text-[13px]'>Book Borrowed</p>
-                        </li>
-                    </NavLink>
+                    {dropDownButtonData.map((data, index) => (
+                        <NavLink to={data.urlPath}>
+                            <li className={`li transition-all sm:border-b border-accent  lg:border-none flex items-center gap-1 duration-150 cursor-pointer hover:bg-base-300 w-full h-full py-3 justify-start sm:justify-center lg:justify-start ps-5 sm:ps-0 lg:ps-5 ${GetLinkPath === data.urlPath ? "text-accent" : "text-neutral"}`}>
+                                {data.iconName}
+                                <p className='block sm:hidden lg:block text-[13px]'>{data.dropDownBtnType}</p>
+                            </li>
+                        </NavLink>
+                    ))}
                 </ul>
             </div>
         </>
