@@ -22,7 +22,6 @@ function TableStudentEntryData({ studentEntryData }) {
                 <div className="container-button-date-time-back flex space-x-3">
                     {/* Filter Section */}
                     <div className="filter-data flex gap-5 items-center">
-                        <p>Filter:</p>
                         <select
                             id='filter'
                             value={filter}

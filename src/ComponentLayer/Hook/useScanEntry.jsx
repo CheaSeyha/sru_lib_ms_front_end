@@ -57,7 +57,6 @@ function useScanEntry() {
                     setStopScan(true);
                     fetchRecentEntryData(); // Fetch latest data after update
                     handleClearFormData();
-                    setDisCheckPur(false); // Enable check purpose
                     startTimeout();
                 }
             } catch (error) {
