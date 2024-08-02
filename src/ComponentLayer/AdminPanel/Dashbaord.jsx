@@ -34,11 +34,14 @@ function Dashbaord() {
     const getCardDataApi = async () => {
         try {
             const response = await axios.get("/dashboard");
-            setCardDataShow(response.data.cardData);
+            const limit = 10; // Set your desired limit here
+            const limitedCardData = response.data.cardData.slice(0, limit);
+            setCardDataShow(limitedCardData);
         } catch (error) {
             console.error('Error fetching card data:', error);
         }
     };
+    
 
 
     useEffect(() => {
