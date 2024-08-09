@@ -8,6 +8,7 @@ import { ScanResultIDProvider } from './Context/ScanResultIDContext';
 import ScoreStudent from './ScoreStudent/ScoreStudent';
 import BookManagement from './Book/BookManagement';
 import Backup from './Backup/Backup';
+import AnalyticForm from './Analytic/AnalyticForm';
 
 function AdminPanel() {
     const GetLinkPath = useLocation().pathname
@@ -27,6 +28,7 @@ function AdminPanel() {
                         <Route path="/" element={<Dashbaord />} />
                         <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
                         <Route path="/BookManagement/AddBook" element={<BookManagement />} />
+                        <Route path="/Analytic" element={<AnalyticForm/>} />
                         <Route path="/BookManagement/BookBorrowed" element={<ScoreStudent />} />
                         <Route path="/ScoreStudent" element={<ScoreStudent />} />
                         <Route path="/Backup" element={<Backup />} />
