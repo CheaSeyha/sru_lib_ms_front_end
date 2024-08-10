@@ -34,6 +34,7 @@ const MyDoughnutChart = ({ bookData }) => {
         backgroundColor: ['#00BBFF', '#00FFEA'],
         hoverOffset: 4,
         borderColor: 'transparent', // Hide the border color
+        
       },
     ],
   };
