@@ -20,9 +20,23 @@ function EntryPurposeCard() {
 
 
     return (
-        <div className='entry-purpose w-[620px] p-5 bg-secondary rounded-[20px] flex flex-col gap-5'>
+        <div className='entry-purpose w-full h-full p-5 bg-secondary rounded-[20px] flex flex-col justify-between gap-5'>
             <div className="header font-noto text-accent flex justify-between">
                 <p>សរុបចំនួនគោលបំណងនិស្សិតចូលប្រើប្រាស់ប័ណ្ណាល័យ</p>
+            </div>
+            <div className="button-contianer w-full flex items-center gap-5 ">
+                <details ref={dropdownRef} className="dropdown">
+                    <summary className="btn bg-primary text-accent">
+                        <span><ListFilter /></span>Filter : {selectedFilterMajorName}
+                    </summary>
+                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-accent">
+                        {majorForFilter.map((major) => (
+                            <li key={major}>
+                                <a onClick={() => handleSelection(major)}>{major}</a>
+                            </li>
+                        ))}
+                    </ul>
+                </details>
                 <div className='w-[90px]'>
                     <DatePicker
                         id='entryPurpose-date-picker'
@@ -35,23 +49,11 @@ function EntryPurposeCard() {
                     />
                 </div>
             </div>
-            <details ref={dropdownRef} className="dropdown w-full">
-                <summary className="btn bg-primary text-accent">
-                    <span><ListFilter /></span>Filter : {selectedFilterMajorName}
-                </summary>
-                <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-accent">
-                    {majorForFilter.map((major) => (
-                        <li key={major}>
-                            <a onClick={() => handleSelection(major)}>{major}</a>
-                        </li>
-                    ))}
-                </ul>
-            </details>
-            <div className="card-purpose-container w-full h-full grid grid-cols-2 gap-5">
+            <div className="card-purpose-container w-full h-fit grid grid-cols-2 gap-5 items-end">
                 <CardPurposeData amountData={23} cardType="Reading" />
-                <CardPurposeData amountData={47} cardType="Use PC"/>
-                <CardPurposeData amountData={86} cardType="Assigment"/>
-                <CardPurposeData amountData={96} cardType="Other"/>
+                <CardPurposeData amountData={47} cardType="Use PC" />
+                <CardPurposeData amountData={86} cardType="Assigment" />
+                <CardPurposeData amountData={96} cardType="Other" />
             </div>
         </div>
     );

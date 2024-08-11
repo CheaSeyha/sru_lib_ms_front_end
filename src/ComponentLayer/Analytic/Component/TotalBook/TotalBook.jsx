@@ -19,7 +19,7 @@ function TotalBook() {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     return (
-        <div className='total-book w-[620px] flex flex-col h-full text-white bg-secondary rounded-[20px] p-5'>
+        <div className='total-book w-full flex flex-col h-full text-white bg-secondary rounded-[20px] p-5'>
             <div className="total-book-header bg-gradient-to-r p-5 from-[#00BBFF] to-secondary w-full h-[176px] flex justify-between rounded-[10px]">
                 <div className="text-data h-full grid col-span-2">
                     <p className='font-noto'>ចំនួនសៀវភៅសរុប</p>
@@ -49,7 +49,7 @@ function TotalBook() {
                 <p className='h-[45px] flex items-center'>សរុបចំនួនតាមភាសា</p>
                 <div className="box-lang-contianer gap-5 grid grid-cols-2 h-full">
                     {bookData.map((data) => (
-                        <div key={"book"+data.lang} className="kh-box flex flex-col justify-center items-center bg-primary rounded-[10px]">
+                        <div key={"book" + data.lang} className="kh-box flex flex-col justify-center items-center bg-primary rounded-[10px]">
                             <p>សៀវភៅភាសា{data.lang === "Khmer" ? "ខ្មែរ" : "អង្គគ្លេស"}</p>
                             <h1 className='text-[40px]'>{data.Total}</h1>
                         </div>
