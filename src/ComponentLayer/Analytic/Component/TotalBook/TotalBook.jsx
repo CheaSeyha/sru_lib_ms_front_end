@@ -25,8 +25,8 @@ function TotalBook() {
                     <p className='font-noto'>ចំនួនសៀវភៅសរុប</p>
                     <div className="h-full grid col-span-2">
                         <div className="total-book-number flex items-center gap-2">
-                            <p className='text-[40px] font-bold'>12,238</p>
-                            <BookOpenText className='text-yellow-300 w-[30px] h-[30px]' />
+                            <p className='text-[30px] sm:text-[40px] font-bold'>12,238</p>
+                            <BookOpenText className='text-yellow-300 w-[20px] sm:w-[30px] h-[30px]' />
                         </div>
                         <div className='w-[90px]'>
                             <DatePicker
@@ -41,17 +41,17 @@ function TotalBook() {
                         </div>
                     </div>
                 </div>
-                <div className="chart-data w-[136px] h-full">
+                <div className="chart-data grid items-center w-[90px] sm:w-[136px] h-full">
                     <DonutChart bookData={bookData} />
                 </div>
             </div>
             <div className="total-book-baseOn-lange text-accent flex flex-col w-full h-full  font-noto">
                 <p className='h-[45px] flex items-center'>សរុបចំនួនតាមភាសា</p>
-                <div className="box-lang-contianer gap-5 grid grid-cols-2 h-full">
+                <div className="box-lang-contianer gap-5 grid grid-cols-2 itece h-full">
                     {bookData.map((data) => (
-                        <div key={"book" + data.lang} className="kh-box flex flex-col justify-center items-center bg-primary rounded-[10px]">
+                        <div key={"book" + data.lang} className="kh-box flex flex-col justify-center text-center p-5 items-center bg-primary rounded-[10px]">
                             <p>សៀវភៅភាសា{data.lang === "Khmer" ? "ខ្មែរ" : "អង្គគ្លេស"}</p>
-                            <h1 className='text-[40px]'>{data.Total}</h1>
+                            <h1 className='text-[30px] lg:text-[40px]'>{data.Total}</h1>
                         </div>
                     ))}
                 </div>

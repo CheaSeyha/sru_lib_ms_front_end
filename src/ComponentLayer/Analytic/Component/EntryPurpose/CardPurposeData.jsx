@@ -34,17 +34,17 @@ function CardPurposeData({ cardType, amountData }) {
     return (
         <>
             <div onClick={handleCardDataClick} className={`container-card-data cursor-pointer drop-shadow-md w-full xl:h-[104px] flex rounded-[10px] bg-primary p-3 sm:p-5`}>
-                <div className="flex-1 data-container w-full h-full flex items-center justify-between space-x-1 lg:space-x-5 text-[#32E2FF]">
-                    <div className='container-icon-text flex lg:flex-col xl:flex-row items-center h-full text-[#32E2FF]'>
-                        <div className={`icon-container lg:w-[50px] xl:w-[64px] p-2 h-fit hidden lg:flex items-center justify-center ${bgIcon} rounded-[10px]`}>
+                <div className="flex-1 data-container w-full h-full flex items-center text-[#32E2FF] sm:gap-5">
+                    <div className='container-icon flex lg:flex-col xl:flex-row items-center h-full text-[#32E2FF]'>
+                        <div className={`icon-container w-[40px] sm:w-[64px] p-2 h-fit items-center justify-center ${bgIcon} rounded-[5px]`}>
                             {iconCard}
                         </div>
-                        <div className="container-card-type text-accent h-full grid justify-center items-center ps-0 xl:ps-5">
-                            <p className='text-[13px] lg:text-[10px] xl:text-[16px] font-bold'>{cardType}</p>
-                            <p className='text-[10px] xl:text-[13px] font-noto lg:hidden xl:block'>សរុបក្នុងខែនេះ</p>
-                        </div>
                     </div>
-                    <div className="amount-entry flex items-center text-[#32E2FF]">
+                    <div className="amount-entry flex flex-col sm:flex-row xl:flex-col 2xl:flex-row  items-center justify-between text-[#32E2FF] w-full h-full">
+                        <div className="container-card-type text-accent h-full grid justify-center items-center">
+                            <p className='font-bold text-sm sm:text-md'>{cardType}</p>
+                            <p className='text-[10px] xl:text-[13px] font-noto hidden sm:block xl:hidden 2xl:block'>សរុបក្នុងខែនេះ</p>
+                        </div>
                         <p className='text-[28px] xl:text-[32px] text-accent font-bold'>{amountData}</p>
                     </div>
                 </div>

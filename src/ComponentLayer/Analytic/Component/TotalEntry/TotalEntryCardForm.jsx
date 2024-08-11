@@ -10,7 +10,7 @@ function TotalEntryCardForm() {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     return (
-        <div className='w-[377px] h-full bg-secondary rounded-[20px] p-5 text-accent flex flex-col space-y-5'>
+        <div className='w-full 2xl:w-[377px] h-full bg-secondary rounded-[20px] p-5 text-accent flex flex-col space-y-5'>
             <div className="header-card font-noto flex justify-between">
                 <p>សរុបចំនួនចូលបណ្ណាល័យក្នុងខែនេះ</p>
                 <div className='w-[90px]'>
