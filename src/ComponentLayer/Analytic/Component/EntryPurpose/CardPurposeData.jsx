@@ -42,10 +42,10 @@ function CardPurposeData({ cardType, amountData }) {
                     </div>
                     <div className="amount-entry flex flex-col sm:flex-row xl:flex-col 2xl:flex-row  items-center justify-between text-[#32E2FF] w-full h-full">
                         <div className="container-card-type text-accent h-full grid justify-center items-center">
-                            <p className='font-bold text-sm sm:text-md'>{cardType}</p>
+                            <p className='font-bold text-[10px] sm:text-[15px]'>{cardType}</p>
                             <p className='text-[10px] xl:text-[13px] font-noto hidden sm:block xl:hidden 2xl:block'>សរុបក្នុងខែនេះ</p>
                         </div>
-                        <p className='text-[28px] xl:text-[32px] text-accent font-bold'>{amountData}</p>
+                        <p className='text-[18px] sm:text-[32px] text-accent font-bold'>{amountData}</p>
                     </div>
                 </div>
             </div>

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { ChevronUp, BookPlus, NotebookPen } from 'lucide-react';
-
+import { useHideSideBar } from '../../Context/HideSidebarContext'
 function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownButtonData }) {
     const GetLinkPath = useLocation().pathname;
     const [showDropdown, setShowDropdown] = useState(false);//Use for show and hide Dropdown menu button
-
+    const { isHideSideBar, setIsHideSideBar } = useHideSideBar();
     const handleHideShowDropDonw = () => {//Use for show and hide Dropdown menu button if it has dropdownButton
         if (dropDownButton) {
             showDropdown ? setShowDropdown(false) : setShowDropdown(true);
         }
+        isHideSideBar ? setIsHideSideBar(false) : setIsHideSideBar(true)
     }
 
     useEffect(() => {
