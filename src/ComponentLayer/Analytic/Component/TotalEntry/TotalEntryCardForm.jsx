@@ -40,10 +40,10 @@ function TotalEntryCardForm() {
                     </p>
                 </div>
             </div>
-            <div className="time-shift-card w-full flex flex-col h-full">
+            <div className="time-shift-card w-full flex flex-col h-full ">
                 <p className='h-[46px] font-noto'>សរុបតាមម៉ោង</p>
                 <div className="card-container w-full flex-grow flex gap-5">
-                    <div className="card-time w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#a6ff00] rounded-[10px]">
+                    <div className="card-time shadow-xl transition-all hover:translate-y-[-5px] hover:scale-105 w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#a6ff00] rounded-[10px]">
                         <div className="icon">
                             <Sunrise />
                         </div>
@@ -51,10 +51,10 @@ function TotalEntryCardForm() {
                             34
                         </div>
                         <div className="text-time-shift font-noto ">
-                            ពេលព្រឹក
+                            ព្រឹក
                         </div>
                     </div>
-                    <div className="card-time w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#FFFDB5] rounded-[10px]">
+                    <div className="card-time shadow-xl transition-all hover:translate-y-[-5px] hover:scale-105 w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#FFFDB5] rounded-[10px]">
                         <div className="icon">
                             <Sunrise />
                         </div>
@@ -62,10 +62,10 @@ function TotalEntryCardForm() {
                             34
                         </div>
                         <div className="text-time-shift font-noto ">
-                            ពេលព្រឹក
+                            រសៀល
                         </div>
                     </div>
-                    <div className="card-time w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#008D97] rounded-[10px]">
+                    <div className="card-time shadow-xl transition-all hover:translate-y-[-5px] hover:scale-105 w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#008D97] rounded-[10px]">
                         <div className="icon">
                             <Sunrise />
                         </div>
@@ -73,7 +73,7 @@ function TotalEntryCardForm() {
                             34
                         </div>
                         <div className="text-time-shift font-noto ">
-                            ពេលព្រឹក
+                            យប់
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ import WeeklyVisitorChart from './Component/WeeklyVisitorChart';
 import RadialBarChart from './Component/RadialBarChart';
 import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
+import { NavLink } from 'react-router-dom';
 
 function Dashbaord() {
     const [cardDataShow, setCardDataShow] = useState([]);
@@ -41,7 +42,7 @@ function Dashbaord() {
             console.error('Error fetching card data:', error);
         }
     };
-    
+
 
 
     useEffect(() => {
@@ -70,7 +71,9 @@ function Dashbaord() {
                                 <p className="sm:text-[30px] xl:text-[30px] font-moul">{t("sruText")}</p>
                                 <p className="text-[10px] xl:text-[15px] font-bold font-noto">WELCOME BACK JOHNSEY</p>
                             </div>
-                            <button className="btn text-accent hidden sm:block rounded-[50px]">View Analytic</button>
+                            <NavLink className="btn text-accent hidden sm:flex items-center justify-center rounded-[50px]" to="/Analytic">
+                                View Analytic
+                            </NavLink>
                         </div>
                         <div className="showCard flex-1 grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-[20px] place-items-end">
                             {cardDataShow.map((e, index) => (
