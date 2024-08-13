@@ -29,7 +29,7 @@ function AdminPanel() {
                         <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
                         <Route path="/BookManagement/AddBook" element={<BookManagement />} />
                         <Route path="/Analytic" element={<AnalyticForm/>} />
-                        <Route path="/BookManagement/BookBorrowed" element={<ScoreStudent />} />
+                        <Route path="/BookManagement/BookBorrowed" element={<BookManagement/>} />
                         <Route path="/ScoreStudent" element={<ScoreStudent />} />
                         <Route path="/Backup" element={<Backup />} />
                     </Routes>
