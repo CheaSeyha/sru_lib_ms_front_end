@@ -2,6 +2,7 @@
 import React from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import {FolderOutput} from 'lucide-react';
 import BtnGredient from '../../Book/BtnGredient';
 import logo from '../../../assets/logo/sru_logo.png';  // Assuming the logo is stored in the src/assets folder
 import frame from '../../../assets/logo/frame1.png'; // Assuming the frame is stored in the src/assets folder
@@ -106,8 +107,9 @@ const todayDate = formatDate(new Date());
     };
 
     return (
-    <button onClick={handleDownloadPDF} class="bg-base-100 hover:bg-neutral text-accent font-bold py-2 px-4 rounded inline-flex items-center">
-    <svg className=" fill-accent p-0 w-4 h-4 mr-2" viewBox="0 0 1920.00 1920.00" xmlns="http://www.w3.org/2000/svg" stroke-width="36.480000000000004"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="m0 1016.081 409.186 409.073 79.85-79.736-272.867-272.979h1136.415V959.611H216.169l272.866-272.866-79.85-79.85L0 1016.082ZM1465.592 305.32l315.445 315.445h-315.445V305.32Zm402.184 242.372-329.224-329.11C1507.042 187.07 1463.334 169 1418.835 169h-743.83v677.647h112.94V281.941h564.706v451.765h451.765v903.53H787.946V1185.47H675.003v564.705h1242.353V667.522c0-44.498-18.07-88.207-49.581-119.83Z" fill-rule="evenodd"></path> </g></svg>
+    <button onClick={handleDownloadPDF} className="bg-base-100 hover:bg-neutral text-accent font-bold py-2 px-4 rounded inline-flex items-center">
+    {/* <svg  viewBox="0 0 1920.00 1920.00" xmlns="http://www.w3.org/2000/svg" stroke-width="36.480000000000004"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="m0 1016.081 409.186 409.073 79.85-79.736-272.867-272.979h1136.415V959.611H216.169l272.866-272.866-79.85-79.85L0 1016.082ZM1465.592 305.32l315.445 315.445h-315.445V305.32Zm402.184 242.372-329.224-329.11C1507.042 187.07 1463.334 169 1418.835 169h-743.83v677.647h112.94V281.941h564.706v451.765h451.765v903.53H787.946V1185.47H675.003v564.705h1242.353V667.522c0-44.498-18.07-88.207-49.581-119.83Z" fillRule="evenodd"></path> </g></svg> */}
+    <FolderOutput className=" p-0 w-4 h-4 mr-2" />
       <span>Export</span>
     </button>
     );

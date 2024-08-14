@@ -3,6 +3,7 @@ import BtnGredient from "../BtnGredient";
 import ModalAdd from "./ModalAdd";
 import axios from "../../../api/axios";
 import ModalLst from "./ModalLst";
+import refresh from "../../../assets/logo/refresh.svg"
 
 export default function ListOfAllBook() {
   // Data of All Book
@@ -96,11 +97,7 @@ export default function ListOfAllBook() {
           </div>
           <div className="inline-block w-1/6 pl-8">
             <BtnGredient className="rounded-" onClick={resetSelection} color={'from-primary to-[#00D9FF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
-              <svg fill="#ffffff" width="18px" height="18px" viewBox="0 0 1920.00 1920.00" xmlns="http://www.w3.org/2000/svg" stroke="#000000" transform="rotate(0)" 
-              stroke-width="0.019200000000000002"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" 
-              stroke="#CCCCCC" stroke-width="30.72"></g><g id="SVGRepo_iconCarrier"> 
-              <path d="M960 0v213.333c411.627 0 746.667 334.934 746.667 746.667S1371.627 1706.667 960 1706.667 213.333 1371.733 213.333 960c0-197.013 78.4-382.507 
-              213.334-520.747v254.08H640V106.667H53.333V320h191.04C88.64 494.08 0 720.96 0 960c0 529.28 430.613 960 960 960s960-430.72 960-960S1489.387 0 960 0" fill-rule="evenodd"></path> </g></svg>
+              <img src={refresh}  width={24} height={24} alt="" />
             </BtnGredient>
           </div>
         </div>
