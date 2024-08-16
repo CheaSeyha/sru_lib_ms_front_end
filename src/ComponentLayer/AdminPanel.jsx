@@ -9,6 +9,7 @@ import ScoreStudent from './ScoreStudent/ScoreStudent';
 import BookManagement from './Book/BookManagement';
 import Backup from './Backup/Backup';
 import AnalyticForm from './Analytic/AnalyticForm';
+import StaffManageForm from './StaffManage/StaffManageForm';
 
 function AdminPanel() {
     const GetLinkPath = useLocation().pathname
@@ -28,6 +29,7 @@ function AdminPanel() {
                         <Route path="/" element={<Dashbaord />} />
                         <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
                         <Route path="/BookManagement/AddBook" element={<BookManagement />} />
+                        <Route path="/StaffManage/" element={<StaffManageForm/>} />
                         <Route path="/Analytic" element={<AnalyticForm/>} />
                         <Route path="/BookManagement/BookBorrowed" element={<BookManagement/>} />
                         <Route path="/ScoreStudent" element={<ScoreStudent />} />
