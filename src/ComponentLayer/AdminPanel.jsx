@@ -17,7 +17,7 @@ function AdminPanel() {
     return (
         <ScanResultIDProvider>
             <main className="flex h-screen sm:h-screen relative">
-                <div className={`sideBarToggle ${GetLinkPath === "/QRStudentEntry" ? "hidden" : "block"} absolute p-10 w-full flex flex-col sm:hidden items-end z-50`}>
+                <div className={`sideBarToggle ${GetLinkPath === "/QRStudentEntry" ? "hidden" : "block"} absolute top-5 w-fit rounded-full right-5 flex flex-col sm:hidden items-end z-50`}>
                     {/* for hide or show sidebar when in mobile view  */}
                     <SideBarToggle />
                 </div>
