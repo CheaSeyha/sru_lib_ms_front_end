@@ -5,9 +5,48 @@ import { UserRoundPlus, X, Save } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
 
 function TableStaff() {
-
+    // Function to handle the "Select All" checkbox End
+    const [searchStaff, setSearchStaff] = useState("")
     const [clickEvenModal, setClickEvenShowModal] = useState("")
     const [isModalVisible, setIsModalVisible] = useState(false)
+    //Staff Data
+    const StaffData = [
+        {
+            staffID: 300134,
+            staffName: "សាស្ត្រាចារ្យជំនួយ ប៉ែន ឌីណា",
+            gender: "ប្រុស",
+            position: "មន្ត្រីទទួលបន្ទុក",
+            degreeLevel: "បរិញ្ញាប័ត្រជាន់ខ្ពស់",
+            major: "១. វិទ្យាសាស្ត្រនយោបាយ ២.វិទ្យាសាស្ត្រអប់រំ",
+            studyYear: "",
+            shiftWork: "ពេញម៉ោង",
+        },
+        {
+            staffID: 200155,
+            staffName: "ដេ​ម៉ូ ដាតា",
+            gender: "ប្រុស",
+            position: "និស្សិតហាត់ការ",
+            degreeLevel: "បរិញ្ញាប័ត្រ",
+            major: "វិទ្យាសាស្ត្រកុំព្យូទ័រ",
+            studyYear: 3,
+            shiftWork: "ព្រឹក-រសៀល",
+        },
+        ,
+        {
+            staffID: 200153,
+            staffName: "សំ​​ សួន",
+            gender: "ប្រុស",
+            position: "និស្សិតហាត់ការ",
+            degreeLevel: "បរិញ្ញាប័ត្រ",
+            major: "វិទ្យាសាស្ត្រកុំព្យូទ័រ",
+            studyYear: 3,
+            shiftWork: "ព្រឹក-រសៀល",
+        }
+    ]
+    const [filteredStaff, setFilteredStaff] = useState(StaffData);
+
+
+
     // Toggle modal visibility
     const handleOpenModal = (clickEven) => {
         setIsModalVisible(true);
@@ -31,6 +70,49 @@ function TableStaff() {
             alert('Please fill out the form correctly.');
         }
     }
+
+
+    // Function to handle the "Select All" checkbox
+    const [selectedStaffIDs, setSelectedStaffIDs] = useState([]);
+
+    // Function to handle the "Select All" checkbox
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            // If checked, select all staff IDs
+            const allStaffIDs = StaffData.map(data => data.staffID);
+            setSelectedStaffIDs(allStaffIDs);
+        } else {
+            // If unchecked, clear the selection
+            setSelectedStaffIDs([]);
+        }
+    };
+
+    // Function to handle individual row checkbox
+    const handleSelectSingle = (staffID) => (e) => {
+        if (e.target.checked) {
+            // Add the staff ID to the selected list
+            setSelectedStaffIDs(prevSelected => [...prevSelected, staffID]);
+        } else {
+            // Remove the staff ID from the selected list
+            setSelectedStaffIDs(prevSelected => prevSelected.filter(id => id !== staffID));
+        }
+    };
+
+    //Handle Search Input 
+    const handleSearchStaff = (e) => {
+        const query = e.target.value.toLowerCase();
+        setSearchStaff(query);
+
+        const filteredData = StaffData.filter((staff) =>
+            staff.staffName.toLowerCase().includes(query) ||  // Search by name
+            staff.staffID.toString().includes(query)          // Search by ID
+        );
+
+        setFilteredStaff(filteredData);
+    };
+
+    //Handle Search Input End
+
     return (
         <>
             <div className='w-full h-full bg-secondary rounded-[20px] p-5 font-noto space-y-5 '>
@@ -47,6 +129,7 @@ function TableStaff() {
                                 type="text"
                                 className="w-full"
                                 placeholder="ស្វែងរក"
+                                onChange={handleSearchStaff}
                             />
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -66,6 +149,19 @@ function TableStaff() {
                     <table className="table">
                         <thead>
                             <tr className='text-accent text-[15px]'>
+                                <td>
+                                    <div className="form-control">
+                                        <label className="cursor-pointer label">
+                                            <input
+                                                id='checkkAll'
+                                                type="checkbox"
+                                                className="checkbox checkbox-accent"
+                                                checked={selectedStaffIDs.length === StaffData.length}
+                                                onChange={handleSelectAll}
+                                            />
+                                        </label>
+                                    </div>
+                                </td>
                                 <th>អត្តលេខ</th>
                                 <th>នាម គោត្តនាម</th>
                                 <th>ភេទ</th>
@@ -77,21 +173,39 @@ function TableStaff() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className='text-[15px] hover:bg-primary cursor-pointer active:bg-primary'>
-                                <td>300124</td>
-                                <td>សាស្ត្រាចារ្យជំនួយ ប៉ែន ឌីណា</td>
-                                <td>ប្រុស</td>
-                                <td>មន្ត្រីទទួលបន្ទុក</td>
-                                <td>បរិ.ជាន់ខ្ពស់</td>
-                                <td>
-                                    ១. វិទ្យាសាស្ត្រនយោបាយ
-                                    ២.វិទ្យាសាស្ត្រអប់រំ
-                                </td>
-                                <td></td>
-                                <td>ពេញម៉ោង</td>
-                            </tr>
+                            {filteredStaff.map((data) => (
+                                <tr key={data.staffID} className='text-[15px] hover:bg-primary cursor-pointer active:bg-primary'>
+                                    <td>
+                                        <div className="form-control">
+                                            <label className="cursor-pointer label">
+                                                <input
+                                                    id={data.staffID}
+                                                    type="checkbox"
+                                                    className="checkbox checkbox-accent"
+                                                    checked={selectedStaffIDs.includes(data.staffID)}
+                                                    onChange={handleSelectSingle(data.staffID)}
+                                                />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>{data.staffID}</td>
+                                    <td>{data.staffName}</td>
+                                    <td>{data.gender}</td>
+                                    <td>{data.position}</td>
+                                    <td>{data.degreeLevel}</td>
+                                    <td>{data.major}</td>
+                                    <td>{data.studyYear === "" ? "N/A" : data.studyYear}</td>
+                                    <td className='hover:bg-yellow-50'>{data.shiftWork}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
+
+                    {/* Optional: Display selected IDs */}
+                    <div>
+                        <h3>Selected Staff IDs:</h3>
+                        <p>{selectedStaffIDs.join(', ') || 'No staff selected'}</p>
+                    </div>
                 </div>
 
             </div>
