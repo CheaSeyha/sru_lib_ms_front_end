@@ -36,23 +36,23 @@ function TableStaff() {
             <div className='w-full h-full bg-secondary rounded-[20px] p-5 font-noto space-y-5 '>
                 <div className="header flex  justify-between">
                     <p>នាមសមាសភាពមន្ត្រីកំពុងបម្រើការងារនៅក្នុងបណ្ណាល័យ </p>
-                    <div className="button-container flex gap-2">
+                    <div className="button-container flex flex-col md:flex-row gap-2">
                         <BtnGredient onClick={() => handleOpenModal("បញ្ចូលបុគ្គលិកថ្មី")}>
                             <UserPlus />
-                            <p>បញ្ចូលបុគ្គលិក</p>
+                            <p className='hidden md:block'>បញ្ចូលបុគ្គលិក</p>
                         </BtnGredient>
-                        <label className="input input-bordered flex items-center gap-2">
+                        <label className="input input-bordered w-[190px] md:w-full flex items-center gap-2">
                             <input
                                 id='searchStaff'
                                 type="text"
-                                className="grow"
-                                placeholder="ស្វែងរកឈ្មោះបុគ្គលិក,ID"
+                                className="w-full"
+                                placeholder="ស្វែងរក"
                             />
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 16 16"
                                 fill="currentColor"
-                                className="h-4 w-4 opacity-70">
+                                className="h-8 w-8 opacity-70">
                                 <path
                                     fillRule="evenodd"
                                     d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
@@ -94,7 +94,6 @@ function TableStaff() {
                     </table>
                 </div>
 
-
             </div>
 
             <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
@@ -130,11 +129,13 @@ function TableStaff() {
                                     id="gender"
                                     required
                                     className="select select-bordered bg-secondary w-full"
+                                    defaultValue=""
                                 >
-                                    <option value="" disabled selected>ជ្រើសរើសភេទ</option>
+                                    <option value="" disabled>ជ្រើសរើសភេទ</option>
                                     <option value="ប្រុស">ប្រុស</option>
                                     <option value="ស្រី">ស្រី</option>
                                 </select>
+
                             </div>
                             <div className="input-container grid w-full gap-2">
                                 <label htmlFor="position" className=''>មុខដំណែង*</label>
@@ -142,8 +143,9 @@ function TableStaff() {
                                     id="position"
                                     required
                                     className="select select-bordered bg-secondary w-full"
+                                    defaultValue=""
                                 >
-                                    <option value="" disabled selected>មុខដំណែង</option>
+                                    <option value="" disabled>មុខដំណែង</option>
                                     <option value="មន្ត្រីទទួលបន្ទុក">មន្ត្រីទទួលបន្ទុក</option>
                                     <option value="និស្សិតហាត់ការ">និស្សិតហាត់ការ</option>
                                 </select>
@@ -157,34 +159,38 @@ function TableStaff() {
                                     id="degreeLvl"
                                     required
                                     className="select select-bordered bg-secondary w-full"
+                                    defaultValue=""
                                 >
-                                    <option value="" disabled selected>ជ្រើសរើសកម្រិតសិក្សា</option>
-                                    <option value="មន្ត្រីទទួលបន្ទុក">បណ្ឌិត</option>
-                                    <option value="មន្ត្រីទទួលបន្ទុក">អនុបណ្ឌិត</option>
-                                    <option value="មន្ត្រីទទួលបន្ទុក">បរិញ្ញាប័ត្រជាន់ខ្ពស់</option>
-                                    <option value="មន្ត្រីទទួលបន្ទុក">បរិញ្ញាប័ត្រ</option>
-                                    <option value="និស្សិតហាត់ការ">បរិញ្ញាប័ត្ររង</option>
+                                    <option value="" disabled>ជ្រើសរើសកម្រិតសិក្សា</option>
+                                    <option value="បណ្ឌិត">បណ្ឌិត</option>
+                                    <option value="អនុបណ្ឌិត">អនុបណ្ឌិត</option>
+                                    <option value="បរិញ្ញាប័ត្រជាន់ខ្ពស់">បរិញ្ញាប័ត្រជាន់ខ្ពស់</option>
+                                    <option value="បរិញ្ញាប័ត្រ">បរិញ្ញាប័ត្រ</option>
+                                    <option value="បរិញ្ញាប័ត្ររង">បរិញ្ញាប័ត្ររង</option>
                                 </select>
+
                             </div>
                             <div className="space-y-2 mt-2 w-full">
                                 <label htmlFor="stdYear" className=''>ឆ្នាំសិក្សា*</label>
                                 <select
                                     id="stdYear"
                                     className="select select-bordered bg-secondary w-full"
+                                    defaultValue=""
                                 >
-                                    <option value="" disabled selected>ជ្រើសរើសឆ្នាំសិក្សា</option>
+                                    <option value="" disabled>ជ្រើសរើសឆ្នាំសិក្សា</option>
                                     <option value="១">១</option>
                                     <option value="២">២</option>
                                     <option value="៣">៣</option>
                                     <option value="៤">៤</option>
                                 </select>
+
                             </div>
                         </div>
 
                         <div className="space-y-2 mt-2">
-                            <label htmlFor="staffName" className=''>ជំនាញ*</label>
+                            <label htmlFor="majorName" className=''>ជំនាញ*</label>
                             <input
-                                id='staffName'
+                                id='majorName'
                                 type="text"
                                 placeholder="ជំនាញ"
                                 className="input input-bordered my-2 bg-secondary w-full"
@@ -193,7 +199,7 @@ function TableStaff() {
                             />
                         </div>
                         <div className="space-y-2 mt-2">
-                            <label htmlFor="staffName" className=''>វេនធ្នើការ*</label>
+                            <p>វេនធ្នើការ*</p>
                             <div className="container-check-shiftTime grid grid-cols-3 md:flex md:justify-between gap-2">
                                 <div className="check-purpose flex items-center space-x-2">
                                     <input
@@ -243,7 +249,7 @@ function TableStaff() {
                         className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] hover:from-[#00D9FF] hover:to-[#a5cef3] transition-all ease-in-out duration-300"
                     >
                         <Save />
-                        Entry
+                        បញ្ចូល
                     </button>
                 </form>
             </Modal>
