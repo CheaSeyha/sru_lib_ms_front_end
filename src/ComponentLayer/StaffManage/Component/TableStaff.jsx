@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BtnGredient from '../../../layout/Component/BtnGredient'
 import { UserPlus } from 'lucide-react'
-import { UserRoundPlus, X, Save } from 'lucide-react';
+import { UserRoundPlus, X, Save, Trash2, SquarePen } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
 
 function TableStaff() {
     // Function to handle the "Select All" checkbox End
     const [searchStaff, setSearchStaff] = useState("")
     const [clickEvenModal, setClickEvenShowModal] = useState("")
-    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)//Modal For Add Staff
+    const [EditDeletModalVisble, setEditDeletModalVisble] = useState(false)//Modal For Edit or delete
+    const [selectedStaffIDs, setSelectedStaffIDs] = useState([]);// Get Select checkbox staff ID
+
     //Staff Data
     const StaffData = [
         {
@@ -31,7 +34,6 @@ function TableStaff() {
             studyYear: 3,
             shiftWork: "ព្រឹក-រសៀល",
         },
-        ,
         {
             staffID: 200153,
             staffName: "សំ​​ សួន",
@@ -47,7 +49,7 @@ function TableStaff() {
 
 
 
-    // Toggle modal visibility
+    // Toggle modal visibility Add And Delete
     const handleOpenModal = (clickEven) => {
         setIsModalVisible(true);
         setClickEvenShowModal(clickEven)
@@ -55,6 +57,21 @@ function TableStaff() {
     const handleCloseModal = () => {
         setIsModalVisible(false);
     };
+
+    //Delete Modal SHow And Hide
+    const handleEditDelteModalClose = () => {
+        setEditDeletModalVisble(false)
+        setSelectedStaffIDs([])
+    }
+    const handleEditDelteModalOpen = (staffID) => {
+        setEditDeletModalVisble(true);
+        //If < 1 Mean Sigle Select Of Staff ID TO Delete
+        if (selectedStaffIDs.length < 1) {
+            // Add the new staffID to the existing array of selectedStaffIDs
+            setSelectedStaffIDs(prevSelectedStaffIDs => [...prevSelectedStaffIDs, staffID]);
+        }
+    }
+
 
     const handleFormSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
@@ -70,10 +87,6 @@ function TableStaff() {
             alert('Please fill out the form correctly.');
         }
     }
-
-
-    // Function to handle the "Select All" checkbox
-    const [selectedStaffIDs, setSelectedStaffIDs] = useState([]);
 
     // Function to handle the "Select All" checkbox
     const handleSelectAll = (e) => {
@@ -170,6 +183,7 @@ function TableStaff() {
                                 <th>ជំនាញ</th>
                                 <th>ឆ្នាំទី</th>
                                 <th>វេនធ្នើការ</th>
+                                <th>កែប្រ-លុប</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -195,21 +209,31 @@ function TableStaff() {
                                     <td>{data.degreeLevel}</td>
                                     <td>{data.major}</td>
                                     <td>{data.studyYear === "" ? "N/A" : data.studyYear}</td>
-                                    <td className='hover:bg-yellow-50'>{data.shiftWork}</td>
+                                    <td>{data.shiftWork}</td>
+                                    <td className='space-x-2'>
+                                        {selectedStaffIDs.length > 1 ? "" : (
+                                            <button className='text-blue-500 active:scale-110'>
+                                                <SquarePen />
+                                            </button>
+                                        )}
+                                        <button
+                                            className='text-red-500 active:scale-110'
+                                            onClick={() => handleEditDelteModalOpen(data.staffID)}
+                                        >
+                                            <Trash2 />
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
+
+
                         </tbody>
                     </table>
-
-                    {/* Optional: Display selected IDs */}
-                    <div>
-                        <h3>Selected Staff IDs:</h3>
-                        <p>{selectedStaffIDs.join(', ') || 'No staff selected'}</p>
-                    </div>
                 </div>
 
             </div>
 
+            {/* Add Edit Modal  */}
             <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
                 <form onSubmit={handleFormSubmit} className="container w-full h-full space-y-5 font-noto">
                     <div className="header-modal flex justify-between">
@@ -366,6 +390,36 @@ function TableStaff() {
                         បញ្ចូល
                     </button>
                 </form>
+            </Modal>
+
+            {/* MOdal Delete Ask User for Confirm When User Click  */}
+            <Modal isVisible={EditDeletModalVisble} onClose={handleEditDelteModalClose}>
+                <div className="header-modal flex justify-between font-noto">
+                    <div className="radio-container flex space-x-3">
+                        <p>តើពិតអ្នកពិតជាចង់លុបបុគ្គលិក?</p>
+                    </div>
+                    <button
+                        onClick={handleEditDelteModalClose}
+                        className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
+                    >
+                        <X />
+                    </button>
+                </div>
+                <div className="modal-form font-noto text-center p-10">
+                    <p>អត្តលេខបុគ្គលិកដែលត្រូវលុបចេញ</p>
+                    <br></br>
+                    <p className='text-red-600'>{selectedStaffIDs.join(' - ')}</p>
+                </div>
+
+
+                <div className="contianer-btn">
+                <button
+                    className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#d45757] to-[#E7FBFF] hover:from-[#5e2626] hover:to-[#ffffff] transition-all ease-in-out duration-300"
+                >
+                    <Trash2 />
+                    យល
+                </button>
+                </div>
             </Modal>
         </>
     )
