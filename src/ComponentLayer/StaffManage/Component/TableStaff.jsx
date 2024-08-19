@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import BtnGredient from '../../../layout/Component/BtnGredient'
 import { UserPlus } from 'lucide-react'
-import { UserRoundPlus, X, Save, Trash2, SquarePen } from 'lucide-react';
+import { UserRoundPlus, X, Save, Trash2, SquarePen, EditIcon } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
 
 function TableStaff() {
@@ -11,6 +11,17 @@ function TableStaff() {
     const [isModalVisible, setIsModalVisible] = useState(false)//Modal For Add Staff
     const [EditDeletModalVisble, setEditDeletModalVisble] = useState(false)//Modal For Edit or delete
     const [selectedStaffIDs, setSelectedStaffIDs] = useState([]);// Get Select checkbox staff ID
+    const [staffInfor, setStaffInfor] = useState({
+        staffID: 0,
+        staffName: "",
+        gender: "",
+        position: "",
+        degreeLevel: "",
+        major: "",
+        studyYear: "",
+        shiftWork: "",
+    })
+
 
     //Staff Data
     const StaffData = [
@@ -32,7 +43,7 @@ function TableStaff() {
             degreeLevel: "បរិញ្ញាប័ត្រ",
             major: "វិទ្យាសាស្ត្រកុំព្យូទ័រ",
             studyYear: 3,
-            shiftWork: "ព្រឹក-រសៀល",
+            shiftWork: "ព្រឹក-យប់",
         },
         {
             staffID: 200153,
@@ -42,7 +53,7 @@ function TableStaff() {
             degreeLevel: "បរិញ្ញាប័ត្រ",
             major: "វិទ្យាសាស្ត្រកុំព្យូទ័រ",
             studyYear: 3,
-            shiftWork: "ព្រឹក-រសៀល",
+            shiftWork: "រសៀល-យប់",
         }
     ]
     const [filteredStaff, setFilteredStaff] = useState(StaffData);
@@ -56,14 +67,25 @@ function TableStaff() {
     }
     const handleCloseModal = () => {
         setIsModalVisible(false);
+        setStaffInfor({
+            staffID: 0,
+            staffName: "",
+            gender: "",
+            position: "",
+            degreeLevel: "",
+            major: "",
+            studyYear: "",
+            shiftWork: "",
+        })
     };
 
     //Delete Modal SHow And Hide
-    const handleEditDelteModalClose = () => {
+    const handleDelteModalClose = () => {
         setEditDeletModalVisble(false)
         setSelectedStaffIDs([])
     }
-    const handleEditDelteModalOpen = (staffID) => {
+
+    const handleDelteModalOpen = (staffID) => {
         setEditDeletModalVisble(true);
         //If < 1 Mean Sigle Select Of Staff ID TO Delete
         if (selectedStaffIDs.length < 1) {
@@ -72,6 +94,38 @@ function TableStaff() {
         }
     }
 
+    //Handle Edit Modal
+    const handleEditModalOpen = (updateStaffID) => {
+        // Find the staff data by staffID
+        const staffToUpdate = StaffData.find(staff => staff.staffID === updateStaffID);
+
+        if (staffToUpdate) {
+            // Update the state with the selected staff data
+            setStaffInfor({
+                staffID: staffToUpdate.staffID,
+                staffName: staffToUpdate.staffName,
+                gender: staffToUpdate.gender,
+                position: staffToUpdate.position,
+                degreeLevel: staffToUpdate.degreeLevel,
+                major: staffToUpdate.major,
+                studyYear: staffToUpdate.studyYear,
+                shiftWork: staffToUpdate.shiftWork,
+            });
+        }
+
+        setIsModalVisible(true); // Open the modal
+        setClickEvenShowModal("កែទិន្ន័យ"); // Set the modal title or purpose
+        console.log(updateStaffID); // Log the ID (for debugging purposes)
+    }
+
+    //Get Data Add Form--------------------
+    const handleInputChange = (e) => {
+        const { id, value } = e.target;
+        setStaffInfor((prevState) => ({
+            ...prevState,
+            [id]: value,
+        }));
+    };
 
     const handleFormSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
@@ -87,6 +141,7 @@ function TableStaff() {
             alert('Please fill out the form correctly.');
         }
     }
+    //Get Data Add Form--------------------
 
     // Function to handle the "Select All" checkbox
     const handleSelectAll = (e) => {
@@ -210,15 +265,15 @@ function TableStaff() {
                                     <td>{data.major}</td>
                                     <td>{data.studyYear === "" ? "N/A" : data.studyYear}</td>
                                     <td>{data.shiftWork}</td>
-                                    <td className='space-x-2'>
+                                    <td className='space-x-2 grid  place-items-center grid-cols-2 lg:block'>
                                         {selectedStaffIDs.length > 1 ? "" : (
-                                            <button className='text-blue-500 active:scale-110'>
+                                            <button className='text-blue-500 active:scale-110' onClick={() => handleEditModalOpen(data.staffID)}>
                                                 <SquarePen />
                                             </button>
                                         )}
                                         <button
                                             className='text-red-500 active:scale-110'
-                                            onClick={() => handleEditDelteModalOpen(data.staffID)}
+                                            onClick={() => handleDelteModalOpen(data.staffID)}
                                         >
                                             <Trash2 />
                                         </button>
@@ -241,6 +296,7 @@ function TableStaff() {
                             <p>{clickEvenModal}</p>
                         </div>
                         <button
+                            type="button"
                             onClick={handleCloseModal}
                             className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
                         >
@@ -249,55 +305,59 @@ function TableStaff() {
                     </div>
                     <div className="modal-form">
                         <div className="input-container w-full">
-                            <label htmlFor="staffName" className=''>ឈ្មោះ*</label>
+                            <label htmlFor="staffName">ឈ្មោះ*</label>
                             <input
                                 id='staffName'
                                 type="text"
                                 placeholder="ឈ្មោះ"
+                                value={staffInfor.staffName}
                                 className="input input-bordered my-2 bg-secondary w-full"
                                 required
+                                onChange={handleInputChange}
                                 minLength="3"
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-2">
                             <div className="input-container grid w-full gap-2">
-                                <label htmlFor="gender" className=''>ភេទ*</label>
+                                <label htmlFor="gender">ភេទ*</label>
                                 <select
                                     id="gender"
                                     required
                                     className="select select-bordered bg-secondary w-full"
-                                    defaultValue=""
+                                    onChange={handleInputChange}
+                                    defaultValue={staffInfor.gender}
                                 >
                                     <option value="" disabled>ជ្រើសរើសភេទ</option>
                                     <option value="ប្រុស">ប្រុស</option>
                                     <option value="ស្រី">ស្រី</option>
                                 </select>
-
                             </div>
                             <div className="input-container grid w-full gap-2">
-                                <label htmlFor="position" className=''>មុខដំណែង*</label>
+                                <label htmlFor="position">មុខដំណែង*</label>
                                 <select
                                     id="position"
                                     required
                                     className="select select-bordered bg-secondary w-full"
-                                    defaultValue=""
+                                    onChange={handleInputChange}
+                                    defaultValue={staffInfor.position}
                                 >
-                                    <option value="" disabled>មុខដំណែង</option>
+                                    <option value="" disabled>ជ្រើសរើសមុខដំណែង</option>
                                     <option value="មន្ត្រីទទួលបន្ទុក">មន្ត្រីទទួលបន្ទុក</option>
                                     <option value="និស្សិតហាត់ការ">និស្សិតហាត់ការ</option>
+                                    <option value="អ្នកអានាម័យ">អ្នកអានាម័យ</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 ">
+                        <div className="grid grid-cols-2 gap-2">
                             <div className="space-y-2 mt-2 w-full">
-                                <label htmlFor="degreeLvl" className=''>កម្រិតសិក្សា</label>
+                                <label htmlFor="degreeLevel">កម្រិតសិក្សា</label>
                                 <select
-                                    id="degreeLvl"
-                                    required
+                                    id="degreeLevel"
                                     className="select select-bordered bg-secondary w-full"
-                                    defaultValue=""
+                                    onChange={handleInputChange}
+                                    defaultValue={staffInfor.degreeLevel}
                                 >
                                     <option value="" disabled>ជ្រើសរើសកម្រិតសិក្សា</option>
                                     <option value="បណ្ឌិត">បណ្ឌិត</option>
@@ -305,101 +365,80 @@ function TableStaff() {
                                     <option value="បរិញ្ញាប័ត្រជាន់ខ្ពស់">បរិញ្ញាប័ត្រជាន់ខ្ពស់</option>
                                     <option value="បរិញ្ញាប័ត្រ">បរិញ្ញាប័ត្រ</option>
                                     <option value="បរិញ្ញាប័ត្ររង">បរិញ្ញាប័ត្ររង</option>
+                                    <option value="">រំលង</option>
                                 </select>
-
                             </div>
                             <div className="space-y-2 mt-2 w-full">
-                                <label htmlFor="stdYear" className=''>ឆ្នាំសិក្សា*</label>
+                                <label htmlFor="studyYear">ឆ្នាំសិក្សា</label>
                                 <select
-                                    id="stdYear"
+                                    id="studyYear"
                                     className="select select-bordered bg-secondary w-full"
-                                    defaultValue=""
+                                    onChange={handleInputChange}
+                                    defaultValue={staffInfor.studyYear}
                                 >
                                     <option value="" disabled>ជ្រើសរើសឆ្នាំសិក្សា</option>
                                     <option value="១">១</option>
                                     <option value="២">២</option>
                                     <option value="៣">៣</option>
                                     <option value="៤">៤</option>
+                                    <option value="">រំលង</option>
                                 </select>
-
                             </div>
                         </div>
 
                         <div className="space-y-2 mt-2">
-                            <label htmlFor="majorName" className=''>ជំនាញ*</label>
+                            <label htmlFor="major">ជំនាញ</label>
                             <input
-                                id='majorName'
+                                id='major'
                                 type="text"
                                 placeholder="ជំនាញ"
                                 className="input input-bordered my-2 bg-secondary w-full"
-                                required
+                                onChange={handleInputChange}
+                                value={staffInfor.major}
                                 minLength="3"
                             />
                         </div>
                         <div className="space-y-2 mt-2">
                             <p>វេនធ្នើការ*</p>
-                            <div className="container-check-shiftTime grid grid-cols-3 md:flex md:justify-between gap-2">
-                                <div className="check-purpose flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id='ពេញម៉ោង'
-                                        className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
-                                    />
-                                    <label htmlFor="ពេញម៉ោង" className='label-text text-[#32E2FF]'>ពេញម៉ោង</label>
-                                </div>
-                                <div className="check-purpose flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id='ព្រឹក'
-                                        className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
-                                    />
-                                    <label htmlFor="ព្រឹក" className='label-text text-[#32E2FF]'>ព្រឹក</label>
-                                </div>
-                                <div className="check-purpose flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id='រសរៀល'
-                                        className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
-                                    />
-                                    <label htmlFor="រសរៀល" className='label-text text-[#32E2FF]'>រសរៀល</label>
-                                </div>
-                                <div className="check-purpose flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id='យប់'
-                                        className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
-                                    />
-                                    <label htmlFor="យប់" className='label-text text-[#32E2FF]'>យប់</label>
-                                </div>
-                                <div className="check-purpose flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
-                                        id='សៅរ៍-អាទិត្យ'
-                                        className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
-                                    />
-                                    <label htmlFor="សៅរ៍-អាទិត្យ" className='label-text text-[#32E2FF]'>សៅរ៍-អាទិត្យ</label>
-                                </div>
+                            <div className="container-check-shiftTime grid grid-cols-2 md:flex md:justify-between gap-2">
+                                {['ពេញម៉ោង', 'ព្រឹក-យប់', 'រសៀល-យប់', 'សៅរ៍-អាទិត្យ'].map((shift) => (
+                                    <div key={shift} className="check-purpose flex items-center space-x-2">
+                                        <input
+                                            type="radio"
+                                            id={shift}
+                                            required 
+                                            name="shiftWork" // Ensure all radios share the same name to be mutually exclusive
+                                            className="radio border-[#32E2FF] radio-info radio-sm"
+                                            onChange={(e) => setStaffInfor({ ...staffInfor, shiftWork: e.target.value })} // Set the shiftWork directly
+                                            value={shift} // Set the value to the shift
+                                            checked={staffInfor.shiftWork === shift} // Check if the current shift matches the selected one
+                                        />
+                                        <label htmlFor={shift} className="label-text text-[#32E2FF]">{shift}</label>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
 
                     <button
+                    type="submit"
                         className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] hover:from-[#00D9FF] hover:to-[#a5cef3] transition-all ease-in-out duration-300"
                     >
-                        <Save />
-                        បញ្ចូល
+                        {clickEvenModal === "កែទិន្ន័យ" ? <EditIcon /> : <Save />}
+                        {clickEvenModal === "កែទិន្ន័យ" ? "កែទិន្ន័យ" : "បញ្ចូលថ្មី"}
                     </button>
                 </form>
             </Modal>
 
+
             {/* MOdal Delete Ask User for Confirm When User Click  */}
-            <Modal isVisible={EditDeletModalVisble} onClose={handleEditDelteModalClose}>
+            <Modal isVisible={EditDeletModalVisble} onClose={handleDelteModalClose}>
                 <div className="header-modal flex justify-between font-noto">
                     <div className="radio-container flex space-x-3">
                         <p>តើពិតអ្នកពិតជាចង់លុបបុគ្គលិក?</p>
                     </div>
                     <button
-                        onClick={handleEditDelteModalClose}
+                        onClick={handleDelteModalClose}
                         className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
                     >
                         <X />
@@ -413,12 +452,12 @@ function TableStaff() {
 
 
                 <div className="contianer-btn">
-                <button
-                    className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#d45757] to-[#E7FBFF] hover:from-[#5e2626] hover:to-[#ffffff] transition-all ease-in-out duration-300"
-                >
-                    <Trash2 />
-                    យល
-                </button>
+                    <button
+                        className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#d45757] to-[#E7FBFF] hover:from-[#5e2626] hover:to-[#ffffff] transition-all ease-in-out duration-300"
+                    >
+                        <Trash2 />
+                        យល
+                    </button>
                 </div>
             </Modal>
         </>
