@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BookOpenText } from 'lucide-react';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import Datepicker from "react-tailwindcss-datepicker";
 import DonutChart from './DonutChart';
 
 function TotalBook() {
@@ -18,6 +17,8 @@ function TotalBook() {
     ];
     const [selectedDate, setSelectedDate] = useState(new Date());
 
+    const [value, setValue] = useState("");
+
     return (
         <div className='total-book w-full flex flex-col h-full text-white bg-secondary rounded-[20px] p-5'>
             <div className="total-book-header bg-gradient-to-r p-5 from-[#00BBFF] to-secondary w-full h-[176px] flex justify-between rounded-[10px]">
@@ -28,15 +29,13 @@ function TotalBook() {
                             <p className='text-[30px] sm:text-[40px] font-bold'>12,238</p>
                             <BookOpenText className='text-yellow-300 w-[20px] sm:w-[30px] h-[30px]' />
                         </div>
-                        <div className='w-[90px]'>
-                            <DatePicker
-                                id='book-date-picker'
-                                key="book-date-picker"
-                                selected={selectedDate}
-                                onChange={(date) => setSelectedDate(date)}
-                                dateFormat="MMM-yyyy" // Display month as name (e.g., "Aug")
-                                showMonthYearPicker
-                                className="w-full p-[10px] rounded-[5px] text-black"
+                        <div className='w-[170px]'>
+                            <Datepicker
+                                inputId='TotalBook'
+                                useRange={false}
+                                asSingle={true}
+                                value={value}
+                                onChange={newValue => setValue(newValue)}
                             />
                         </div>
                     </div>

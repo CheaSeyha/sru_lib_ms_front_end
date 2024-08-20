@@ -11,9 +11,6 @@ function AnalyticForm() {
                     <TotalBook />
                     <EntryPurposeCard />
                 </div>
-                <div className="total-entry">
-                    <TotalEntryCardForm />
-                </div>
             </div>
         </main>
     )

@@ -1,16 +1,15 @@
 import React, { useState, useRef } from 'react';
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ListFilter } from 'lucide-react';
 import CardPurposeData from '../EntryPurpose/CardPurposeData'
-
+import Datepicker from "react-tailwindcss-datepicker";
 
 function EntryPurposeCard() {
     const [selectedFilterMajorName, setSelectedFilterMajorName] = useState('All'); // State for selected filter
     const dropdownRef = useRef(null); // Create a ref to the <details> element
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [majorForFilter, setMajorForFilter] = useState(["All", "CS", "ENG", "BUS"]);
-
+    const [value, setValue] = useState("");
     // Handle selection
     const handleSelection = (value) => {
         setSelectedFilterMajorName(value);
@@ -37,15 +36,13 @@ function EntryPurposeCard() {
                         ))}
                     </ul>
                 </details>
-                <div className='w-[90px]'>
-                    <DatePicker
-                        id='entryPurpose-date-picker'
-                        key="entryPurpose-date-picker"
-                        selected={selectedDate}
-                        onChange={(date) => setSelectedDate(date)}
-                        dateFormat="MMM-yyyy" // Display month as name (e.g., "Aug")
-                        showMonthYearPicker
-                        className="w-full p-[10px] rounded-[5px] text-black"
+                <div className='w-[170px]'>
+                    <Datepicker
+                        inputId='EntryPurpose'
+                        useRange={false}
+                        asSingle={true}
+                        value={value}
+                        onChange={newValue => setValue(newValue)}
                     />
                 </div>
             </div>
