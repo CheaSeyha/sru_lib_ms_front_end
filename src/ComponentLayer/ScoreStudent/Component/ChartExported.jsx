@@ -10,19 +10,30 @@ const ChartExported = () => {
   const colortext=theme === 'dark' ? '#FFFFFF' : '#12363C';
   const colorgrid=theme === 'dark' ? '#cbcbcb6b' : '#DDDDDD';
   const data = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    labels: ["January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"],
     datasets: [
       {
-        label: 'Certificates Exported',
-        data: [5, 4, 7, 3, 8, 8, 5],
+        label: 'University',
+        data: [33,43,45,32,98,76,43,78,85,12,34,55],
         borderColor: '#ff5656',
         backgroundColor: '#ff5656',
         fill: false,
         tension: 0.1,
       },
       {
-        label: 'Certificates Imported',
-        data: [3, 2, 6, 5, 6, 7, 4],
+        label: 'Donation',
+        data: [12,34,56,33,54,65,67,8,86,56,45,34],
         borderColor: '#ffff56',
         backgroundColor: '#ffff56',
         fill: false,
@@ -44,7 +55,7 @@ const ChartExported = () => {
       },
       title: {
         display: true,
-        text: 'Certificate Exported',
+        text: 'Book income',
         color: colortext,
         font: {
           size: 24,

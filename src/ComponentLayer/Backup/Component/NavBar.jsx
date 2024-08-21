@@ -21,7 +21,7 @@ function Navbar() {
   return (
     <>
     <div className="table-container flex lg:h-full md:h-[700px] sm:h-[700px] bg-secondary text-accent rounded-[20px] scrollbar-hide">
-    <nav className=" rounded-[20px] bg-secondary p-5">
+    <nav className=" rounded-[20px] bg-secondary pr-5">
       <div className="container mx-auto flex justify-between items-center">
         <div className="space-x-0 flex flex-col">
         <button
@@ -40,7 +40,7 @@ function Navbar() {
       </div>
     </nav>
     
-    <div className='table-container border-solid border-l-2 border-base-100 table-borrow-book h-full w-full bg-secondary text-accent rounded-[20px] p-5'>
+    <div className='table-container border-solid border-l-2 border-base-100 table-borrow-book h-full w-full bg-secondary text-accent pl-5'>
       {renderComponent()}
       </div>
       </div>

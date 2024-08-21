@@ -15,7 +15,7 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownBu
 
     useEffect(() => {
         if (dropDownButton) {//Check link path it was in drop down or not if true show drop down
-            if (GetLinkPath === "/BookManagement/AddBook" || GetLinkPath === "/BookManagement/BookBorrowed") {
+            if (GetLinkPath === "/BookManagement/AddBook" || GetLinkPath === "/BookManagement/BookBorrowed" || GetLinkPath === "/BookManagement/Score" || GetLinkPath === "/BookManagement/Backup") {
                 setShowDropdown(true);
             } else {
                 setShowDropdown(false);
@@ -43,7 +43,7 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownBu
                 )}
             </NavLink>
             {/* drop down menu */}
-            <div className={`transition-max-height px-5 sm:px-0 lg:px-5 duration-500 rounded-none sm:rounded-[10px] lg:rounded-none ease-in-out sm:bg-base-300 lg:bg-secondary overflow-hidden ${showDropdown ? 'max-h-40' : 'max-h-0'}`}>
+            <div className={`transition-max-height px-5 sm:px-0 lg:px-5 duration-500 rounded-none sm:rounded-[10px] lg:rounded-none ease-in-out sm:bg-base-300 lg:bg-secondary overflow-hidden ${showDropdown ? 'max-h-60' : 'max-h-0'}`}>
                 <ul className="ul border-s sm:border-s-0 lg:border-s border-accent text-[13px] sm:px-1 lg:px-0">
                     {dropDownButtonData.map((data, index) => (
                         <NavLink to={data.urlPath} key={index}>

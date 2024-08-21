@@ -1,6 +1,8 @@
 import React,{useState} from 'react'
 import ListOfAllBook from './ListOfAllBook';
 import ListOfBorrow from '../Borrow/ListOfBorrow'
+import ListCertificate from '../../ScoreStudent/Component/ListCertificate';
+import ListBackup from "../../Backup/Component/NavBar";
 import { useLocation } from 'react-router-dom';
 const NavBarBook = () => {
     const location = useLocation();
@@ -11,6 +13,10 @@ const NavBarBook = () => {
         return <ListOfAllBook />;
       case "/BookManagement/BookBorrowed":
         return <ListOfBorrow />;
+      case "/BookManagement/Score":
+        return <ListCertificate />;
+        case "/BookManagement/Backup":
+        return <ListBackup />;
       default:
         return <ListOfAllBook />;
     }

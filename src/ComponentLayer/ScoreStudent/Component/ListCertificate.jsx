@@ -125,7 +125,7 @@ const ListCertificate = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full h-full space-y-5 p-5">
+      <div className="flex flex-col w-full h-full space-y-5">
         <div className="text-table w-full h-[45px] flex justify-between">
           <p>List of Certicate</p>
         </div>

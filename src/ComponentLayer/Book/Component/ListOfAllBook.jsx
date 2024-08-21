@@ -8,17 +8,19 @@ import refresh from "../../../assets/logo/refresh.svg"
 export default function ListOfAllBook() {
   // Data of All Book
   const [books, setBooks] = useState([]);
-
+  const [genre, setgenre] = useState([]);
   useEffect(() => {
     axios.get('/book')
       .then(response => {
-        const bookData = response.data.map(book => ({
-          bookId: book.bookId,
-          bookTitle: book.bookTitle,
-          bookType: book.bookType,
-          number: book.number,
-        }));
-        setBooks(bookData);
+        // const bookData = response.data.map(book => ({
+        //   bookId: book.bookId,
+        //   bookTitle: book.bookTitle,
+        //   bookType: book.bookType,
+        //   number: book.number,
+        // }));
+        setBooks(response.data);
+        const uniqueBookTypes = [...new Set(response.data.map(book => book.genre))];
+        setgenre(uniqueBookTypes);
       })
       .catch(error => {
         console.error("There was an error fetching the books!", error);
@@ -26,7 +28,7 @@ export default function ListOfAllBook() {
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectType] = useState('');
+  const [selectedGenre, setSelectType] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalLstVisible, setIsModalLstVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
@@ -57,7 +59,7 @@ export default function ListOfAllBook() {
   const filteredBooks = books.filter(book => 
     (book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
     book.bookId.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (selectedType === '' || book.bookType === selectedType)
+    (selectedGenre === '' || book.genre === selectedGenre)
   );
 
   const handleSearchChange = (event) => {
@@ -85,14 +87,15 @@ export default function ListOfAllBook() {
           </div>
           <div className="inline-block pl-5 w-1/3">
             <select
-              value={selectedType}
+              value={selectedGenre}
               onChange={handleSelectType}
               className="p-2 border border-gray-300 rounded text-black w-full"
             >
-              <option disabled className="refresh" value="">Select Type</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Food Technology">Food Technology</option>
+              <option disabled className="refresh" value="">Select Genre</option>
+              {genre.map((index) => (
+              <option value={index}>{index}</option>
+              
+            ))}
             </select>
           </div>
           <div className="inline-block w-1/6 pl-8">
@@ -108,8 +111,11 @@ export default function ListOfAllBook() {
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">NO</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">ID</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Title</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Type</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Qty</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">College</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Author</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Genre</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Public Year</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Quantity</th>
               </tr>
             </thead>
             <tbody>
@@ -118,8 +124,11 @@ export default function ListOfAllBook() {
                   <th>{index + 1}</th>
                   <td>{entry.bookId}</td>
                   <td>{entry.bookTitle}</td>
-                  <td>{entry.bookType}</td>
-                  <td>{entry.number}</td>
+                  <td>{entry.collegeId}</td>
+                  <td>{entry.author?? 'N/A'}</td>
+                  <td>{entry.genre}</td>
+                  <td>{entry.publicationYear?? 'N/A'}</td>
+                  <td>{entry.bookQuan}</td>
                 </tr>
               ))}
             </tbody>
