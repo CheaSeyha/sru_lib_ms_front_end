@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Datepicker from 'react-tailwindcss-datepicker'
-import BarChart from './BarChart';
+import BarChart from '../Chart/BarChart';
+import LineChart from '../Chart/LineChart';
 
 function BookAnalyticForm() {
     const [value, setValue] = useState({
@@ -22,9 +23,9 @@ function BookAnalyticForm() {
                         />
                     </div>
                 </div>
-                <div className="BarChart-Contianer grid grid-cols-2 h-[497px]">
+                <div className="BarChart-Contianer flex flex-col md:flex-row h-[800px] md:h-[497px]">
                     <BarChart/>
-                    <BarChart/>
+                    <LineChart/>
                 </div>
             </div>
         </div>

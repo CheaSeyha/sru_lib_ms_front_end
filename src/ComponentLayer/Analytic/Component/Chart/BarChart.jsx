@@ -15,6 +15,14 @@ const BarChart = () => {
       type: 'bar',
       height: 430,
     },
+    title: {
+      text: 'ទនិ្នន័យសៀវភៅតាមមហាវិទ្យាល័យនីមួយៗ',
+      align: 'left',
+      style: {
+        fontFamily: "NotoSansKhmer-Regular",
+        color: axisLabelsColors, // Title color
+      }
+    },
     plotOptions: {
       bar: {
         horizontal: false,
@@ -47,8 +55,17 @@ const BarChart = () => {
         },
       },
     },
+    legend: {
+      show: true,
+      position: 'top', // Position of the legend (top, right, bottom, left)
+      labels: {
+        colors: axisLabelsColors, // Legend text color
+        fontSize: '12px',
+        fontFamily: 'Arial, sans-serif',
+      },
+    },
     colors: ['#2845FF', '#00D0FF'],
-  }), [axisLabelsColors]);
+  }), [axisLabelsColors, theme]);
 
   const series = [
     {
@@ -62,8 +79,8 @@ const BarChart = () => {
   ];
 
   return (
-    <div id="chart">
-      <Chart options={options} series={series} type="bar" height={"100%"} />
+    <div id="chart" className='w-full h-full'>
+      <Chart options={options} series={series} type="bar" width={"100%"} height={"100%"} />
     </div>
   );
 };
