@@ -12,12 +12,6 @@ export default function ListOfAllBook() {
   useEffect(() => {
     axios.get('/book')
       .then(response => {
-        // const bookData = response.data.map(book => ({
-        //   bookId: book.bookId,
-        //   bookTitle: book.bookTitle,
-        //   bookType: book.bookType,
-        //   number: book.number,
-        // }));
         setBooks(response.data);
         const uniqueBookTypes = [...new Set(response.data.map(book => book.genre))];
         setgenre(uniqueBookTypes);
@@ -86,17 +80,21 @@ export default function ListOfAllBook() {
             />
           </div>
           <div className="inline-block pl-5 w-1/3">
-            <select
-              value={selectedGenre}
-              onChange={handleSelectType}
-              className="p-2 border border-gray-300 rounded text-black w-full"
-            >
-              <option disabled className="refresh" value="">Select Genre</option>
-              {genre.map((index) => (
-              <option value={index}>{index}</option>
-              
-            ))}
-            </select>
+          <select
+  value={selectedGenre}
+  onChange={handleSelectType}
+  className="p-2 border border-gray-300 rounded text-black w-full"
+>
+  <option disabled className="refresh" value="">
+    Select Genre
+  </option>
+  {genre.map((type, index) => (
+    <option key={index} value={type}>
+      {type}
+    </option>
+  ))}
+</select>
+
           </div>
           <div className="inline-block w-1/6 pl-8">
             <BtnGredient className="rounded-" onClick={resetSelection} color={'from-primary to-[#00D9FF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>

@@ -11,7 +11,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
     bookTitle: '',
     bookQuan: '',
     languageId: '',
-    CollegeId: '',
+    collegeId: '',
     author: '',
     publicationYear: '',
     genre: ''
@@ -55,6 +55,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
                     </div>
                     
                       <>
+                      <form onSubmit={handleSubmit}>
                     <div className="container w-full h-full space-y-5">
                     {/* Write here */}
                     <div className="w-full mt-5">
@@ -67,7 +68,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
                     </div>
                     <div className="w-full">
                       <div className="inline-block w-1/5">College :</div>
-                      <input type="text" className="input input-bordered inline-block w-4/5" name="collegeId" value={formData.CollegeId} onChange={handleChange} required />
+                      <input type="text" className="input input-bordered inline-block w-4/5" name="collegeId" value={formData.collegeId} onChange={handleChange} required />
                     </div>
                     <div className="w-full">
                       <div className="inline-block w-1/5">Author :</div>
@@ -87,7 +88,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
                     </div>
                     <div className="w-full">
                     <div>
-        <label className="block text-sm font-medium text-white">Choose Language</label>
+        <label className="block text-sm font-medium text-accent">Choose Language</label>
         <div className="mt-2 space-x-4">
           <label className="inline-flex items-center">
             <input 
@@ -99,7 +100,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
               required 
               className="form-radio h-5 w-5 text-blue-600"
             />
-            <span className="ml-2 text-white">English</span>
+            <span className="ml-2 text-accent">English</span>
           </label>
           <label className="inline-flex items-center">
             <input 
@@ -111,7 +112,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
               required 
               className="form-radio h-5 w-5 text-blue-600"
             />
-            <span className="ml-2 text-white">Khmer</span>
+            <span className="ml-2 text-accent">Khmer</span>
           </label>
           <label className="inline-flex items-center">
             <input 
@@ -123,7 +124,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
               required 
               className="form-radio h-5 w-5 text-blue-600"
             />
-            <span className="ml-2 text-white">Other</span>
+            <span className="ml-2 text-accent">Other</span>
           </label>
         </div></div>
                     </div>
@@ -131,9 +132,10 @@ const ModalAdd = ({ isModalVisible, handleCloseModal }) => {
                 <div className="grid grid-cols-1 gap-4 content-center p-5">   
                 <BtnGredient className="rounded-" color={'from-[#1b0bc6] to-[#0d849f]'} hover={'hover:from-[#0d849f] hover:to-[#1b0bc6]'}>
                         <img src={add} alt="add" width={30} height={30} />
-                            <div className='text-xl text-white'>Add</div>
+                            <div type="submit" className='text-xl text-accent'>Add</div>
                             </BtnGredient>
-                            </div></>
+                            </div>
+                            </form></>
             </Modal>
     </>
   )

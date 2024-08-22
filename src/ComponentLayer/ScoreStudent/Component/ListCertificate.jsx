@@ -1,126 +1,46 @@
-import React, { useState, useRef } from 'react';
-import BtnGredient from '../../Book/BtnGredient';
+import React, { useState} from 'react';
+import { useEffect } from 'react';
 import Certificate from './Certificate';
-
+import axios from '../../../api/axios';
 const ListCertificate = () => {
-  const ScoreData = [
-    {
-      "ID": 1001,
-      "StuId": "200101",
-      "StuName": "Student_1",
-      "Dept": "Computer Science",
-      "TotalHour": 66
-    },
-    {
-      "ID": 1002,
-      "StuId": "200102",
-      "StuName": "Student_2",
-      "Dept": "Computer Science",
-      "TotalHour": 87
-    },
-    {
-      "ID": 1003,
-      "StuId": "200103",
-      "StuName": "Student_3",
-      "Dept": "Computer Science",
-      "TotalHour": 76
-    },
-    {
-      "ID": 1004,
-      "StuId": "200104",
-      "StuName": "Chhorn Chanraksmey",
-      "Dept": "Computer Science",
-      "TotalHour": 65
-    },
-    {
-      "ID": 1001,
-      "StuId": "200101",
-      "StuName": "Student_1",
-      "Dept": "Computer Science",
-      "TotalHour": 66
-    },
-    {
-      "ID": 1002,
-      "StuId": "200102",
-      "StuName": "Student_2",
-      "Dept": "Computer Science",
-      "TotalHour": 87
-    },
-    {
-      "ID": 1003,
-      "StuId": "200103",
-      "StuName": "Student_3",
-      "Dept": "Computer Science",
-      "TotalHour": 76
-    },
-    {
-      "ID": 1004,
-      "StuId": "200104",
-      "StuName": "Chhorn Chanraksmey",
-      "Dept": "Computer Science",
-      "TotalHour": 65
-    },
-    {
-      "ID": 1001,
-      "StuId": "200101",
-      "StuName": "Student_1",
-      "Dept": "Computer Science",
-      "TotalHour": 66
-    },
-    {
-      "ID": 1002,
-      "StuId": "200102",
-      "StuName": "Student_2",
-      "Dept": "Computer Science",
-      "TotalHour": 87
-    },
-    {
-      "ID": 1003,
-      "StuId": "200103",
-      "StuName": "Student_3",
-      "Dept": "Computer Science",
-      "TotalHour": 76
-    },
-    {
-      "ID": 1004,
-      "StuId": "200104",
-      "StuName": "Chhorn Chanraksmey",
-      "Dept": "Computer Science",
-      "TotalHour": 65
-    }
-  ];
-
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
 
+  const [timespent, settimespent] = useState([]);
 
+  useEffect(() => {
+    axios.get('/att/time-spent')
+      .then(response => {
+        settimespent(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the time-spent!", error);
+      });
+  }, []);
+  function convertMinutesToHoursAndMinutes(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}h ${remainingMinutes}min`;
+  }
+  
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
   const handleSortToggle = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
-  const handleSortToggle1 = () => {
-    setSortOrder(sortOrder === "asc1" ? "desc1" : "asc1");
-  };
-  const sortedData = [...ScoreData].sort((a, b) => {
+  const sortedData = [...timespent].sort((a, b) => {
     if (sortOrder === "asc") {
-      return a.TotalHour - b.TotalHour;
+      return a.totalTimeSpent - b.totalTimeSpent;
     } 
-    else if(sortOrder==="asc1"){
-      return a.ID - b.ID;
-    }
-    else if(sortOrder==="desc1"){
-      return b.ID - a.ID;
-    }
     else {
-      return b.TotalHour - a.TotalHour;
+      return b.totalTimeSpent - a.totalTimeSpent;
     }
   });
 
   const filteredData = sortedData.filter(item => 
-    item.StuId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.StuName.toLowerCase().includes(searchTerm.toLowerCase())
+    item.studentId.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.studentName.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -145,15 +65,11 @@ const ListCertificate = () => {
             <thead className='text-accent items-center'>
               <tr>
                 <th className="sticky top-0 text-left text-xs font-medium bg-secondary">NO</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">ID</th>
                 <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Student ID</th>
                 <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Student Name</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Department</th>
+                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Major</th>
                 <th className="sticky top-0 text-center text-xs font-medium bg-secondary">
-                  <button onClick={handleSortToggle}>Total Hour {sortOrder === "asc" ? "▲" : "▼"}</button>
-                </th>
-                <th className="sticky top-0 text-center text-xs font-medium bg-secondary">
-                <button onClick={handleSortToggle1}>Total borrow {sortOrder === "asc1" ? "▲" : "▼"}</button>
+                  <button onClick={handleSortToggle}>Spent Time {sortOrder === "asc" ? "▲" : "▼"}</button>
                 </th>
                 <th className="sticky top-0 text-center text-xs font-medium bg-secondary"></th>
 
@@ -163,14 +79,12 @@ const ListCertificate = () => {
               {filteredData.map((certificate, index) => (
                 <tr key={index} className='hover:bg-primary cursor-pointer active:bg-primary'>
                   <th>{index + 1}</th>
-                  <td>{certificate.ID}</td>
-                  <td>{certificate.StuId}</td>
-                  <td>{certificate.StuName}</td>
-                  <td>{certificate.Dept}</td>
-                  <td className='text-center'>{certificate.TotalHour}</td>
-                  <td className='text-center'>{certificate.TotalHour}</td>
+                  <td>{certificate.studentId}</td>
+                  <td>{certificate.studentName}</td>
+                  <td>{certificate.major}</td>
+                  <td className='text-center'>{convertMinutesToHoursAndMinutes(certificate.totalTimeSpent)}</td>
                   <td className='text-center'>  
-                    <Certificate certificate={certificate}/>
+                    <Certificate certificate={certificate} timespent={convertMinutesToHoursAndMinutes(certificate.totalTimeSpent)}/>
                   </td>
                 </tr>
               ))}

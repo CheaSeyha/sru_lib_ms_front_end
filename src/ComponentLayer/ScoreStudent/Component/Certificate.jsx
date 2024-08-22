@@ -12,7 +12,7 @@ import libraryImg from '../../../assets/image/library.png';
 import callAddFont from '../Font/LCALLIG-bold.js';
 import Bodyfont from '../Font/Body_Font.js';
 import fontname from '../Font/Font_Name.js';
-const Certificate = ({ certificate}) => {
+const Certificate = ({ certificate,timespent}) => {
   if (!certificate) return null;
   const formatDate = (date) => {
     return date.toLocaleDateString('en-US', {
@@ -54,21 +54,12 @@ const todayDate = formatDate(new Date());
       const imgRight = await compressImage(medal, 0.6);
       const bookbotom = await compressImage(book, 0.6);
       const librarypng= await compressImage(libraryImg, 0.6);
-        // Add the frame image to the background
-        // const frameImg = new Image();
-        // frameImg.src = frame;
         doc.getFillColor('#ffffff');
         doc.addImage(frameImg, 'PNG', 0, 0, pageWidth, pageHeight);
 
-        // Add the logo to the PDF
-        // const imgLeft = new Image();
-        // imgLeft.src = logo;
         doc.addImage(imgLeft, 'PNG', 25, 25, 40, 40);  // Adjust the size and position as needed
         doc.addImage(bookbotom, 'PNG', pageWidth - 65, 140, 40, 40);
         doc.addImage(librarypng, 'PNG', 25, 140, 50, 50); 
-        // Add the right logo to the PDF
-        // const imgRight = new Image();
-        // imgRight.src = medal;
         doc.addImage(imgRight, 'PNG', pageWidth - 65, 25, 40, 57.93);  // Adjust the size and position as needed
         doc.addFileToVFS('LCALLIG.ttf', callAddFont);
         doc.addFont('LCALLIG.ttf', 'LCALLIG', 'normal');
@@ -92,18 +83,19 @@ const todayDate = formatDate(new Date());
         doc.setFont('Font_Name', 'normal');
         doc.setFontSize(60);
         doc.setTextColor(210,162,8);
-        doc.text(certificate.StuName, pageWidth / 2, 110, null, null, 'center');
+        doc.text(certificate.studentName, pageWidth / 2, 110, null, null, 'center');
         doc.setTextColor(0,0,0);
         doc.setFontSize(15);
         doc.setFont('Body_Font', 'normal');
-        doc.text(`For library entry of Svay Rieng University for a total of ${certificate.TotalHour} hours`, pageWidth / 2, 130, null, null, 'center');
+        doc.text(`For a total of ${timespent} to spend in the library at Svay Rieng University`, pageWidth / 2, 130, null, null, 'center');
         doc.text(`Held at SRU on ${todayDate}`, pageWidth / 2, 140, null, null, 'center');
         doc.setFontSize(15);
-        doc.text('Prom Chanthan', pageWidth / 2, 180, null, null, 'center');
-        doc.text('Director Of Library', pageWidth / 2, 190, null, null, 'center');
+        doc.setFont('LCALLIG', 'normal');
+        doc.text('Pen Dina', pageWidth / 2, 180, null, null, 'center');
+        doc.text('Coordinator Of Library', pageWidth / 2, 190, null, null, 'center');
 
-        // Save the PDF with the filecertificate.StuId as the inputted certificate.StuId
-        doc.save(`${certificate.StuId}-certificate.pdf`);
+        // Save the PDF with the filecertificate.studentId as the inputted certificate.studentId
+        doc.save(`${certificate.studentId}-certificate.pdf`);
     };
 
     return (
