@@ -36,24 +36,44 @@ function TableStaff() {
             shiftWork: "ពេញម៉ោង",
         },
         {
-            staffID: 200155,
-            staffName: "ដេ​ម៉ូ ដាតា",
-            gender: "ប្រុស",
-            position: "និស្សិតហាត់ការ",
-            degreeLevel: "បរិញ្ញាប័ត្រ",
-            major: "វិទ្យាសាស្ត្រកុំព្យូទ័រ",
-            studyYear: 3,
+            staffID: 300001,
+            staffName: "ណន ស្រីស្រស់",
+            gender: "ស្រី",
+            position: "ហាត់ការ",
+            degreeLevel: "បរិញ្ញាបត្រ",
+            major: "អក្សរសាស្ត្រអង់គ្លេស",
+            studyYear: "៣",
             shiftWork: "ព្រឹក-យប់",
         },
         {
-            staffID: 200153,
-            staffName: "សំ​​ សួន",
-            gender: "ប្រុស",
-            position: "និស្សិតហាត់ការ",
-            degreeLevel: "បរិញ្ញាប័ត្រ",
-            major: "វិទ្យាសាស្ត្រកុំព្យូទ័រ",
-            studyYear: 3,
+            staffID: 300002,
+            staffName: "អៀក ស្រីភួង",
+            gender: "ស្រី",
+            position: "ហាត់ការ",
+            degreeLevel: "បរិញ្ញាបត្រ",
+            major: "គ្រប់គ្រងពាណិជ្ផនម្ម",
+            studyYear: "៣",
             shiftWork: "រសៀល-យប់",
+        },
+        {
+            staffID: 300003,
+            staffName: "គិន យិនសុខី",
+            gender: "ស្រី",
+            position: "ហាត់ការ",
+            degreeLevel: "បរិញ្ញាបត្រ",
+            major: "វិស្មកម្មមេកានិច",
+            studyYear: "៣",
+            shiftWork: "សៅរ៍-អាទិត្យ",
+        },
+        {
+            staffID: 300004,
+            staffName: "សេក ចន្ថន",
+            gender: "ស្រី",
+            position: "អនាម័យ",
+            degreeLevel: "",
+            major: "",
+            studyYear: "",
+            shiftWork: "ពេញម៉ោង",
         }
     ]
     const [filteredStaff, setFilteredStaff] = useState(StaffData);
@@ -261,9 +281,9 @@ function TableStaff() {
                                     <td>{data.staffName}</td>
                                     <td>{data.gender}</td>
                                     <td>{data.position}</td>
-                                    <td>{data.degreeLevel}</td>
-                                    <td>{data.major}</td>
-                                    <td>{data.studyYear === "" ? "N/A" : data.studyYear}</td>
+                                    <td>{data.degreeLevel === "" ? "មិនមាន" : data.degreeLevel}</td>
+                                    <td>{data.major === "" ? "មិនមាន" :  data.major}</td>
+                                    <td>{data.studyYear === "" ? "មិនមាន" : data.studyYear}</td>
                                     <td>{data.shiftWork}</td>
                                     <td className='space-x-2 grid  place-items-center grid-cols-2 lg:block'>
                                         {selectedStaffIDs.length > 1 ? "" : (
@@ -435,7 +455,7 @@ function TableStaff() {
             <Modal isVisible={EditDeletModalVisble} onClose={handleDelteModalClose}>
                 <div className="header-modal flex justify-between font-noto">
                     <div className="radio-container flex space-x-3">
-                        <p>តើពិតអ្នកពិតជាចង់លុបបុគ្គលិក?</p>
+                        <p>តើពិតអ្នកពិតជាចង់លុបទិន្ន័យបុគ្គលិក?</p>
                     </div>
                     <button
                         onClick={handleDelteModalClose}
@@ -453,10 +473,10 @@ function TableStaff() {
 
                 <div className="contianer-btn">
                     <button
-                        className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#d45757] to-[#E7FBFF] hover:from-[#5e2626] hover:to-[#ffffff] transition-all ease-in-out duration-300"
+                        className="btn w-full font-noto rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#d45757] to-[#E7FBFF] hover:from-[#5e2626] hover:to-[#ffffff] transition-all ease-in-out duration-300"
                     >
                         <Trash2 />
-                        យល
+                        យល់ព្រម
                     </button>
                 </div>
             </Modal>
