@@ -19,3 +19,44 @@
   src: local("Moul-Regular"),
   url('./assets/font-fam/Moul-Regular.ttf') format('truetype');
 }
+
+
+/* ApexCharts Custom Theme */
+
+/* Light Mode (default) */
+.apexcharts-tooltip,
+.apexcharts-tooltip-title {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.apexcharts-legend-text,
+.apexcharts-toolbar-icon {
+  color: #000000;
+}
+
+.apexcharts-menu,
+.apexcharts-menu-open {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .apexcharts-tooltip,
+[data-theme="dark"] .apexcharts-tooltip-title {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .apexcharts-legend-text,
+[data-theme="dark"] .apexcharts-text {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .apexcharts-menu,
+[data-theme="dark"] .apexcharts-menu-open {
+  background-color: #000000bc;
+  color: #ffffff;
+  border: none;
+}
