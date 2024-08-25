@@ -28,7 +28,7 @@ function EntryPurposeCard() {
                     <summary className="btn bg-primary text-accent">
                         <span><ListFilter /></span>Filter : {selectedFilterMajorName}
                     </summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-accent">
+                    <ul className="menu dropdown-content bg-primary shadow-xl rounded-box z-[1] w-52 p-2 text-accent">
                         {majorForFilter.map((major) => (
                             <li key={major}>
                                 <a onClick={() => handleSelection(major)}>{major}</a>
@@ -36,15 +36,7 @@ function EntryPurposeCard() {
                         ))}
                     </ul>
                 </details>
-                <div className='w-[170px]'>
-                    <Datepicker
-                        inputId='EntryPurpose'
-                        useRange={false}
-                        asSingle={true}
-                        value={value}
-                        onChange={newValue => setValue(newValue)}
-                    />
-                </div>
+                
             </div>
             <div className="card-purpose-container w-full h-fit grid grid-cols-2 gap-5 items-end">
                 <CardPurposeData amountData={23} cardType="Reading" />

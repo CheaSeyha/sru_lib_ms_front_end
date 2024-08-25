@@ -29,15 +29,9 @@ function TotalBook() {
                             <p className='text-[30px] sm:text-[40px] font-bold'>12,238</p>
                             <BookOpenText className='text-yellow-300 w-[20px] sm:w-[30px] h-[30px]' />
                         </div>
-                        <div className='w-[170px]'>
-                            <Datepicker
-                                inputId='TotalBook'
-                                useRange={false}
-                                asSingle={true}
-                                value={value}
-                                onChange={newValue => setValue(newValue)}
-                            />
-                        </div>
+                        <button className='w-fit btn px-5 h-[46px] rounded-xl bg-secondary font-noto grid place-items-center '>
+                            <p className='text-accent'>មើលទិន្ន័យលំអិត</p>
+                        </button>
                     </div>
                 </div>
                 <div className="chart-data grid items-center w-[90px] sm:w-[136px] h-full">

@@ -71,18 +71,6 @@ function Sidebar() {
                 icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" id="Graph-Bar-Increase--Streamline-Core" height={17} width={17} ><desc>{"Graph Bar Increase Streamline Icon: https://streamlinehq.com"}</desc><g id="graph-bar-increase--up-product-performance-increase-arrow-graph-business-chart"><path id="Union" fill="#00bcff" fillRule="evenodd" d="M14 6.5c0 -0.27614 -0.2239 -0.5 -0.5 -0.5h-2.8333c-0.2761 0 -0.5 0.22386 -0.5 0.5v7c0 0.2761 0.2239 0.5 0.5 0.5H13.5c0.2761 0 0.5 -0.2239 0.5 -0.5v-7ZM8.91675 8.25c0 -0.27614 -0.22386 -0.5 -0.5 -0.5H5.5835c-0.27615 0 -0.5 0.22386 -0.5 0.5v5.25c0 0.2761 0.22385 0.5 0.5 0.5h2.83325c0.27614 0 0.5 -0.2239 0.5 -0.5V8.25Zm-5.58338 1c0.27615 0 0.5 0.22386 0.5 0.5v3.75c0 0.2761 -0.22385 0.5 -0.5 0.5H0.500122c-0.276142 0 -0.49999993 -0.2239 -0.49999993 -0.5V9.75c0 -0.27614 0.22385793 -0.5 0.49999993 -0.5H3.33337Z" clipRule="evenodd" strokeWidth={1} /><path id="Union_2" fill="#00f6ff" fillRule="evenodd" d="M12.2208 4.84635c0.2022 0.012 0.3917 -0.09923 0.4798 -0.28167l1.2496 -2.58718c0.1196 -0.24768 0.0167 -0.54546 -0.2303 -0.66647L11.1463 0.050261c-0.1817 -0.0890302 -0.3992 -0.05973337 -0.5509 0.074213 -0.1517 0.133946 -0.2077 0.346125 -0.1418 0.537484l0.4113 1.195552L0.517923 5.47332c-0.391026 0.13664 -0.5972415 0.5644 -0.4605961 0.95543 0.1366451 0.39102 0.5644071 0.59724 0.9554331 0.46059L11.353 3.27591l0.4246 1.234c0.0659 0.19157 0.2409 0.32444 0.4432 0.33644Z" clipRule="evenodd" strokeWidth={1} /></g></svg>,
                 dropDownButton: false,
                 dropDownButtonData: []
-            },
-            {
-                btnType: "Score",
-                path: "/ScoreStudent",
-                icon: <img src={medal} alt="modal" width={17} height={17} />,
-                dropDownButton: false
-            },
-            {
-                btnType: "Backup",
-                path: "/Backup",
-                icon: <img src={backup} alt="excel" width={17} height={17} />,
-                dropDownButton: false
             }
         ]
 

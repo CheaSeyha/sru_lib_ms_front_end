@@ -37,7 +37,7 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownBu
                 <div className="icon">{icon}</div>
                 <p className='block sm:hidden lg:block text-[13px]'>{btnMenuType}</p>
                 {dropDownButton && (
-                    <div className={`icon-dropdown absolute right-2 top-1/2 transform -translate-y-1/2 hidden lg:flex`}>
+                    <div className={`icon-dropdown absolute right-2 top-1/2 transform -translate-y-1/2 flex sm:hidden lg:flex`}>
                         <ChevronUp className={`transition-transform duration-600 ease-in-out ${showDropdown ? "rotate-180" : "rotate-0"}`} />
                     </div>
                 )}
