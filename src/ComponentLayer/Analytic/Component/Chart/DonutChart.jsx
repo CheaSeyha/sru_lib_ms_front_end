@@ -5,58 +5,57 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 // Register necessary components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DonutChart = ({ bookData }) => {
-  const [chartLabel, setChartLabel] = useState([]);
-  const [chartData, setChartData] = useState([]);
+const DonutChart = ({ data, labelsKey, dataKey, dataSetLabel, colors }) => {
+    const [chartConfig, setChartConfig] = useState({ labels: [], data: [] });
 
-  useEffect(() => {
-    // Initialize temporary arrays to hold the labels and data
-    const labels = [];
-    const data = [];
+    useEffect(() => {
+        const labels = data.map(item => item[labelsKey]);
+        const chartData = data.map(item => item[dataKey]);
 
-    // Collect labels and data
-    bookData.forEach((dataItem) => {
-      labels.push(dataItem.lang);
-      data.push(dataItem.Total);
-    });
+        setChartConfig({ labels, data: chartData });
+    }, [data, labelsKey, dataKey]);
 
-    // Update state with the collected data
-    setChartLabel(labels);
-    setChartData(data);
-  }, [bookData]);
+    const chartData = {
+        labels: chartConfig.labels,
+        datasets: [
+            {
+                label: dataSetLabel || "Dataset",
+                data: chartConfig.data,
+                backgroundColor: colors, // Use passed colors
+                hoverOffset: 4,
+                borderColor: 'transparent', // Hide the border color
+            },
+        ],
+    };
 
-  const data = {
-    labels: chartLabel,
-    datasets: [
-      {
-        label: "Total Book",
-        data: chartData,
-        backgroundColor: ['#00BBFF', '#00FFEA'],
-        hoverOffset: 4,
-        borderColor: 'transparent', // Hide the border color
-        
-      },
-    ],
-  };
+    const options = {
+        cutout: "70%", // Adjust thickness
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: (tooltipItem) => {
+                        const dataset = tooltipItem.dataset;
+                        const total = dataset.data.reduce((sum, value) => sum + value, 0);
+                        const currentValue = dataset.data[tooltipItem.dataIndex];
+                        const percentage = ((currentValue / total) * 100).toFixed(2);
 
-  const options = {
-    cutout: "70%", // Adjust thickness
-    plugins: {
-      tooltip: {
-        enabled: true, // Ensure tooltip is enabled
-      },
-      legend: {
-        display: false, // Set to false to hide the legend
-      },
-    },
-  };
+                        return `${tooltipItem.label}: ${currentValue} (${percentage}%)`;
+                    },
+                },
+                enabled: true, // Ensure tooltip is enabled
+            },
+            legend: {
+                display: false, // Set to false to hide the legend
+            },
+        },
+    };
 
-  return (
-    <Doughnut
-      data={data}
-      options={options}
-    />
-  );
+    return (
+        <Doughnut
+            data={chartData}
+            options={options}
+        />
+    );
 };
 
 export default DonutChart;

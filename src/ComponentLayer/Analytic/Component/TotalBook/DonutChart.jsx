@@ -5,7 +5,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 // Register necessary components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DonutChart = ({ bookData }) => {
+const MyDoughnutChart = ({ bookData }) => {
   const [chartLabel, setChartLabel] = useState([]);
   const [chartData, setChartData] = useState([]);
 
@@ -59,4 +59,4 @@ const DonutChart = ({ bookData }) => {
   );
 };
 
-export default DonutChart;
+export default MyDoughnutChart;

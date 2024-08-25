@@ -3,6 +3,7 @@ import Datepicker from 'react-tailwindcss-datepicker'
 import BarChart from '../Chart/BarChart';
 import LineChart from '../Chart/LineChart';
 import BookBorrowedPieChart from './BookBorrowedPieChart';
+import MostBorrowBookTable from './MostBorrowBookTable';
 
 function BookAnalyticForm() {
 
@@ -16,8 +17,13 @@ function BookAnalyticForm() {
                 <div className="chart w-full h-[497px] bg-secondary p-5 rounded-[20px]">
                     <LineChart />
                 </div>
-                <div className="chart w-full h-[497px] bg-secondary p-5 rounded-[20px]">
+            </div>
+            <div className="BarChart-Contianer grid grid-cols-1 xl:grid-cols-2 h-full gap-5 w-full">
+                <div className="chart w-full h-fit lg:h-[497px] bg-secondary p-5 rounded-[20px]">
                     <BookBorrowedPieChart />
+                </div>
+                <div className="chart w-full h-[497px] bg-secondary p-5 rounded-[20px]">
+                    <MostBorrowBookTable />
                 </div>
             </div>
         </div>
