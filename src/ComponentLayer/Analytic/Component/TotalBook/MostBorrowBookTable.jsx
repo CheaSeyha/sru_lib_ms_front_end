@@ -3,169 +3,88 @@ import React, { Component } from 'react'
 export class MostBorrowBookTable extends Component {
     render() {
         return (
-            <main className='font-noto text-accent'>
-                <div className="header">
+            <main className='font-noto w-full h-full text-accent space-y-5'>
+                <div className="header h-[46px] flex justify-between">
                     <p>សៀវភៅដែលពេញនិយមខ្ចីច្រើជាងគេ</p>
+                    <button className='btn text-accent'>View Details</button>
                 </div>
-                <div className="overflow-x-auto text-accent">
-                    <table className="table">
+                <div className="overflow-x-auto w-full h-[390px] overflow-y-auto scrollbar-hide">
+                    <table className="table w-full">
                         {/* head */}
-                        <thead>
+                        <thead className=' text-accent sticky top-0 left-0 bg-secondary'>
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" className="checkbox" />
-                                    </label>
-                                </th>
-                                <th>Name</th>
-                                <th>Job</th>
-                                <th>Favorite Color</th>
-                                <th></th>
+                                <th>ចំណាត់ថ្នាក់</th>
+                                <th>ឈ្មោះសៀវភៅ</th>
+                                <th>ប្រភេទសៀវភៅ</th>
+                                <th>ចំនួនខ្ចី/ដង</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {/* row 1 */}
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" className="checkbox" />
-                                    </label>
-                                </th>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="font-bold">Hart Hagerty</div>
-                                            <div className="text-sm opacity-50">United States</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Zemlak, Daniel and Leannon
-                                    <br />
-                                    <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
-                                </td>
-                                <td>Purple</td>
-                                <th>
-                                    <button className="btn btn-ghost btn-xs">details</button>
-                                </th>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
                             </tr>
-                            {/* row 2 */}
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" className="checkbox" />
-                                    </label>
-                                </th>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src="https://img.daisyui.com/images/profile/demo/3@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="font-bold">Brice Swyre</div>
-                                            <div className="text-sm opacity-50">China</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Carroll Group
-                                    <br />
-                                    <span className="badge badge-ghost badge-sm">Tax Accountant</span>
-                                </td>
-                                <td>Red</td>
-                                <th>
-                                    <button className="btn btn-ghost btn-xs">details</button>
-                                </th>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
                             </tr>
-                            {/* row 3 */}
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" className="checkbox" />
-                                    </label>
-                                </th>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src="https://img.daisyui.com/images/profile/demo/4@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="font-bold">Marjy Ferencz</div>
-                                            <div className="text-sm opacity-50">Russia</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Rowe-Schoen
-                                    <br />
-                                    <span className="badge badge-ghost badge-sm">Office Assistant I</span>
-                                </td>
-                                <td>Crimson</td>
-                                <th>
-                                    <button className="btn btn-ghost btn-xs">details</button>
-                                </th>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
                             </tr>
-                            {/* row 4 */}
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" className="checkbox" />
-                                    </label>
-                                </th>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src="https://img.daisyui.com/images/profile/demo/5@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="font-bold">Yancy Tear</div>
-                                            <div className="text-sm opacity-50">Brazil</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Wyman-Ledner
-                                    <br />
-                                    <span className="badge badge-ghost badge-sm">Community Outreach Specialist</span>
-                                </td>
-                                <td>Indigo</td>
-                                <th>
-                                    <button className="btn btn-ghost btn-xs">details</button>
-                                </th>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <td>Cy Ganderton</td>
+                                <td>Quality Control Specialist</td>
+                                <td>38</td>
                             </tr>
                         </tbody>
-                        {/* foot */}
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th>Name</th>
-                                <th>Job</th>
-                                <th>Favorite Color</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </main>
+
         )
     }
 }

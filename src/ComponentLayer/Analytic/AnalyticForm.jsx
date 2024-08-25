@@ -33,6 +33,8 @@ function AnalyticForm() {
                         p-2 lg:p-0 bg-secondary lg:bg-transparent`}>
                             <div className="date-picker z-40">
                                 <Datepicker
+                                    inputId='datePikcer'
+                                    key={"datePicker"}
                                     showShortcuts={true}
                                     showFooter={true}
                                     value={value}
