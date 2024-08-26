@@ -69,11 +69,11 @@ const BarChart = () => {
 
   const series = [
     {
-      name: "Khmer",
+      name: "សៀវភៅភាសាខ្មែរ",
       data: [44, 55, 41, 64, 22, 43, 21],
     },
     {
-      name: "English",
+      name: "សៀវភៅភាសាអង្គគ្លេស",
       data: [53, 32, 33, 52, 13, 44, 32],
     },
   ];

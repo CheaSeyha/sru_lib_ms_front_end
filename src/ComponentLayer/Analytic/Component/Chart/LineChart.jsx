@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { useThemeSwitch } from '../../../../Context/ThemeSwitchContext';
 
-const IncomeLineChart = () => {
+const LineChart = ({ seriesData = [], categories = [], title = '' }) => {
     const { theme } = useThemeSwitch();
 
     // Precompute colors based on the theme
@@ -15,20 +15,7 @@ const IncomeLineChart = () => {
     }, [theme]);
 
     const options = useMemo(() => ({
-        series: [
-            {
-                name: "Donations",
-                data: [26, 12, 23, 15, 16, 10, 24, 46, 8]
-            },
-            {
-                name: "University Funding",
-                data: [16, 36, 26, 17, 38, 27, 17, 24, 16]
-            },
-            {
-                name: "Thesis Income",
-                data: [3, 5, 8, 9, 11, 13, 16, 11, 13]
-            }
-        ],
+        series: seriesData,
         chart: {
             height: 430,
             type: 'line',
@@ -40,7 +27,7 @@ const IncomeLineChart = () => {
             enabled: false
         },
         title: {
-            text: 'ប្រភពដែលសៀបភៅទទួលបាន',
+            text: title,
             align: 'left',
             style: {
                 fontFamily: "NotoSansKhmer-Regular",
@@ -54,7 +41,7 @@ const IncomeLineChart = () => {
             },
         },
         xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+            categories: categories,
             labels: {
                 style: {
                     colors: axisLabelsColors, // X-axis labels color
@@ -86,14 +73,14 @@ const IncomeLineChart = () => {
             intersect: false,
             theme: theme, // Use "dark" or "light" for theme-based styling
         },
-        colors: ['#2845FF', '#00D0FF', '#FF5722'], // Customize colors as needed
-    }), [axisLabelsColors]);
+        colors: ['#2845FF', '#00D0FF', '#FF5722', '#FFE100'], // Customize colors as needed
+    }), [axisLabelsColors, gridColor, seriesData, categories, title, theme]);
 
     return (
         <div id="chart" className='w-full h-full'>
-            <Chart options={options} series={options.series} type="line" width={"100%"} height={"100%"} />
+            <Chart options={options} series={seriesData} type="line" width={"100%"} height={"100%"} />
         </div>
     );
 };
 
-export default IncomeLineChart;
+export default LineChart;
