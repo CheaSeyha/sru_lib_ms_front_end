@@ -29,6 +29,10 @@ const ListOfBorrow = () => {
     setSelectedEntry(entry);
     setIsModalLstVisible(true);
   };
+  const handlerefresh = () => {
+    setSearchTerm("");
+    setSearchDate(null);
+  };
   const closeModal = () => {
     setIsModalLstVisible(false);
     setSelectedEntry(null);
@@ -64,7 +68,7 @@ const ListOfBorrow = () => {
                     />
         </div>
         <div className="inline-block w-1/6 pl-8">
-          <BtnGredient className="rounded-" color={'from-primary to-[#00D9FF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
+          <BtnGredient onClick={handlerefresh} className="rounded-" color={'from-primary to-[#00D9FF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
           <img src={refresh}  width={24} height={24} alt="" />
           </BtnGredient>
         </div>
