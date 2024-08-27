@@ -17,13 +17,12 @@ const ModalLst = ({ isModalVisible, closeModal, entry,fetchBooks }) => {
   const handleChangestudent = (event) => {
     setSelectedStudent(event.target.value);
   };
-  // const { studetnEntryData } = useScanEntry();
+  const { studetnEntryData } = useScanEntry();
   const submitData = {
     studentId: selectedStudent,
     bookId: entry.bookId,
     bookQuan: selectedQuantity
   };
-  console.log(submitData);
   const handleClick = (event) => {
     axios.post('/borrow', submitData, {
       headers: {
@@ -96,13 +95,9 @@ const ModalLst = ({ isModalVisible, closeModal, entry,fetchBooks }) => {
                 <div className="inline-block w-4/5 pt-5">
                   <select id="stuId" onChange={handleChangestudent} className="select select-bordered inline-block bg-base-300 w-full pr-5">
                     <option disabled className="refresh" value="" selected>Select Student</option>
-                    {/* {studetnEntryData.map((e, index) => (
+                    {studetnEntryData.map((e, index) => (
                       <option key={index} value={e.studentId}>{e.studentId} {e.studentName}</option>
-                    ))} */}
-                    <option value="200739">200739</option>
-                    <option value="200739">200739</option>
-                    <option value="200739">200739</option>
-                    <option value="200739">200739</option>
+                    ))}
                   </select>
                 </div>
               </div>
