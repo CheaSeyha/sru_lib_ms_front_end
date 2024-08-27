@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import ListOfAllBook from './ListOfAllBook';
+import ListDonation from './ListDonation';
 import ListOfBorrow from '../Borrow/ListOfBorrow'
 import ListCertificate from '../../ScoreStudent/Component/ListCertificate';
 import ListBackup from "../../Backup/Component/NavBar";
@@ -15,8 +16,10 @@ const NavBarBook = () => {
         return <ListOfBorrow />;
       case "/BookManagement/Score":
         return <ListCertificate />;
-        case "/BookManagement/Backup":
+      case "/BookManagement/Backup":
         return <ListBackup />;
+      case "/BookManagement/Donation":
+        return <ListDonation />;
       default:
         return <ListOfAllBook />;
     }

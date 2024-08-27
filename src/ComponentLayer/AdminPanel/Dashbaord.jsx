@@ -84,7 +84,7 @@ function Dashbaord() {
                                     analytic={e.analytic}
                                 />
                             ))}
-                        </div>
+                        </div>Total major
                     </div>
                     {/* Header content */}
                     {/* Main Content */}

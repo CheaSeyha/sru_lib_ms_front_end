@@ -15,7 +15,7 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownBu
 
     useEffect(() => {
         if (dropDownButton) {//Check link path it was in drop down or not if true show drop down
-            if (GetLinkPath === "/BookManagement/AddBook" || GetLinkPath === "/BookManagement/BookBorrowed" || GetLinkPath === "/BookManagement/Score" || GetLinkPath === "/BookManagement/Backup") {
+            if (GetLinkPath === "/BookManagement/AddBook"|| GetLinkPath === "/BookManagement/Donation" || GetLinkPath === "/BookManagement/BookBorrowed" || GetLinkPath === "/BookManagement/Score" || GetLinkPath === "/BookManagement/Backup") {
                 setShowDropdown(true);
             } else {
                 setShowDropdown(false);

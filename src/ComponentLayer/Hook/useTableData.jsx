@@ -10,7 +10,6 @@ const useTableData = (studentEntryData) => {
     const handleBack = () => {
         navigate(-1); // This will navigate to the previous URL in the history stack
     };
-
     // Filter data based on selected filter
     const getFilteredRecords = (data) => {
         if (filter === 'all') return data;
@@ -77,7 +76,7 @@ const useTableData = (studentEntryData) => {
         handlePageChange,
         currentPage,
         totalPages,
-        pageButtons,
+        pageButtons
     };
 };
 

@@ -1,14 +1,31 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Modal from '../../../layout/Component/Modal';
 import BtnGredient from "../../AdminPanel/Component/BtnGredient";
 import { X } from 'lucide-react';
-import DatePicker from "react-datepicker";
+import axios from '../../../api/axios';
+import toast, { Toaster } from 'react-hot-toast';
 import "react-datepicker/dist/react-datepicker.css";
-const ModalBorrow = ({ isModalVisible, closeModal, entry }) => {
+const ModalBorrow = ({ isModalVisible, closeModal, entry, fetchBorrow}) => {
   if (!entry) return null;
   const [isreturn, setIsreturn] = useState(true);
   const handleRadioChange = (event) => {
     setIsreturn(event.target.value === 'return');
+};
+const giveBack= new Date(entry.giveBackDate);
+giveBack.setDate(giveBack.getDate() + 14);
+const updatedGiveBackDate = giveBack.toISOString().split('T')[0];
+const handleClick = () => {
+  axios.put('/borrow', null, {
+      params: {
+          studentId: entry.studentId,
+          bookId: entry.bookId
+      }
+  })
+      toast.log('Borrow request successful:', response.data);
+      // Handle successful response, e.g., show a success message
+  useEffect(() => {
+    fetchBorrow();
+  }, []);
 };
   return (
     <>
@@ -30,40 +47,33 @@ const ModalBorrow = ({ isModalVisible, closeModal, entry }) => {
                     </div>
                     {/* Write here */}
                     <div className="w-full">
-                      <div className="inline-block w-1/3">ID :</div>
-                      <div className="inline-block"><p>{entry.ID}</p></div>
+                      <div className="inline-block w-1/3 font-bold">Book ID :</div>
+                      <div className="inline-block"><p>{entry.bookId}</p></div>
                     </div>
                     <div className="w-full">
-                      <div className="inline-block w-1/3">return ID :</div>
-                      <div  className="inline-block"><p>{entry.StuId}</p></div>
+                      <div className="inline-block w-1/3 font-bold">Student ID :</div>
+                      <div  className="inline-block"><p>{entry.studentId}</p></div>
                     </div>
                     <div className="w-full">
-                      <div className="inline-block w-1/3">Book ID :</div>
-                      <div className="inline-block"><p>{entry.BookId}</p></div>
+                      <div className="inline-block w-1/3 font-bold">Borrow Date :</div>
+                      <div className="inline-block"><p>{entry.borrowDate}</p></div>
                     </div>
                     <div className="w-full">
-                      <div className="inline-block w-1/3">Date :</div>
-                      <div className="inline-block"><p>{entry.Date}</p></div>
-                    </div>
-                    <div className="w-full">
-                      <div className="inline-block w-1/3">Expire Date :</div>
-                      <div className="inline-block"><p>{entry.Expire}</p></div>
+                      <div className="inline-block w-1/3 font-bold">Return date:</div>
+                      <div className="inline-block"><p>{entry.giveBackDate}</p></div>
                     </div>
                     {isreturn ? (
                         <div className="grid grid-cols-1 gap-4 content-center p-5">   
-                        <BtnGredient className="content-center">
+                        <BtnGredient onClick={handleClick} className="content-center">
                                     <p>Return</p>
                                     </BtnGredient>
                                     </div>
                     ) : (
                       <>
                         <div className="w-full">
-                        <div className="inline-block w-1/3">Continue Date :</div>
-                        <DatePicker
-                        selected={new Date}
-                        dateFormat="dd/MM/yyyy"
-                        className="input input-bordered w-full bg-primary pointer-events-none border-0 p-0"
-                        /></div>
+                        <div className="inline-block font-bold w-1/3">Continue Date :</div>
+                        <div className="inline-block"><p>{updatedGiveBackDate}</p></div>
+                        </div>
                         <div className="grid grid-cols-1 gap-4 content-center p-5">   
                           <BtnGredient className="content-center">
                             <p>Continue</p>
@@ -72,7 +82,7 @@ const ModalBorrow = ({ isModalVisible, closeModal, entry }) => {
                       </>
                     )}
                 </div>
-                
+                <Toaster/>
             </Modal>
     </>
   )

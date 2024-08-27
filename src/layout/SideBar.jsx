@@ -6,7 +6,7 @@ import { useThemeSwitch } from '../Context/ThemeSwitchContext';
 import { useLocation } from 'react-router-dom';
 import medal from '../../src/assets/image/medal.svg'
 import backup from '../../src/assets/image/backup.svg'
-import { ChevronUp, BookPlus, NotebookPen, ShieldCheck, DatabaseBackup } from 'lucide-react';
+import { ChevronUp, BookPlus, NotebookPen, ShieldCheck, DatabaseBackup,BookUser } from 'lucide-react';
 function Sidebar() {
     // State to track the current theme
     // const [theme, setTheme] = useState('dark');
@@ -55,6 +55,11 @@ function Sidebar() {
                         iconName: <DatabaseBackup className='w-[18px]' />,
                         dropDownBtnType: "Backup",
                         urlPath: "/BookManagement/Backup",
+                    },
+                    {
+                        iconName: <BookUser className='w-[18px]' />,
+                        dropDownBtnType: "Donation",
+                        urlPath: "/BookManagement/Donation",
                     }
                 ]
             },

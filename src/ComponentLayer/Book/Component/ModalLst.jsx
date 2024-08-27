@@ -1,116 +1,132 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import Modal from '../../../layout/Component/Modal';
 import BtnGredient from '../BtnGredient';
 import { X } from 'lucide-react';
-import DatePicker from 'react-datepicker';
-const ModalLst = ({ isModalVisible, closeModal, entry }) => {
+import useScanEntry from '../../Hook/useScanEntry';
+import axios from "../../../api/axios";
+import toast, { Toaster } from 'react-hot-toast';
+const ModalLst = ({ isModalVisible, closeModal, entry,fetchBooks }) => {
   if (!entry) return null;
-  const [isborrow, setIsborrow] = useState(true);
-  const [Inputname, setInputname]=useState(entry.bookTitle);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
 
-  const [Inputtype, setInputtype]=useState(entry.bookType);
-  const handleRadioChange = (e) => {
-    setIsborrow(e.target.value === 'borrow');
-};
-const handlechangename=(e) => {
-  setInputname(e.target.value);
-};
-const handlechangetype=(e) => {
-  setInputtype(e.target.value);
-};
-const [searchDate, setSearchDate] = useState(new Date());
+  const handleChange = (event) => {
+    setSelectedQuantity(event.target.value);
+  };
+  const [selectedStudent, setSelectedStudent] = useState();
+
+  const handleChangestudent = (event) => {
+    setSelectedStudent(event.target.value);
+  };
+  // const { studetnEntryData } = useScanEntry();
+  const submitData = {
+    studentId: selectedStudent,
+    bookId: entry.bookId,
+    bookQuan: selectedQuantity
+  };
+  console.log(submitData);
+  const handleClick = (event) => {
+    axios.post('/borrow', submitData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(response => {
+      toast.success('Borrow successfully!');
+      fetchBooks(); 
+    })
+      .catch(error => {
+        toast.error('Please select student!')
+        console.error('Backend Error:', error.response.data);
+      });
+  };
   return (
-    <>
-        <Modal isVisible={isModalVisible} onClose={closeModal}>
-                <div className="container w-full h-full space-y-5">
-                    <div className="header-modal flex items-center justify-between">
-                    <div className="radio-container flex space-x-3">
-                                <input type="radio" id='borrowRadio' name="entryType" value="borrow" className="radio radio-accent" onChange={handleRadioChange} checked={isborrow} />
-                                <label htmlFor="borrowRadio">Borrow</label>
-                                <input type="radio" id='optionRadio' name="entryType" value="option" className="radio radio-accent" onChange={handleRadioChange} checked={!isborrow} />
-                                <label htmlFor="optionRadio">Option</label>
-                            </div>
-                        <button onClick={closeModal} className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out">
-                            <X/>
-                        </button>
-                    </div>
-                    </div>
-                    {isborrow ? (
-                      <>
-                    <div className="container w-full h-full space-y-5">
-                    {/* Write here */}
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">ID :</div>
-                      <div className="inline-block"><p>{entry.bookId}</p></div>
-                    </div>
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">Title :</div>
-                      <div  className="inline-block"><p>{entry.bookTitle}</p></div>
-                    </div>
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">Type :</div>
-                      <div className="inline-block"><p>{entry.bookType}</p></div>
-                    </div>
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">Name :</div>
-                      <div className="inline-block">
-                        <select id="position"  className="select select-bordered inline-block bg-base-300 w-80">
-                                <option disabled value="" selected>Select Student</option>
-                                <option value="History">History</option>
-                                <option value="History">Science</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">Type :</div>
-                      <div className="inline-block">
-                      <DatePicker
-                        selected={searchDate}
-                        onChange={date => setSearchDate(date)}
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="Select Date"
-                        className="input input-bordered bg-base-300 w-80"
-                    />
-                      </div>
-                    </div>
+      <Modal isVisible={isModalVisible} onClose={closeModal}>
+        <div className="container w-full h-full space-y-5">
+          <div className="header-modal flex items-center justify-between">
+            <label className='text-[24px]'>Borrow Book</label>
+            <button onClick={closeModal} className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out">
+              <X />
+            </button>
+          </div>
+        </div>
+          <div className="container w-full h-full space-y-5 pt-5">
+            {/* Write here */}
+            <div className="flex">
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">ID :</div>
+                <div className="inline-block"><p>{entry.bookId}</p></div>
+              </div>
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">Title :</div>
+                <div className="inline-block"><p>{entry.bookTitle}</p></div>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">College :</div>
+                <div className="inline-block"><p>{entry.collegeId}</p></div>
+              </div>
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">Language :</div>
+                <div className="inline-block"><p>{entry.languageId}</p></div>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">Genre :</div>
+                <div className="inline-block"><p>{entry.genre}</p></div>
+              </div>
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">Author :</div>
+                <div className="inline-block"><p>{entry.author ?? 'N/A'}</p></div>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">Public :</div>
+                <div className="inline-block"><p>{entry.publicationYear ?? 'N/A'}</p></div>
+              </div>
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">Total Qty:</div>
+                <div className="inline-block"><p>{entry.bookQuan}</p></div>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="w-full">
+                <div className="inline-block w-2/5 font-bold">Student</div>
+                <div className="inline-block w-4/5 pt-5">
+                  <select id="stuId" onChange={handleChangestudent} className="select select-bordered inline-block bg-base-300 w-full pr-5">
+                    <option disabled className="refresh" value="" selected>Select Student</option>
+                    {/* {studetnEntryData.map((e, index) => (
+                      <option key={index} value={e.studentId}>{e.studentId} {e.studentName}</option>
+                    ))} */}
+                    <option value="200739">200739</option>
+                    <option value="200739">200739</option>
+                    <option value="200739">200739</option>
+                    <option value="200739">200739</option>
+                  </select>
                 </div>
-                <div className="grid grid-cols-1 gap-4 content-center p-5 bg-">   
-                <BtnGredient className="content-center" color={'from-[#dad1ff] to-[#908cfc]'} hover={'hover:from-[#8cfc9d] hover:to-[#cabef8] hover:scale-90'}>
-                            <p>ADD</p>
-                            </BtnGredient>
-                            </div>
-                            </>
-                ) : (
-                  <>
-                    <div className="container w-full h-full space-y-5">
-                    {/* Write here */}
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">ID :</div>
-                      <div className="inline-block"><p>{entry.bookId}</p></div>
-                    </div>
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">Name :</div>
-                      <input type="text" className="input input-bordered inline-block w-4/5" value={Inputname} onChange={handlechangename}/>
-                    </div>
-                    <div className="w-full">
-                      <div className="inline-block w-1/5">Type :</div>
-                      <input type="text" className="input input-bordered inline-block w-4/5" value={Inputtype} onChange={handlechangetype}/>
-                    </div>
+              </div>
+              <div className="w-full">
+                <div className="inline-block w-full font-bold">Quantity</div>
+                <div className="inline-block w-4/5 pt-5">
+                  <select id="quantity" value={selectedQuantity} onChange={handleChange} className="select select-bordered inline-block bg-base-300 w-full">
+                    <option disabled value="">Select quantity</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
                 </div>
-                <div className="grid grid-cols-2 gap-4 content-center items-center p-5 bg">   
-                <BtnGredient className="content-center" color={'from-[#cabef8] to-[#8cfc9d]'} hover={'hover:from-[#8cfc9d] hover:to-[#cabef8] hover:scale-90'}>
-                            <p>Update</p>
-                </BtnGredient>
-                <BtnGredient className="content-center" color={'from-[#cabef8] to-[#fc8c8c]'} hover={'hover:from-[#fc8c8c] hover:to-[#cabef8] hover:scale-90'}>
-                            <p>Delete</p>
-                </BtnGredient>
-                            </div>
-          
-                            </>
-                )}
-            </Modal>
-    </>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 content-center pt-5 bg-">
+            <BtnGredient onClick={handleClick} className="content-center" color={'from-[#00d0ffb1] to-[#E7FBFF]'} hover={'hover:from-[#8cfc9d] hover:to-[#cabef8] hover:scale-90'}>
+              <p>Borrow</p>
+            </BtnGredient>
+          </div>
+        <Toaster position='bottom-center' />
+      </Modal>
   )
-}
+};
 
-export default ModalLst
+export default ModalLst;

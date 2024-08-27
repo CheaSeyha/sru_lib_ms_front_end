@@ -5,9 +5,7 @@ import Dashbaord from './AdminPanel/Dashbaord';
 import QRStudentEntry from './QrEntry/QRStudentEntry';
 import SideBarToggle from '../layout/Component/SideBarToggle';
 import { ScanResultIDProvider } from './Context/ScanResultIDContext';
-import ScoreStudent from './ScoreStudent/ScoreStudent';
 import BookManagement from './Book/BookManagement';
-import Backup from './Backup/Backup';
 import AnalyticForm from './Analytic/AnalyticForm';
 import StaffManageForm from './StaffManage/StaffManageForm';
 
@@ -34,8 +32,7 @@ function AdminPanel() {
                         <Route path="/BookManagement/BookBorrowed" element={<BookManagement/>} />
                         <Route path="/BookManagement/Score" element={<BookManagement/>} />
                         <Route path="/BookManagement/Backup" element={<BookManagement/>} />
-                        <Route path="/ScoreStudent" element={<ScoreStudent />} />
-                        <Route path="/Backup" element={<Backup />} />
+                        <Route path="/BookManagement/Donation" element={<BookManagement/>} />
                     </Routes>
                 </section>
             </main>

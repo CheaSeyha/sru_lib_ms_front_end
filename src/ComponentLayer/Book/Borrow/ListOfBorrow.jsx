@@ -8,15 +8,18 @@ import { parse, format,isEqual } from 'date-fns';
 import refresh from "../../../assets/logo/refresh.svg";
 const ListOfBorrow = () => {
   const [borrow, setborrow] = useState([]);
-
-  useEffect(() => {
+  const fetchBorrow = () => {
     axios.get('/borrow')
       .then(response => {
-        setborrow(response.data);
+        const filteredBooks = response.data.filter(book => book.isBringBack === false);
+        setborrow(filteredBooks);
       })
       .catch(error => {
         console.error("There was an error fetching the borrow!", error);
       });
+  };
+  useEffect(() => {
+    fetchBorrow();
   }, []);
   const [isModalLstVisible, setIsModalLstVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
@@ -74,7 +77,7 @@ const ListOfBorrow = () => {
                 <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Student ID</th>
                 <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Book ID</th>
                 <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Date</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Expire</th>
+                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Return Date</th>
               </tr>
           </thead>
           <tbody>
@@ -91,7 +94,7 @@ const ListOfBorrow = () => {
         </table>
       </div>
     </div>
-    <ModalBorrow entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible}/>
+    <ModalBorrow entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} fetchBorrow={fetchBorrow}/>
     </>
   );
 };

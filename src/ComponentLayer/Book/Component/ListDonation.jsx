@@ -1,46 +1,28 @@
 import React, { useEffect, useState } from "react";
 import BtnGredient from "../BtnGredient";
-import ModalAdd from "./ModalAdd.jsx";
+import ModalAdd from "./ModalAdd";
 import axios from "../../../api/axios";
-import ModalLst from "./ModalLst";
 import refresh from "../../../assets/logo/refresh.svg"
-import toast from "react-hot-toast";
-export default function ListOfAllBook() {
+import CerAppreciation from "./CerAppreciation"
+export default function ListDonation() {
   // Data of All Book
   const [books, setBooks] = useState([]);
   const [genre, setgenre] = useState([]);
-  const fetchBooks = () => {
-    axios.get('/book/current-book')
+  useEffect(() => {
+    axios.get('/donation')
       .then(response => {
-        // Filter books where isActive is true
-        const filteredBooks = response.data.filter(book => book.isActive === true);
-        setBooks(filteredBooks);
+        setBooks(response.data);
         const uniqueBookTypes = [...new Set(response.data.map(book => book.genre))];
         setgenre(uniqueBookTypes);
       })
       .catch(error => {
         console.error("There was an error fetching the books!", error);
       });
-  };
-  useEffect(() => {
-    fetchBooks();
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectType] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isModalLstVisible, setIsModalLstVisible] = useState(false);
-  const [selectedEntry, setSelectedEntry] = useState(null);
-
-  const handleRowClick = (entry) => {
-    setSelectedEntry(entry);
-    setIsModalLstVisible(true);
-  };
-
-  const closeModal = () => {
-    setIsModalLstVisible(false);
-    setSelectedEntry(null);
-  };
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
@@ -55,9 +37,9 @@ export default function ListOfAllBook() {
     setSelectType(e.target.value);
   };
 
-  const filteredBooks = books.filter(book =>
+  const filteredBooks = books.filter(book => 
     (book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.bookId.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
+    book.bookId.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
     (selectedGenre === '' || book.genre === selectedGenre)
   );
 
@@ -69,8 +51,8 @@ export default function ListOfAllBook() {
     <>
       <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
         <div className="text-table w-full h-[45px] flex justify-between">
-          <BtnGredient onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
-            hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
+          <BtnGredient onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'} 
+          hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
             <p>ADD</p>
           </BtnGredient>
         </div>
@@ -85,25 +67,25 @@ export default function ListOfAllBook() {
             />
           </div>
           <div className="inline-block pl-5 w-1/3">
-            <select
-              value={selectedGenre}
-              onChange={handleSelectType}
-              className="p-2 border border-gray-300 rounded text-black w-full"
-            >
-              <option disabled className="refresh" value="">
-                Select Genre
-              </option>
-              {genre.map((type, index) => (
-                <option key={index} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+          <select
+  value={selectedGenre}
+  onChange={handleSelectType}
+  className="p-2 border border-gray-300 rounded text-black w-full"
+>
+  <option disabled className="refresh" value="">
+    Select Genre
+  </option>
+  {genre.map((type, index) => (
+    <option key={index} value={type}>
+      {type}
+    </option>
+  ))}
+</select>
 
           </div>
           <div className="inline-block w-1/6 pl-8">
             <BtnGredient className="rounded-" onClick={resetSelection} color={'from-primary to-[#00D9FF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
-              <img src={refresh} width={24} height={24} alt="" />
+              <img src={refresh}  width={24} height={24} alt="" />
             </BtnGredient>
           </div>
         </div>
@@ -112,34 +94,40 @@ export default function ListOfAllBook() {
             <thead className='text-accent'>
               <tr>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">NO</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">ID</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Sponsor Name</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Book ID</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Title</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">College</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Author</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Genre</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Public Year</th>
+                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Sponsor Date</th>
                 <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Quantity</th>
               </tr>
             </thead>
             <tbody>
               {filteredBooks.map((entry, index) => (
-                <tr key={index} onClick={() => handleRowClick(entry)} className='hover:bg-primary cursor-pointer active:bg-primary'>
+                <tr key={index}>
                   <th>{index + 1}</th>
+                  <td>{entry.sponsorName}</td>
                   <td>{entry.bookId}</td>
                   <td>{entry.bookTitle}</td>
-                  <td>{entry.collegeId}</td>
-                  <td>{entry.author ?? 'N/A'}</td>
+                  <td>{entry.collegeName}</td>
+                  <td>{entry.author?? 'N/A'}</td>
                   <td>{entry.genre}</td>
-                  <td>{entry.publicationYear ?? 'N/A'}</td>
+                  <td>{entry.publicationYear?? 'N/A'}</td>
+                  <td>{entry.sponsorDate}</td>
                   <td>{entry.bookQuan}</td>
+                  <td>
+                    <CerAppreciation certificate={entry}/>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-      <ModalLst entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} fetchBooks={fetchBooks} />
-      <ModalAdd isModalVisible={isModalVisible} handleCloseModal={handleCloseModal} fetchBooks={fetchBooks} />
+      <ModalAdd isModalVisible={isModalVisible} handleCloseModal={handleCloseModal} />
     </>
   );
 }

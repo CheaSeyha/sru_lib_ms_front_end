@@ -3,9 +3,7 @@ import FormInput from './Component/FormInput'
 import ListOfAllBook from './Component/ListOfAllBook'
 function BookManagement() {
     return (
-        <>
             <FormInput/>
-        </>
     )
 }
 
