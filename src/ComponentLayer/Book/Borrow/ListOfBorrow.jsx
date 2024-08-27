@@ -58,8 +58,8 @@ const ListOfBorrow = () => {
       <DatePicker
                         selected={searchDate}
                         onChange={date => setSearchDate(date)}
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="Select Expire Date"
+                        dateFormat="yyyy-MM-dd"
+                        placeholderText="Select return Date"
                         className="input input-bordered w-32 bg-primary"
                     />
         </div>
