@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
-import { Sunrise } from 'lucide-react';
+import { Sunrise, Sun, CloudMoon } from 'lucide-react';
 
 
 
@@ -44,7 +44,7 @@ function TotalEntryCardForm() {
                     </div>
                     <div className="card-time shadow-xl transition-all hover:translate-y-[-5px] hover:scale-105 w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#FFFDB5] rounded-[10px]">
                         <div className="icon">
-                            <Sunrise />
+                            <Sun />
                         </div>
                         <div className="amount text-[24px] font-bold">
                             34
@@ -55,7 +55,7 @@ function TotalEntryCardForm() {
                     </div>
                     <div className="card-time shadow-xl transition-all hover:translate-y-[-5px] hover:scale-105 w-full h-full grid  place-items-center bg-gradient-to-t text-black from-white to-[#008D97] rounded-[10px]">
                         <div className="icon">
-                            <Sunrise />
+                            <CloudMoon />
                         </div>
                         <div className="amount text-[24px] font-bold">
                             34

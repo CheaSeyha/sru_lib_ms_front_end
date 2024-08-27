@@ -10,10 +10,24 @@ import axios from '../../api/axios';
 import { NavLink } from 'react-router-dom';
 
 function Dashbaord() {
-    const [cardDataShow, setCardDataShow] = useState([]);
+    const defaultCardData = [
+        { cardType: "Entry", amount: 0, analytic: 0.0 },
+        { cardType: "Book Borrow", amount: 0, analytic: 0.0 },
+        { cardType: "Book Donation", amount: 0, analytic: 0.0 },
+        { cardType: "Total Entry Of This Month", amount: 0, analytic: 0.0 },
+    ];
+
+    const defaultBookAvailability = [
+        { language: "English", totalBook: 0, available: 0 },
+        { language: "Khmer", totalBook: 0, available: 0 },
+    ];
+
+    const defaultWeeklyVisitorData = [0, 0, 0, 0, 0, 0, 0];
+
+    const [cardDataShow, setCardDataShow] = useState(defaultCardData);
     const [dataMejorVisitor, setDataMejorVisitor] = useState([]);
-    const [bookAviable, setBookAviable] = useState([]);
-    const [weelyVisitorData, setWeelyVisitorData] = useState([]);
+    const [bookAviable, setBookAviable] = useState(defaultBookAvailability);
+    const [weelyVisitorData, setWeelyVisitorData] = useState(defaultWeeklyVisitorData);
     const [loading, setLoading] = useState(true); // Loading state
 
     const getDataApi = async () => {
@@ -84,14 +98,14 @@ function Dashbaord() {
                                     analytic={e.analytic}
                                 />
                             ))}
-                        </div>Total major
+                        </div>
                     </div>
                     {/* Header content */}
                     {/* Main Content */}
                     <div className="flex-1 flex flex-col md:flex-col xl:flex-row container-main-content text-accent gap-5 overflow-y-auto scrollbar-hide">
                         <div className="table-chart flex gap-5">
                             {/* table List Of Student name */}
-                            <div className="table-container table-stu-entry w-full md:w-full xl:w-[450px] 2xl:w-[885px] h-full bg-secondary rounded-[20px] p-5">
+                            <div className="table-container table-stu-entry w-full md:w-full h-[500px] xl:h-full xl:w-[450px] 2xl:w-[885px] bg-secondary rounded-[20px] p-5">
                                 <TableStuEntry getCardDataApi={getCardDataApi} />
                             </div>
                             {/* table List Of Student name */}

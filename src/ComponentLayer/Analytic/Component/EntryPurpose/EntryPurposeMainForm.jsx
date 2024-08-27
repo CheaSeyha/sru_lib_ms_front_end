@@ -41,7 +41,7 @@ function EntryPurposeMainForm() {
                     />
                 </div>
             </div>
-            <div className="table-entry-hour h-[497px] grid grid-cols-2 gap-5">
+            <div className="table-entry-hour h-[994px] xl:h-[497px] grid xl:grid-cols-2 gap-5">
                 <div className="table-stu bg-secondary p-5 h-full rounded-[20px] font-noto">
                     <div className="header h-[46px] text-accent">
                         <p>ចំនួនម៉ោងនិស្សិតចូលប្រើប្រាស់បណ្ណាល័យ</p>
@@ -115,7 +115,6 @@ function EntryPurposeMainForm() {
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
 

@@ -46,7 +46,7 @@ function EntryTableBaseOnMajor() {
 
     return (
         <div className='w-full h-full text-white rounded-[20px] bg-secondary p-5 overflow-scroll scrollbar-hide'>
-            <div className="font-noto h-[46px] w-full text-center">សរុបចំនួនចូលបណ្ណាល័យក្នុងខែនេះ</div>
+            <div className="font-noto h-[46px] w-full text-center text-accent">មហាវិទ្យាល័យចូលបណ្ណាល័យ</div>
             <table className="table text-accent font-noto overflow-auto">
                 {/* head */}
                 <thead className='text-accent sticky top-0 left-0 bg-secondary'>
