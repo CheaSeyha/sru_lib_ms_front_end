@@ -41,8 +41,8 @@ function EntryPurposeMainForm() {
                     />
                 </div>
             </div>
-            <div className="table-entry-hour h-[994px] xl:h-[497px] grid xl:grid-cols-2 gap-5">
-                <div className="table-stu bg-secondary p-5 h-full rounded-[20px] font-noto">
+            <div className="table-entry-hour h-[994px] xl:h-[497px] grid xl:grid-cols-2 gap-5 w-full">
+                <div className="table-stu bg-secondary p-5 h-full rounded-[20px] font-noto  overflow-auto">
                     <div className="header h-[46px] text-accent">
                         <p>ចំនួនម៉ោងនិស្សិតចូលប្រើប្រាស់បណ្ណាល័យ</p>
                     </div>
@@ -80,7 +80,7 @@ function EntryPurposeMainForm() {
                         </table>
                     </div>
                 </div>
-                <div className="table-stu bg-secondary p-5 h-full rounded-[20px] font-noto">
+                <div className="table-stu bg-secondary p-5 h-full rounded-[20px] font-noto  overflow-auto">
                     <div className="header h-[46px] text-accent">
                         <p>ចំនួនម៉ោងបុគ្គលិកSRUចូលប្រើប្រាស់បណ្ណាល័យ</p>
                     </div>

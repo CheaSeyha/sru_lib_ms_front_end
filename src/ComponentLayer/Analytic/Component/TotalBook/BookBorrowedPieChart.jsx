@@ -51,14 +51,16 @@ function BookBorrowedPieChart() {
                 <p>ចំនួនខ្ចីសៀវភៅគិតតាមហាវិទ្យាល័យ</p>
             </div>
             <div className="flex-1 container-chart-data w-full h-full flex flex-col lg:flex-row gap-5">
-                <div className="danutChart w-full lg:w-[230px] h-full grid place-items-center">
-                    <DonutChart
-                        data={bookBorrowed}
-                        labelsKey="majorName"
-                        dataKey="borrowedNumber"
-                        dataSetLabel="Books Borrowed"
-                        colors={colors} // Pass colors to the DonutChart component
-                    />
+                <div className="danutChart w-full grid place-items-center">
+                    <div className="w-[230px] h-full grid place-items-center">
+                        <DonutChart
+                            data={bookBorrowed}
+                            labelsKey="majorName"
+                            dataKey="borrowedNumber"
+                            dataSetLabel="Books Borrowed"
+                            colors={colors} // Pass colors to the DonutChart component
+                        />
+                    </div>
                 </div>
                 <div className="table-container w-full h-[420px] overflow-y-scroll scrollbar-hide">
 
