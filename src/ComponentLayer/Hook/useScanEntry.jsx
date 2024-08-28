@@ -10,7 +10,9 @@ function useScanEntry() {
     const [checkPurpose, setCheckPurpose] = useState('');
     const [disCheckPur, setDisCheckPur] = useState(true);
     const [cardDataEntry, setCardDataEntry] = useState([
-        { cardType: "", dataNumber: 0 }
+        { cardType: "Entry", dataNumber: 0 },
+        { cardType: "Exit", dataNumber: 0 },
+        { cardType: "Total", dataNumber: 0 },
     ]);
     const [stuEntryInfor, setStuEntryInfor] = useState({
         studentId: 0, studentName: "", gender: "", dateOfBirth: "",

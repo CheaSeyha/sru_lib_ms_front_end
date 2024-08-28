@@ -5,7 +5,7 @@ export class MostBorrowBookTable extends Component {
         return (
             <main className='font-noto w-full h-full text-accent space-y-5'>
                 <div className="header h-[46px] flex justify-between">
-                    <p>សៀវភៅដែលពេញនិយមខ្ចីច្រើជាងគេ</p>
+                    <p>សៀវភៅដែលពេញនិយមខ្ចី</p>
                     <button className='btn text-accent'>View Details</button>
                 </div>
                 <div className="overflow-x-auto w-full h-[390px] overflow-y-auto scrollbar-hide">
@@ -20,60 +20,6 @@ export class MostBorrowBookTable extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
-                            <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>38</td>
-                            </tr>
                             <tr>
                                 <th>1</th>
                                 <td>Cy Ganderton</td>

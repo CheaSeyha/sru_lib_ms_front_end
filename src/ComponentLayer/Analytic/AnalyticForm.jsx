@@ -32,10 +32,10 @@ function AnalyticForm() {
                                 <SquareMenu />
                             </button>
                             <div className={`
-                        container-button flex ${hideDropDownButton ? "hidden" : "block"} 
-                        z-20 top-[50px] lg:top-0 lg:flex gap-3 lg:gap-5 absolute flex-col lg:flex-row 
-                        lg:relative sm:right-0 rounded-lg drop-shadow-md lg:drop-shadow-none 
-                        p-2 lg:p-0 bg-secondary lg:bg-transparent`}>
+                                container-button flex ${hideDropDownButton ? "hidden" : "block"} 
+                                z-20 top-[50px] lg:top-0 lg:flex gap-3 lg:gap-5 absolute flex-col lg:flex-row 
+                                lg:relative sm:right-0 rounded-lg drop-shadow-md lg:drop-shadow-none 
+                                p-2 lg:p-0 bg-primary lg:bg-transparent`}>
                                 <div className="date-picker z-40">
                                     <Datepicker
                                         inputId='datePikcer'
@@ -44,14 +44,14 @@ function AnalyticForm() {
                                         showFooter={true}
                                         value={value}
                                         onChange={newValue => setValue(newValue)}
-                                        inputClassName="bg-primary h-[48px] px-5 rounded-[10px] w-[290px] text-accent"
+                                        inputClassName="bg-secondary h-[48px] px-5 rounded-[10px] w-[290px] text-accent"
                                     />
                                 </div>
-                                <button className="btn btn-primary font-noto">
+                                <button className="btn btn-secondary font-noto">
                                     <FileDown />
                                     <p>ទាញរបាយការណ៍ប្រចាំខែ</p>
                                 </button>
-                                <button className="btn btn-primary font-noto" onClick={() => setisShowModal(true)}>
+                                <button className="btn btn-secondary font-noto" onClick={() => setisShowModal(true)}>
                                     <FileBarChartIcon />
                                     បង្កើតរបាយករណ៏
                                 </button>

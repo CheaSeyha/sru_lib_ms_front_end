@@ -36,7 +36,7 @@ function EntryPurposeCard() {
                         ))}
                     </ul>
                 </details>
-                
+
             </div>
             <div className="card-purpose-container w-full h-fit grid grid-cols-2 gap-5 items-end">
                 <CardPurposeData amountData={23} cardType="Reading" />
