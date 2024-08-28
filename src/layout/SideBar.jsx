@@ -48,8 +48,8 @@ function Sidebar() {
                     },
                     {
                         iconName: <ShieldCheck className='w-[18px]' />,
-                        dropDownBtnType: "Score",
-                        urlPath: "/BookManagement/Score",
+                        dropDownBtnType: "Time Spent",
+                        urlPath: "/BookManagement/TimeSpent",
                     },
                     {
                         iconName: <DatabaseBackup className='w-[18px]' />,

@@ -48,28 +48,49 @@ const ListOfBorrow = () => {
   return (
     <>
     <div className="flex flex-col w-full h-full space-y-5">
-      <div className="w-full m-0">
-        <div className="inline-block w-1/2 pl-5">
+      <div className="flex flex-row w-full m-0">
+        {/* <div className="inline-block pr-5 w-2/5">
                 <input
         type="text"
         placeholder="Student ID or Book ID"
         value={searchTerm}
         onChange={handleSearchChange}
-        className="p-2 w-full border rounded text-black"
+        className="p-2 h-full w-full border input-bordered rounded-[50px] bg-primary"
       />
-      </div>
-      <div className="inline-block pl-5 w-1/3">
+      </div> */}
+      <div className="inline-block h-full pr-5 w-2/5">
+            <label htmlFor="" className="input input-bordered rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2">
+            <input
+              type="text"
+              placeholder="Student ID or Book ID"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full h-full"
+            />
+            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                className="h-8 w-8 opacity-70">
+                                <path
+                                    fillRule="evenodd"
+                                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                    clipRule="evenodd" />
+                            </svg>
+                            </label>
+          </div>
+      <div className="inline-block pr-5">
       <DatePicker
                         selected={searchDate}
                         onChange={date => setSearchDate(date)}
                         dateFormat="yyyy-MM-dd"
                         placeholderText="Select return Date"
-                        className="input input-bordered w-32 bg-primary"
+                        className="input input-bordered rounded-[50px] w-full bg-primary"
                     />
         </div>
-        <div className="inline-block w-1/6 pl-8">
-          <BtnGredient onClick={handlerefresh} className="rounded-" color={'from-primary to-[#00D9FF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
-          <img src={refresh}  width={24} height={24} alt="" />
+        <div className="inline-block">
+          <BtnGredient onClick={handlerefresh} className="rounded-" color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
+          <p>Refresh</p>
           </BtnGredient>
         </div>
         </div>

@@ -1,73 +1,87 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import 'chart.js/auto';
-import { color } from 'framer-motion';
-import { useThemeSwitch } from '../../../Context/ThemeSwitchContext'
-import 'tailwindcss/tailwind.css';
+import React, { useMemo } from 'react';
+import Chart from 'react-apexcharts';
+import { useThemeSwitch } from '../../../Context/ThemeSwitchContext';
 const ChartBorrow = () => {
-  const { theme } = useThemeSwitch();
-  const colortext=theme === 'dark' ? '#FFFFFF' : '#12363C';
-  const data = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    datasets: [
-      {
-        label: 'Borrow',
-        data: [10, 12, 17, 9, 15, 19, 21],
-        backgroundColor:'#ff3636',
-        borderColor:'#000000',
-      },
-      {
-        label: 'Return',
-        data: [12,31,15,14,6,34,20],
-        backgroundColor:'#3c32ff',
-        borderColor:'#000000',
-      },
-    ],
-  };
 
-  const options = {
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: true,
-        text: 'Borrow',
-        color: colortext,
-        font: {
-          size: 24,
+  const { theme } = useThemeSwitch();
+  // Precompute colors based on the theme
+  const axisLabelsColors = useMemo(() => {
+    return theme === "dark" ? "#ffffff" : "#000000";
+  }, [theme]);
+
+  const options = useMemo(() => ({
+    chart: {
+      type: 'bar',
+      height: 430,
+    },
+    title: {
+      text: 'ចំនួនសងនិងខ្ចីសៀវភៅប្រចាំថ្ងៃ',
+      align: 'left',
+      style: {
+        fontFamily: "NotoSansKhmer-Regular",
+        color: axisLabelsColors, // Title color
+      }
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        dataLabels: {
+          position: 'top',
         },
       },
     },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          color: colortext, 
-        },
-        grid: {
-          color: theme === 'dark' ? '#cbcbcb6b' : '#DDDDDD',
-        },
-      },
-      x: {
-        ticks: {
-          color: colortext, // Set the x-axis labels color to white
-        },
-        grid: {
-          color: theme === 'dark' ? '#cbcbcb6b' : '#DDDDDD',
+    tooltip: {
+      shared: true,
+      intersect: false,
+      theme: theme, // Use "dark" or "light" for theme-based styling
+    },
+    xaxis: {
+      categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      labels: {
+        style: {
+          colors: axisLabelsColors, // White for dark theme, black for light theme
+          fontSize: '12px',
+          fontFamily: 'Arial, sans-serif',
         },
       },
     },
-    maintainAspectRatio: false,
-    categoryPercentage: 0.8, // Adjust to make bars wider/narrower
-    barPercentage: 1, // Adjust to make bars wider/narrower
-  };
+    yaxis: {
+      labels: {
+        style: {
+          colors: axisLabelsColors, // White for dark theme, black for light theme
+          fontSize: '12px',
+          fontFamily: 'Arial, sans-serif',
+        },
+      },
+    },
+    legend: {
+      show: true,
+      position: 'top', // Position of the legend (top, right, bottom, left)
+      labels: {
+        colors: axisLabelsColors, // Legend text color
+        fontSize: '12px',
+        fontFamily: 'Arial, sans-serif',
+      },
+    },
+    colors: ['#ff2828', '#2833ff'],
+  }), [axisLabelsColors, theme]);
+
+  const series = [
+    {
+      name: "ខ្ចី",
+      data: [12,8,6,9,4,3,7],
+    },
+    {
+      name: "សង",
+      data: [9,6,10,5,2,7,3],
+    },
+  ];
 
   return (
-    <div className='w-full h-full bg-secondary p-5 rounded-[20px]'>
-      <Bar data={data} options={options}/>
+    <div id="chart" className=' w-full h-full'>
+      <Chart options={options} series={series} type="bar" width={"100%"} height={"100%"} />
     </div>
   );
-};
 
+};
 export default ChartBorrow;

@@ -3,12 +3,28 @@ import CardData from './CardData'
 import { BookA, BookX,BookMarked  } from 'lucide-react';
 import { BookDown } from "lucide-react";
 import { BookUp } from "lucide-react";
-import ListOfAllBook from "./ListOfAllBook";
 import ChartBorrow from "./ChartBorrow";
-import { ThemeSwitchProvider } from "../../../Context/ThemeSwitchContext";
+import LineChart from "../../Analytic/Component/Chart/LineChart";
 import CartBR from "./CartBR";
 import NavBarBook from "./NavBar";
 export default function FormInput() {
+    const mySeriesData = [
+        {
+            name: "Donations",
+            data: [26, 12, 23, 15, 16, 10, 24, 46, 8]
+        },
+        {
+            name: "University Funding",
+            data: [16, 36, 26, 17, 38, 27, 17, 24, 16]
+        },
+        {
+            name: "Thesis Income",
+            data: [3, 5, 8, 9, 11, 13, 16, 11, 13]
+        }
+    ];
+
+    const myCategories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+    const myTitle = 'ប្រភពដែលសៀវភៅទទួលបាន';
     return (
         <>
             <div className="flex flex-col w-full h-fit xl:h-full space-y-5">
@@ -31,17 +47,17 @@ export default function FormInput() {
                     </div>
                     <div className="lg:w-1/3 flex flex-col w-full pl-0 2xl:h-full h-[600px] pt-5 lg:pl-5 md:pl-0 sm:pl-0 md:w-full sm:w-full">
                         <div className="table-chart gap-5 w-full h-full pb-5 overflow-auto scrollbar-hide">
-                            <div className='w-full items-start h-full bg-secondary text-accent rounded-[20px]'>
-                                <ThemeSwitchProvider>
-                                    {/* <ChartBorrow></ChartBorrow> */}
-                                </ThemeSwitchProvider>
+                            <div className='w-full p-2 items-start h-full bg-secondary text-accent rounded-[20px]'>
+                                    <ChartBorrow></ChartBorrow>
                             </div>
                         </div>
                         <div className="table-chart gap-5 w-full h-full pt-5 overflow-auto scrollbar-hide">
-                            <div className="table-container w-full h-full bg-secondary rounded-[20px]">
-                                <ThemeSwitchProvider>
-                                    {/* <ChartReturn /> */}
-                                </ThemeSwitchProvider>
+                            <div className="table-container w-full h-full bg-secondary rounded-[20px] p-2">
+                                <LineChart 
+                                    seriesData={mySeriesData}
+                                    categories={myCategories}
+                                    title={myTitle}
+                                />
                             </div>
                         </div>
                     </div>

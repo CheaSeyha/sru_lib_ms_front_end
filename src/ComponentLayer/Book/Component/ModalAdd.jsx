@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Modal from '../../../layout/Component/Modal';
 import BtnGredient from '../BtnGredient';
 import { X } from 'lucide-react';
@@ -6,6 +6,7 @@ import axios from "../../../api/axios";
 import ExcelImported from './ExcelImported';
 import toast, { Toaster } from 'react-hot-toast';
 const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
+  const [collegeData, setCollegeData]=useState([]);
   const [formData, setFormData] = useState({
     bookId: "",
     bookTitle: "",
@@ -16,6 +17,14 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
     publicationYear: "",
     genre: ""
   });
+  useEffect(() => {
+    axios.get('/college')
+      .then(response => {
+        // Filter books where isActive is true
+        setCollegeData(response.data);
+      });
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -44,6 +53,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
       // Convert bookQuan to a number if necessary
       bookQuan: Number(formData.bookQuan),
     },];
+    console.log(submissionData);
     // try {
        axios.post('/book', submissionData, {
         headers: {
@@ -102,7 +112,24 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
               <div className='flex'>
                 <div className="w-full mr-1">
                   <div className=" w-full ">College :</div>
-                  <input type="text" className="input input-bordered  w-full" name="collegeId" value={formData.collegeId} onChange={handleChange} required />
+                  <select
+        name="collegeId"
+        value={formData.collegeId}
+        onChange={handleChange}
+        required
+        className="input input-bordered w-full"
+    >
+      {/* <option value="ST">English</option>
+    <option value="ST">Khmer</option>
+    <option value="ST">Other</option> */}
+    <option disabled className="refresh" value="">
+                Select college
+              </option>
+    {collegeData.map((e, index) => (
+                      <option key={index} value={e.collegeId}>{e.collegeName}</option>
+                    ))}
+
+</select>
                 </div>
                 <div className="w-full ml-1">
                   <div className=" w-full">Author :</div>

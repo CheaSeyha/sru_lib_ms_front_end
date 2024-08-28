@@ -30,7 +30,7 @@ function AdminPanel() {
                         <Route path="/StaffManage/" element={<StaffManageForm/>} />
                         <Route path="/Analytic" element={<AnalyticForm/>} />
                         <Route path="/BookManagement/BookBorrowed" element={<BookManagement/>} />
-                        <Route path="/BookManagement/Score" element={<BookManagement/>} />
+                        <Route path="/BookManagement/TimeSpent" element={<BookManagement/>} />
                         <Route path="/BookManagement/Backup" element={<BookManagement/>} />
                         <Route path="/BookManagement/Donation" element={<BookManagement/>} />
                     </Routes>

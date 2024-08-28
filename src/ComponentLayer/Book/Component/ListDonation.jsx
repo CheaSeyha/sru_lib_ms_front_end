@@ -39,6 +39,7 @@ export default function ListDonation() {
 
   const filteredBooks = books.filter(book => 
     (book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.sponsorName.toString().toLowerCase().includes(searchTerm.toLowerCase())||
     book.bookId.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
     (selectedGenre === '' || book.genre === selectedGenre)
   );
@@ -50,44 +51,56 @@ export default function ListDonation() {
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
-        <div className="text-table w-full h-[45px] flex justify-between">
-          <BtnGredient onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'} 
-          hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
+      <div className="w-full flex flex-row m-0">
+          <div className="inline-block w-full h-full">
+            <label htmlFor="" className="input input-bordered rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2">
+            <input
+              type="text"
+              placeholder="ID, Title or Sponsor Name"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full h-full"
+            />
+            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                className="h-8 w-8 opacity-70">
+                                <path
+                                    fillRule="evenodd"
+                                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                    clipRule="evenodd" />
+                            </svg>
+                            </label>
+          </div>
+          <div className="inline-block w-3/5 h-full pl-5 pr-5">
+            <select
+              value={selectedGenre}
+              onChange={handleSelectType}
+              className="p-2 border rounded-[50px] input-bordered bg-base-100 h-full w-full"
+            >
+              <option disabled className="refresh" value="">
+                Select Genre
+              </option>
+              {genre.map((type, index) => (
+                <option key={index} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+
+          </div>
+          <div className="inline-block w-4/5">
+            <BtnGredient className="w-full h-full" onClick={resetSelection} color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
+            <p>Refresh</p>
+            </BtnGredient>
+          </div>
+          <div className="inline-block">
+          <BtnGredient onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
+            hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
             <p>ADD</p>
           </BtnGredient>
         </div>
-        <div className="w-full m-0">
-          <div className="inline-block w-1/2 pl-5">
-            <input
-              type="text"
-              placeholder="ID or Name"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="p-2 w-full border rounded text-black"
-            />
-          </div>
-          <div className="inline-block pl-5 w-1/3">
-          <select
-  value={selectedGenre}
-  onChange={handleSelectType}
-  className="p-2 border border-gray-300 rounded text-black w-full"
->
-  <option disabled className="refresh" value="">
-    Select Genre
-  </option>
-  {genre.map((type, index) => (
-    <option key={index} value={type}>
-      {type}
-    </option>
-  ))}
-</select>
-
-          </div>
-          <div className="inline-block w-1/6 pl-8">
-            <BtnGredient className="rounded-" onClick={resetSelection} color={'from-primary to-[#00D9FF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
-              <img src={refresh}  width={24} height={24} alt="" />
-            </BtnGredient>
-          </div>
         </div>
         <div className="variable-book  overflow-y-auto flex-1 w-full grid items-start scrollbar-hide">
           <table className="table tectav min-w-full divide-y divide-gray-200">

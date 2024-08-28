@@ -46,18 +46,36 @@ const ListCertificate = () => {
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-5">
-        <div className="text-table w-full h-[45px] flex justify-between">
-          <p>List of Certicate</p>
-        </div>
         <div className="w-full m-0">
-          <div className="inline-block w-1/2 pl-5">
+          {/* <div className="inline-block w-1/2">
             <input
               type="text"
               placeholder="Student ID or Student Name"
               value={searchTerm}
               onChange={handleSearchChange}
-              className="p-2 w-full border rounded text-black"
+              className="p-2 border rounded-[50px] input-bordered bg-base-100 h-full w-full"
             />
+          </div> */}
+          <div className="inline-block h-full w-1/2">
+            <label htmlFor="" className="input input-bordered rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2">
+            <input
+              type="text"
+              placeholder="Student ID or Student Name"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full h-full"
+            />
+            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                className="h-8 w-8 opacity-70">
+                                <path
+                                    fillRule="evenodd"
+                                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                    clipRule="evenodd" />
+                            </svg>
+                            </label>
           </div>
         </div>
         <div className="table-container overflow-y-auto flex-1 w-full grid items-start">
