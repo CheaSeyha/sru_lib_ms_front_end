@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: import.meta.env.VITE_API_URL
+    baseURL: 'http://localhost:8090/api/v1/'
 })
