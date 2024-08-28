@@ -2,22 +2,24 @@ import React, { useState } from 'react';
 import { BookOpenText } from 'lucide-react';
 import Datepicker from "react-tailwindcss-datepicker";
 import DonutChart from './DonutChart';
+import useAnalyticData from '../../../Hook/useAnalyticData';
 
 function TotalBook() {
 
-    const bookData = [
+    const { data } = useAnalyticData()
+
+    const [bookData, setBookData] = useState([
         {
             lang: "Khmer",
-            Total: 8015,
+            Total: data.bookAnalysis.totalBooks.khmerBooks,
         },
         {
             lang: "English",
-            Total: 11663,
+            Total: data.bookAnalysis.totalBooks.englishBooks,
         }
-    ];
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    ])
 
-    const [value, setValue] = useState("");
+
 
     return (
         <div className='total-book w-full flex flex-col h-full text-white bg-secondary rounded-[20px] p-5'>
