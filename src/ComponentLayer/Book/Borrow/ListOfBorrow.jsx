@@ -5,15 +5,12 @@ import BtnGredient from '../BtnGredient';
 import "react-datepicker/dist/react-datepicker.css";
 import axios from '../../../api/axios';
 import { parse, format,isEqual } from 'date-fns';
-import Alert from '@mui/material/Alert';
+import AlertWithSound from './Alert';
 import Snackbar from '@mui/material/Snackbar';
 import refresh from "../../../assets/logo/refresh.svg";
-import Alert_Voice from "../../../assets/image/Alert_Voice.mp3"
 const ListOfBorrow = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [latestBorrowId, setLatestBorrowId] = useState([]);
-  const [openAlert, setOpenAlert] = useState(false);
-  const audio = new Audio(Alert_Voice);
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
     fetchBorrow();
@@ -36,19 +33,19 @@ const ListOfBorrow = () => {
       const filteredBooks = response.data.filter(borrow => borrow.isBringBack === false);
       setborrow(filteredBooks);
       // Check if there is new data
-      if (filteredBooks.length > 0 && filteredBooks[0].borrowId !== latestBorrowId) {
-        setLatestBorrowId(filteredBooks[0]);
-        setOpenAlert(true);  // Show the alert
-        audio.play();
+      // if (filteredBooks.length > 0 && filteredBooks[0].borrowId !== latestBorrowId) {
+      //   setLatestBorrowId(filteredBooks[0]);
+      //   setOpenAlert(true);  // Show the alert
+      //   audio.play();
+      // }
+      if (filteredBooks.length > latestBorrowId.length) {
+        setLatestBorrowId(filteredBooks);
       }
     })
     .catch(error => {
       console.error("There was an error fetching the borrow!", error);
     });
   };
-  };
-  const handleCloseAlert = () => {
-    setOpenAlert(false);  // Close the alert
   };
   useEffect(() => {
       fetchBorrow();    
@@ -162,7 +159,7 @@ const ListOfBorrow = () => {
         </table>
       </div>
       {/* MUI Alert */}
-      <Snackbar
+      {/* <Snackbar
         open={openAlert}
         autoHideDuration={6000}
         onClose={handleCloseAlert}
@@ -170,9 +167,10 @@ const ListOfBorrow = () => {
         <Alert onClose={handleCloseAlert} severity="warning">
           Student id {latestBorrowId.studentId} have not return!
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
+      <AlertWithSound newData={latestBorrowId.length > 0 && latestBorrowId[latestBorrowId.length - 1]} />
     </div>
-    <ModalBorrow entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} fetchBorrow={fetchBorrow}/>
+    <ModalBorrow entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} fetchBorrow={fetchBorrow} isChecked={handleCheckboxChange}/>
     </>
   );
 };
