@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BtnGredient from "../BtnGredient";
-import ModalAdd from "./ModalAdd";
+import ModalAddDonation from "./ModalAddDonation";
 import axios from "../../../api/axios";
 import refresh from "../../../assets/logo/refresh.svg"
 import CerAppreciation from "./CerAppreciation"
@@ -9,7 +9,10 @@ export default function ListDonation() {
   const [books, setBooks] = useState([]);
   const [genre, setgenre] = useState([]);
   useEffect(() => {
-    axios.get('/donation')
+    fetchDonation();
+  }, []);
+const fetchDonation=()=>{
+  axios.get('/donation')
       .then(response => {
         setBooks(response.data);
         const uniqueBookTypes = [...new Set(response.data.map(book => book.genre))];
@@ -18,8 +21,7 @@ export default function ListDonation() {
       .catch(error => {
         console.error("There was an error fetching the books!", error);
       });
-  }, []);
-
+}
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectType] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -140,7 +142,7 @@ export default function ListDonation() {
           </table>
         </div>
       </div>
-      <ModalAdd isModalVisible={isModalVisible} handleCloseModal={handleCloseModal} />
+      <ModalAddDonation isModalVisible={isModalVisible} handleCloseModal={handleCloseModal} fetchDonation={fetchDonation} />
     </>
   );
 }

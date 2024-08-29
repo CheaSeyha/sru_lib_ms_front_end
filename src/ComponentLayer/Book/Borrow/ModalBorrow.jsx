@@ -21,11 +21,30 @@ const handleClick = () => {
           bookId: entry.bookId
       }
   })
-      toast.log('Borrow request successful:', response.data);
-      // Handle successful response, e.g., show a success message
-  useEffect(() => {
-    fetchBorrow();
-  }, []);
+  .then(response => {
+      toast.success('Return request successful!'); // Show success toast
+      fetchBorrow(); // Call the fetchBorrow function after a successful request
+  })
+  .catch(error => {
+      toast.error('There was an error with the return request.');
+      console.error(error);
+  });
+};
+
+const handleContinue = () => {
+  axios.put('/borrow/extend-borrow', null, {
+      params: {
+          id: entry.borrowId
+      }
+  })
+  .then(response => {
+      toast.success('Continue request successful!'); // Show success toast
+      fetchBorrow(); // Call the fetchBorrow function after a successful request
+  })
+  .catch(error => {
+      toast.error('There was an error with the continue request.');
+      console.error(error);
+  });
 };
   return (
     <>
@@ -75,14 +94,14 @@ const handleClick = () => {
                         <div className="inline-block"><p>{updatedGiveBackDate}</p></div>
                         </div>
                         <div className="grid grid-cols-1 gap-4 content-center p-5">   
-                          <BtnGredient className="content-center">
+                          <BtnGredient className="content-center" onClick={handleContinue}>
                             <p>Continue</p>
                           </BtnGredient>
                         </div>
                       </>
                     )}
+                    <Toaster/>
                 </div>
-                <Toaster/>
             </Modal>
     </>
   )

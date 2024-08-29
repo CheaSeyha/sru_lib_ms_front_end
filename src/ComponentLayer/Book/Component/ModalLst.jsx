@@ -98,6 +98,7 @@ const ModalLst = ({ isModalVisible, closeModal, entry,fetchBooks }) => {
                     {studetnEntryData.map((e, index) => (
                       <option key={index} value={e.studentId}>{e.studentId} {e.studentName}</option>
                     ))}
+                    <option  value="200739">Phel Vivath</option>
                   </select>
                 </div>
               </div>
