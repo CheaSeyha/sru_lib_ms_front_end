@@ -5,11 +5,24 @@ import BtnGredient from '../BtnGredient';
 import "react-datepicker/dist/react-datepicker.css";
 import axios from '../../../api/axios';
 import { parse, format,isEqual } from 'date-fns';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import refresh from "../../../assets/logo/refresh.svg";
+import Alert_Voice from "../../../assets/image/Alert_Voice.mp3"
 const ListOfBorrow = () => {
+  const [isChecked, setIsChecked] = useState(false);
+  const [latestBorrowId, setLatestBorrowId] = useState([]);
+  const [openAlert, setOpenAlert] = useState(false);
+  const audio = new Audio(Alert_Voice);
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+    fetchBorrow();
+  };
+  console.log(isChecked);
   const [borrow, setborrow] = useState([]);
   const fetchBorrow = () => {
-    axios.get('/borrow')
+    if(isChecked){
+      axios.get('/borrow')
       .then(response => {
         const filteredBooks = response.data.filter(book => book.isBringBack === false);
         setborrow(filteredBooks);
@@ -17,9 +30,28 @@ const ListOfBorrow = () => {
       .catch(error => {
         console.error("There was an error fetching the borrow!", error);
       });
+    }else{
+    axios.get('/borrow/over-due')
+    .then(response => {
+      const filteredBooks = response.data.filter(borrow => borrow.isBringBack === false);
+      setborrow(filteredBooks);
+      // Check if there is new data
+      if (filteredBooks.length > 0 && filteredBooks[0].borrowId !== latestBorrowId) {
+        setLatestBorrowId(filteredBooks[0]);
+        setOpenAlert(true);  // Show the alert
+        audio.play();
+      }
+    })
+    .catch(error => {
+      console.error("There was an error fetching the borrow!", error);
+    });
+  };
+  };
+  const handleCloseAlert = () => {
+    setOpenAlert(false);  // Close the alert
   };
   useEffect(() => {
-    fetchBorrow();
+      fetchBorrow();    
   }, []);
   const [isModalLstVisible, setIsModalLstVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
@@ -88,10 +120,21 @@ const ListOfBorrow = () => {
                         className="input input-bordered rounded-[50px] w-full bg-primary"
                     />
         </div>
-        <div className="inline-block">
+        <div className="inline-block w-1/4">
           <BtnGredient onClick={handlerefresh} className="rounded-" color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
           <p>Refresh</p>
           </BtnGredient>
+        </div>
+        <div className="inline-block">
+        <div className='flex items-center justify-center h-full text-[20px]'>
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          className='form-checkbox mr-2 w-[25px] h-[25px] text-secondary'
+        />
+         Over Due
+      </div>
         </div>
         </div>
       <div className="table-container overflow-y-auto flex-1 w-full grid items-start scrollbar-hide">
@@ -118,6 +161,16 @@ const ListOfBorrow = () => {
           </tbody>
         </table>
       </div>
+      {/* MUI Alert */}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+      >
+        <Alert onClose={handleCloseAlert} severity="warning">
+          Student id {latestBorrowId.studentId} have not return!
+        </Alert>
+      </Snackbar>
     </div>
     <ModalBorrow entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} fetchBorrow={fetchBorrow}/>
     </>

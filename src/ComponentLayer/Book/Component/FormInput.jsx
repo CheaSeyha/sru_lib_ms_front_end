@@ -30,10 +30,10 @@ export default function FormInput() {
             <div className="flex flex-col w-full h-fit xl:h-full space-y-5">
                 <div className="flex flex-col space-y-10 sm:flex-col lg:space-x-10 lg:flex-row md:flex-col md:space-x-0 lg:space-y-0 sm:space-y-10 overflow-auto scrollbar-hide">
                     <div className="flex-1">
-                        <CartBR Bdata={87} Rdata={70} Btype="All Books" Rtype="All Donation" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookMarked className='w-full h-full text-white inline-block' />} iconB={<BookA className='w-full h-full text-white inline-block' />}  bgColor="from-[#1F9EB2] to-[#d310d6]" />
+                        <CartBR Bdata={87} Rdata={70} Btype="All Books" Rtype="All Donation" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookMarked className='w-full h-full text-white inline-block' />} iconB={<BookA className='w-full h-full text-white inline-block' />}  bgColor="from-[#35b21f] to-[#1F9EB2]"/>
                     </div>
                     <div className="flex-1">
-                        <CartBR Bdata={44} Rdata={87} Btype="All Borrowed" Rtype="Expired" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookX className='w-full h-full text-white inline-block' />} iconB={<BookUp className='w-full h-full text-white inline-block' />}  bgColor="from-[#1F9EB2] to-[#d310d6]" />
+                        <CartBR Bdata={44} Rdata={3} Btype="All Borrowed" Rtype="Overdue" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookX className='w-full h-full text-white inline-block' />} iconB={<BookUp className='w-full h-full text-white inline-block' />}  bgColor="from-[#1F9EB2] to-[#d310d6]" />
                     </div>
                     <div className="flex-1">
                         <CartBR Bdata={20} Rdata={18} Btype="Borrow today" Rtype="Return today" bgColor="from-[#d310d6] to-[#e3d813]" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} iconR={<BookDown className='w-full h-full text-white inline-block' />} iconB={<BookUp className='w-full h-full text-white inline-block' />} />
