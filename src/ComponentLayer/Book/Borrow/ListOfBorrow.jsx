@@ -11,33 +11,22 @@ import refresh from "../../../assets/logo/refresh.svg";
 const ListOfBorrow = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [latestBorrowId, setLatestBorrowId] = useState([]);
+  useEffect(() => {
+    fetchBorrow();    
+}, []);
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked);
-    fetchBorrow();
+    if(isChecked){
+      fetchBorrow();
+    }else{fetchOver();}
   };
   console.log(isChecked);
   const [borrow, setborrow] = useState([]);
-  const fetchBorrow = () => {
-    if(isChecked){
-      axios.get('/borrow')
-      .then(response => {
-        const filteredBooks = response.data.filter(book => book.isBringBack === false);
-        setborrow(filteredBooks);
-      })
-      .catch(error => {
-        console.error("There was an error fetching the borrow!", error);
-      });
-    }else{
+  const fetchOver = () => {
     axios.get('/borrow/over-due')
     .then(response => {
       const filteredBooks = response.data.filter(borrow => borrow.isBringBack === false);
       setborrow(filteredBooks);
-      // Check if there is new data
-      // if (filteredBooks.length > 0 && filteredBooks[0].borrowId !== latestBorrowId) {
-      //   setLatestBorrowId(filteredBooks[0]);
-      //   setOpenAlert(true);  // Show the alert
-      //   audio.play();
-      // }
       if (filteredBooks.length > latestBorrowId.length) {
         setLatestBorrowId(filteredBooks);
       }
@@ -46,10 +35,16 @@ const ListOfBorrow = () => {
       console.error("There was an error fetching the borrow!", error);
     });
   };
+  const fetchBorrow = () => {
+    axios.get('/borrow')
+      .then(response => {
+        const filteredBooks = response.data.filter(book => book.isBringBack === false);
+        setborrow(filteredBooks);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the borrow!", error);
+      });
   };
-  useEffect(() => {
-      fetchBorrow();    
-  }, []);
   const [isModalLstVisible, setIsModalLstVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
