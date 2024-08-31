@@ -4,6 +4,32 @@ import { UserPlus } from 'lucide-react'
 import { UserRoundPlus, X, Save, Trash2, SquarePen, EditIcon } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
 import useCollage from '../../../Hook/useCollege';
+import useCRUDStaff from '../Hook/useCRUDStaff'
+
+//Staff Data
+const StaffData = [
+    {
+        staffId: 300134,
+        staffName: "សាស្ត្រាចារ្យជំនួយ ប៉ែន ឌីណា",
+        gender: "ប្រុស",
+        position: "មន្ត្រីទទួលបន្ទុក",
+        degreeLevel: "បរិញ្ញាប័ត្រជាន់ខ្ពស់",
+        major: ["វិទ្យាសាស្ត្រនយោបាយ", "វិទ្យាសាស្ត្រអប់រំ"],
+        studyYear: "",
+        shiftWork: "ពេញម៉ោង",
+    },
+    {
+        staffId: 300001,
+        staffName: "ណន ស្រីស្រស់",
+        gender: "ស្រី",
+        position: "ហាត់ការ",
+        degreeLevel: "បរិញ្ញាបត្រ",
+        major: ["អក្សរសាស្ត្រអង់គ្លេស"],
+        studyYear: "៣",
+        shiftWork: "ព្រឹក-យប់",
+    }
+]
+
 
 function TableStaff() {
     // Function to handle the "Select All" checkbox End
@@ -11,9 +37,9 @@ function TableStaff() {
     const [clickEvenModal, setClickEvenShowModal] = useState("")
     const [isModalVisible, setIsModalVisible] = useState(false)//Modal For Add Staff
     const [EditDeletModalVisble, setEditDeletModalVisble] = useState(false)//Modal For Edit or delete
-    const [selectedStaffIDs, setSelectedStaffIDs] = useState([]);// Get Select checkbox staff ID
+    const [selectedstaffIds, setSelectedstaffIds] = useState([]);// Get Select checkbox staff ID
     const [staffInfor, setStaffInfor] = useState({
-        staffID: 0,
+        staffId: 0,
         staffName: "",
         gender: "",
         position: "",
@@ -24,60 +50,8 @@ function TableStaff() {
     })
 
 
-    //Staff Data
-    const StaffData = [
-        {
-            staffID: 300134,
-            staffName: "សាស្ត្រាចារ្យជំនួយ ប៉ែន ឌីណា",
-            gender: "ប្រុស",
-            position: "មន្ត្រីទទួលបន្ទុក",
-            degreeLevel: "បរិញ្ញាប័ត្រជាន់ខ្ពស់",
-            major: "១. វិទ្យាសាស្ត្រនយោបាយ ២.វិទ្យាសាស្ត្រអប់រំ",
-            studyYear: "",
-            shiftWork: "ពេញម៉ោង",
-        },
-        {
-            staffID: 300001,
-            staffName: "ណន ស្រីស្រស់",
-            gender: "ស្រី",
-            position: "ហាត់ការ",
-            degreeLevel: "បរិញ្ញាបត្រ",
-            major: "អក្សរសាស្ត្រអង់គ្លេស",
-            studyYear: "៣",
-            shiftWork: "ព្រឹក-យប់",
-        },
-        {
-            staffID: 300002,
-            staffName: "អៀក ស្រីភួង",
-            gender: "ស្រី",
-            position: "ហាត់ការ",
-            degreeLevel: "បរិញ្ញាបត្រ",
-            major: "គ្រប់គ្រងពាណិជ្ផនម្ម",
-            studyYear: "៣",
-            shiftWork: "រសៀល-យប់",
-        },
-        {
-            staffID: 300003,
-            staffName: "គិន យិនសុខី",
-            gender: "ស្រី",
-            position: "ហាត់ការ",
-            degreeLevel: "បរិញ្ញាបត្រ",
-            major: "វិស្មកម្មមេកានិច",
-            studyYear: "៣",
-            shiftWork: "សៅរ៍-អាទិត្យ",
-        },
-        {
-            staffID: 300004,
-            staffName: "សេក ចន្ថន",
-            gender: "ស្រី",
-            position: "អនាម័យ",
-            degreeLevel: "",
-            major: "",
-            studyYear: "",
-            shiftWork: "ពេញម៉ោង",
-        }
-    ]
-    const [filteredStaff, setFilteredStaff] = useState(StaffData);
+    const { staffList } = useCRUDStaff()
+    const [filteredStaff, setFilteredStaff] = useState([]);
 
 
     const { collageName, loading, error } = useCollage();
@@ -85,6 +59,7 @@ function TableStaff() {
 
     // Update college state whenever collageName changes
     useEffect(() => {
+        setFilteredStaff(staffList)
         if (collageName.length > 0) {
             // Filter out colleges that are in staffInfor.major
             const filteredCollege = collageName.filter(
@@ -137,7 +112,7 @@ function TableStaff() {
     const handleCloseModal = () => {
         setIsModalVisible(false);
         setStaffInfor({
-            staffID: 0,
+            staffId: 0,
             staffName: "",
             gender: "",
             position: "",
@@ -151,32 +126,31 @@ function TableStaff() {
     //Delete Modal SHow And Hide
     const handleDelteModalClose = () => {
         setEditDeletModalVisble(false)
-        setSelectedStaffIDs([])
+        setSelectedstaffIds([])
     }
 
-    const handleDelteModalOpen = (staffID) => {
+    const handleDelteModalOpen = (staffId) => {
         setEditDeletModalVisble(true);
         //If < 1 Mean Sigle Select Of Staff ID TO Delete
-        if (selectedStaffIDs.length < 1) {
-            // Add the new staffID to the existing array of selectedStaffIDs
-            setSelectedStaffIDs(prevSelectedStaffIDs => [...prevSelectedStaffIDs, staffID]);
+        if (selectedstaffIds.length < 1) {
+            // Add the new staffId to the existing array of selectedstaffIds
+            setSelectedstaffIds(prevSelectedstaffIds => [...prevSelectedstaffIds, staffId]);
         }
     }
 
     //Handle Edit Modal
-    const handleEditModalOpen = (updateStaffID) => {
-        // Find the staff data by staffID
-        const staffToUpdate = StaffData.find(staff => staff.staffID === updateStaffID);
-
+    const handleEditModalOpen = (updatestaffId) => {
+        // Find the staff data by staffId
+        const staffToUpdate = filteredStaff.find(staff => staff.staffId === updatestaffId);
         if (staffToUpdate) {
             // Update the state with the selected staff data
             setStaffInfor({
-                staffID: staffToUpdate.staffID,
+                staffId: staffToUpdate.staffId,
                 staffName: staffToUpdate.staffName,
                 gender: staffToUpdate.gender,
                 position: staffToUpdate.position,
                 degreeLevel: staffToUpdate.degreeLevel,
-                major: staffToUpdate.major,
+                major: staffToUpdate.majorId,
                 studyYear: staffToUpdate.studyYear,
                 shiftWork: staffToUpdate.shiftWork,
             });
@@ -184,7 +158,7 @@ function TableStaff() {
 
         setIsModalVisible(true); // Open the modal
         setClickEvenShowModal("កែទិន្ន័យ"); // Set the modal title or purpose
-        console.log(updateStaffID); // Log the ID (for debugging purposes)
+        console.log(updatestaffId); // Log the ID (for debugging purposes)
     }
 
     //Get Data Add Form--------------------
@@ -217,22 +191,22 @@ function TableStaff() {
     const handleSelectAll = (e) => {
         if (e.target.checked) {
             // If checked, select all staff IDs
-            const allStaffIDs = StaffData.map(data => data.staffID);
-            setSelectedStaffIDs(allStaffIDs);
+            const allstaffIds = StaffData.map(data => data.staffId);
+            setSelectedstaffIds(allstaffIds);
         } else {
             // If unchecked, clear the selection
-            setSelectedStaffIDs([]);
+            setSelectedstaffIds([]);
         }
     };
 
     // Function to handle individual row checkbox
-    const handleSelectSingle = (staffID) => (e) => {
+    const handleSelectSingle = (staffId) => (e) => {
         if (e.target.checked) {
             // Add the staff ID to the selected list
-            setSelectedStaffIDs(prevSelected => [...prevSelected, staffID]);
+            setSelectedstaffIds(prevSelected => [...prevSelected, staffId]);
         } else {
             // Remove the staff ID from the selected list
-            setSelectedStaffIDs(prevSelected => prevSelected.filter(id => id !== staffID));
+            setSelectedstaffIds(prevSelected => prevSelected.filter(id => id !== staffId));
         }
     };
 
@@ -243,7 +217,7 @@ function TableStaff() {
 
         const filteredData = StaffData.filter((staff) =>
             staff.staffName.toLowerCase().includes(query) ||  // Search by name
-            staff.staffID.toString().includes(query)          // Search by ID
+            staff.staffId.toString().includes(query)          // Search by ID
         );
 
         setFilteredStaff(filteredData);
@@ -294,7 +268,7 @@ function TableStaff() {
                                                 id='checkkAll'
                                                 type="checkbox"
                                                 className="checkbox checkbox-accent"
-                                                checked={selectedStaffIDs.length === StaffData.length}
+                                                checked={selectedstaffIds.length === StaffData.length}
                                                 onChange={handleSelectAll}
                                             />
                                         </label>
@@ -313,45 +287,51 @@ function TableStaff() {
                         </thead>
                         <tbody>
                             {filteredStaff.map((data) => (
-                                <tr key={data.staffID} className='text-[15px] hover:bg-primary cursor-pointer active:bg-primary'>
+                                <tr key={data.staffId} className='text-[15px] hover:bg-primary cursor-pointer active:bg-primary'>
                                     <td>
                                         <div className="form-control">
                                             <label className="cursor-pointer label">
                                                 <input
-                                                    id={data.staffID}
+                                                    id={data.staffId}
                                                     type="checkbox"
                                                     className="checkbox checkbox-accent"
-                                                    checked={selectedStaffIDs.includes(data.staffID)}
-                                                    onChange={handleSelectSingle(data.staffID)}
+                                                    checked={selectedstaffIds.includes(data.staffId)}
+                                                    onChange={handleSelectSingle(data.staffId)}
                                                 />
                                             </label>
                                         </div>
                                     </td>
-                                    <td>{data.staffID}</td>
+                                    <td>{data.staffId}</td>
                                     <td>{data.staffName}</td>
                                     <td>{data.gender}</td>
                                     <td>{data.position}</td>
                                     <td>{data.degreeLevel === "" ? "មិនមាន" : data.degreeLevel}</td>
-                                    <td>{data.major === "" ? "មិនមាន" : data.major}</td>
-                                    <td>{data.studyYear === "" ? "មិនមាន" : data.studyYear}</td>
+                                    <td>
+                                        {data.majorId.length === 0 ? (
+                                            "មិនមាន"
+                                        ) : (
+                                            data.majorId.map((item, index) => (
+                                                <div key={index}>{(index+1)+"."+item}</div>
+                                            ))
+                                        )}
+                                    </td>
+                                    <td>{data.year === "" ? "មិនមាន" : data.studyYear}</td>
                                     <td>{data.shiftWork}</td>
                                     <td className='space-x-2 grid  place-items-center grid-cols-2 lg:block'>
-                                        {selectedStaffIDs.length > 1 ? "" : (
-                                            <button className='text-blue-500 active:scale-110' onClick={() => handleEditModalOpen(data.staffID)}>
+                                        {selectedstaffIds.length > 1 ? "" : (
+                                            <button className='text-blue-500 active:scale-110' onClick={() => handleEditModalOpen(data.staffId)}>
                                                 <SquarePen />
                                             </button>
                                         )}
                                         <button
                                             className='text-red-500 active:scale-110'
-                                            onClick={() => handleDelteModalOpen(data.staffID)}
+                                            onClick={() => handleDelteModalOpen(data.staffId)}
                                         >
                                             <Trash2 />
                                         </button>
                                     </td>
                                 </tr>
                             ))}
-
-
                         </tbody>
                     </table>
                 </div>
@@ -544,7 +524,7 @@ function TableStaff() {
                 <div className="modal-form font-noto text-center p-10">
                     <p>អត្តលេខបុគ្គលិកដែលត្រូវលុបចេញ</p>
                     <br></br>
-                    <p className='text-red-600'>{selectedStaffIDs.join(' - ')}</p>
+                    <p className='text-red-600'>{selectedstaffIds.join(' - ')}</p>
                 </div>
 
 
