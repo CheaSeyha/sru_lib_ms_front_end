@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import BtnGredient from '../../../layout/Component/BtnGredient'
 import { UserPlus } from 'lucide-react'
 import { UserRoundPlus, X, Save, Trash2, SquarePen, EditIcon } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
+import useCollage from '../../../Hook/useCollege';
 
 function TableStaff() {
     // Function to handle the "Select All" checkbox End
@@ -17,7 +18,7 @@ function TableStaff() {
         gender: "",
         position: "",
         degreeLevel: "",
-        major: "",
+        major: [],
         studyYear: "",
         shiftWork: "",
     })
@@ -77,6 +78,54 @@ function TableStaff() {
         }
     ]
     const [filteredStaff, setFilteredStaff] = useState(StaffData);
+
+
+    const { collageName, loading, error } = useCollage();
+    const [college, setCollege] = useState([]);
+
+    // Update college state whenever collageName changes
+    useEffect(() => {
+        if (collageName.length > 0) {
+            // Filter out colleges that are in staffInfor.major
+            const filteredCollege = collageName.filter(
+                (data) => !staffInfor.major.includes(data.collegeId)
+            );
+            setCollege(filteredCollege);
+        }
+    }, [collageName, staffInfor.major]);
+
+    const handleGetCollege = (event) => {
+        const value = event.target.value;
+
+        setStaffInfor((prevStaffInfor) => {
+            const updatedMajor = [...prevStaffInfor.major];
+            if (!updatedMajor.includes(value)) {
+                updatedMajor.push(value); // Add selected major to the list
+            }
+
+            return {
+                ...prevStaffInfor,
+                major: updatedMajor, // Update the state with the new major list
+            };
+        });
+    };
+
+    // Function to handle removing a major
+    const handleRemoveMajor = (majorToRemove) => {
+        setStaffInfor((prevStaffInfor) => ({
+            ...prevStaffInfor,
+            major: prevStaffInfor.major.filter((major) => major !== majorToRemove),
+        }));
+    };
+
+
+
+
+
+
+
+
+
 
 
 
@@ -155,12 +204,13 @@ function TableStaff() {
         // Check if the form is valid
         if (form.checkValidity()) {
             // Proceed with form submission or any action
-            alert('Form submitted successfully!');
+            console.log(staffInfor)
         } else {
             // Display custom error messages if needed
             alert('Please fill out the form correctly.');
         }
     }
+
     //Get Data Add Form--------------------
 
     // Function to handle the "Select All" checkbox
@@ -282,7 +332,7 @@ function TableStaff() {
                                     <td>{data.gender}</td>
                                     <td>{data.position}</td>
                                     <td>{data.degreeLevel === "" ? "មិនមាន" : data.degreeLevel}</td>
-                                    <td>{data.major === "" ? "មិនមាន" :  data.major}</td>
+                                    <td>{data.major === "" ? "មិនមាន" : data.major}</td>
                                     <td>{data.studyYear === "" ? "មិនមាន" : data.studyYear}</td>
                                     <td>{data.shiftWork}</td>
                                     <td className='space-x-2 grid  place-items-center grid-cols-2 lg:block'>
@@ -408,15 +458,42 @@ function TableStaff() {
 
                         <div className="space-y-2 mt-2">
                             <label htmlFor="major">ជំនាញ</label>
-                            <input
-                                id='major'
-                                type="text"
-                                placeholder="ជំនាញ"
-                                className="input input-bordered my-2 bg-secondary w-full"
-                                onChange={handleInputChange}
-                                value={staffInfor.major}
-                                minLength="3"
-                            />
+                            {/* Dropdown to select a major */}
+                            <select
+                                id="major"
+                                className="select select-bordered bg-secondary w-full"
+                                onChange={handleGetCollege} // Add selected major
+                            >
+                                <option>ជ្រើសរើសជំនាញ</option>
+                                {college.length > 0 ? (
+                                    college.map((data) => (
+                                        <option key={data.collegeId} value={data.collegeId}>
+                                            {data.collegeName}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option>No colleges available</option>
+                                )}
+                            </select>
+
+                            {/* Render selected majors */}
+                            <div className="w-full h-fit bg-secondary p-5 rounded-[10px] border mt-2 flex flex-wrap gap-2">
+                                {staffInfor.major.length > 0 ? (
+                                    staffInfor.major.map((data, index) => (
+                                        <button
+                                            type="button"
+                                            key={index}
+                                            className="btn text-accent h-fit w-fit bg-primary rounded-full"
+                                            onClick={() => handleRemoveMajor(data)} // Remove major on click
+                                        >
+                                            {collageName.find(college => college.collegeId === data)?.collegeName || data}
+                                        </button>
+                                    ))
+                                ) : (
+                                    <p className="text-primary">សូមជ្រើសរើសជំនាញ</p>
+                                )}
+                            </div>
+
                         </div>
                         <div className="space-y-2 mt-2">
                             <p>វេនធ្នើការ*</p>
@@ -426,7 +503,7 @@ function TableStaff() {
                                         <input
                                             type="radio"
                                             id={shift}
-                                            required 
+                                            required
                                             name="shiftWork" // Ensure all radios share the same name to be mutually exclusive
                                             className="radio border-[#32E2FF] radio-info radio-sm"
                                             onChange={(e) => setStaffInfor({ ...staffInfor, shiftWork: e.target.value })} // Set the shiftWork directly
@@ -441,7 +518,7 @@ function TableStaff() {
                     </div>
 
                     <button
-                    type="submit"
+                        type="submit"
                         className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] hover:from-[#00D9FF] hover:to-[#a5cef3] transition-all ease-in-out duration-300"
                     >
                         {clickEvenModal === "កែទិន្ន័យ" ? <EditIcon /> : <Save />}
