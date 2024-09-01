@@ -78,7 +78,18 @@ const useCRUDStaff = () => {
         setSuccess(false);
 
         try {
-            await axios.put(`/staff/${staffID}`, updatedData); // Send PUT request to API
+            await axios.put(`/staff/${staffID}`,
+                {
+                    staffName: updatedData.staffName,
+                    gender: updatedData.gender,
+                    position: updatedData.position,
+                    degreeLevel: updatedData.degreeLevel,
+                    majorId: updatedData.major,
+                    year: updatedData.studyYear,
+                    shiftWork: updatedData.shiftWork,
+                    isActive: updatedData.isActive
+                }
+            ); // Send PUT request to API
             setSuccess(true); // Set success to true on successful update
             await getAllStaff(); // Fetch the updated staff list after update
         } catch (err) {

@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BtnGredient from '../../../layout/Component/BtnGredient'
 import { UserPlus } from 'lucide-react'
-import { UserRoundPlus, X, Save, Trash2, SquarePen, EditIcon } from 'lucide-react';
+import { UserRoundPlus, X, Save, Trash2, SquarePen, EditIcon, ArrowDownToLine } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
 import useCRUDStaff from '../Hook/useCRUDStaff'
 import useMajor from '../../../Hook/useMajor'
 import useDegreeLevel from '../../../Hook/useDegreeLevel';
 import toast, { Toaster } from 'react-hot-toast';
-
+import * as XLSX from 'xlsx';
 function TableStaff() {
     // Function to handle the "Select All" checkbox End
     const [searchStaff, setSearchStaff] = useState("")
@@ -22,12 +22,12 @@ function TableStaff() {
         position: "",
         degreeLevel: "",
         major: [],
-        studyYear: "",
+        studyYear: 0,
         shiftWork: "",
         isActive: true
     })
 
-    const { staffList, saveStaff, getAllStaff, deleteStaff } = useCRUDStaff()
+    const { staffList, saveStaff, getAllStaff, deleteStaff,updateStaff } = useCRUDStaff()
     const [filteredStaff, setFilteredStaff] = useState([]);
     // const { majorData, loading, error } = useCollage();
     const { majorData } = useMajor()
@@ -44,8 +44,6 @@ function TableStaff() {
             setmajorSelect(filteredmajorSelect);
         }
     }, [staffList, majorData, staffInfor.major]);
-    
-
 
     const handleGetmajorSelect = (event) => {
         const value = event.target.value;
@@ -106,6 +104,19 @@ function TableStaff() {
         console.log(selectedstaffIds)
     }
 
+    const handleExportToExcel = (data) => {
+        // Convert JSON data to worksheet
+        const ws = XLSX.utils.json_to_sheet(data);
+
+        // Create a new workbook and append the worksheet
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        // Write the workbook to a binary string and create a download link
+        XLSX.writeFile(wb, 'data.xlsx');
+    };
+
+
     const handelDelteStaff = async () => {
         try {
             // Create an array of promises for deletion
@@ -128,16 +139,16 @@ function TableStaff() {
         } catch (error) {
             toast.error("បរាជ័យក្នុងការលុប");
         }
+        setSelectedstaffIds([])
     };
-
-
 
     //Handle Edit Modal
     const handleEditModalOpen = (updatestaffId) => {
         // Find the staff data by staffId
         const staffToUpdate = filteredStaff.find(staff => staff.staffId === updatestaffId);
+
         if (staffToUpdate) {
-            // Update the state with the selected staff data
+
             setStaffInfor({
                 staffId: staffToUpdate.staffId,
                 staffName: staffToUpdate.staffName,
@@ -145,14 +156,16 @@ function TableStaff() {
                 position: staffToUpdate.position,
                 degreeLevel: staffToUpdate.degreeLevel,
                 major: staffToUpdate.majorId,
-                studyYear: staffToUpdate.studyYear,
+                studyYear: staffToUpdate.studyYear, // Ensure this is correct
                 shiftWork: staffToUpdate.shiftWork,
             });
+
+        } else {
+            console.error("Staff not found for id:", updatestaffId);
         }
 
         setIsModalVisible(true); // Open the modal
         setClickEvenShowModal("កែទិន្ន័យ"); // Set the modal title or purpose
-        console.log(updatestaffId); // Log the ID (for debugging purposes)
     }
 
     //Get Data Add Form--------------------
@@ -171,27 +184,33 @@ function TableStaff() {
 
         // Check if the form is valid
         if (form.checkValidity()) {
-            try {
-                const saveStaffData = await saveStaff(staffInfor); // Pass staffInfor here
-                // Refetch the staff list after successful submission
-                await getAllStaff();
-                // Optionally clear the form or reset staffInfor
-                setStaffInfor({
-                    staffName: '',
-                    gender: '',
-                    position: '',
-                    degreeLevel: '',
-                    major: '',
-                    studyYear: '',
-                    shiftWork: '',
-                    isActive: false,
-                });
-                setIsModalVisible(false)
-                toast.success("បុគ្គលិកបានបញ្ចូលជោគជ័យ")
-            } catch (error) {
-                console.error('Error saving staff data:', error);
-                toast.error("ការបញ្ចូលបរាជ័យ។សូមព្យាយាមម្តងទៀត...") // Handle the error properly
+            if (clickEvenModal === "កែទិន្ន័យ") {
+                console.log(staffInfor.staffId)
+                
+            } else {
+                try {
+                    const saveStaffData = await saveStaff(staffInfor); // Pass staffInfor here
+                    // Refetch the staff list after successful submission
+                    await getAllStaff();
+                    // Optionally clear the form or reset staffInfor
+                    setStaffInfor({
+                        staffName: '',
+                        gender: '',
+                        position: '',
+                        degreeLevel: '',
+                        major: '',
+                        studyYear: '',
+                        shiftWork: '',
+                        isActive: false,
+                    });
+                    setIsModalVisible(false)
+                    toast.success("បុគ្គលិកបានបញ្ចូលជោគជ័យ")
+                } catch (error) {
+                    console.error('Error saving staff data:', error);
+                    toast.error("ការបញ្ចូលបរាជ័យ។សូមព្យាយាមម្តងទៀត...") // Handle the error properly
+                }
             }
+
         } else {
             // Display custom error messages if needed
             alert('Please fill out the form correctly.');
@@ -204,7 +223,7 @@ function TableStaff() {
     const handleSelectAll = (e) => {
         if (e.target.checked) {
             // If checked, select all staff IDs
-            const allstaffIds = staffInfor.map(data => data.staffId);
+            const allstaffIds = filteredStaff.map(data => data.staffId);
             setSelectedstaffIds(allstaffIds);
         } else {
             // If unchecked, clear the selection
@@ -243,6 +262,9 @@ function TableStaff() {
                 <div className="header flex  justify-between">
                     <p>នាមសមាសភាពមន្ត្រីកំពុងបម្រើការងារនៅក្នុងបណ្ណាល័យ </p>
                     <div className="button-container flex flex-col md:flex-row gap-2">
+                        <button className='btn btn-primary' onClick={() => handleExportToExcel(staffList)}>
+                            <ArrowDownToLine />
+                        </button>
                         <BtnGredient onClick={() => handleOpenModal("បញ្ចូលបុគ្គលិកថ្មី")}>
                             <UserPlus />
                             <p className='hidden md:block'>បញ្ចូលបុគ្គលិក</p>
@@ -280,7 +302,7 @@ function TableStaff() {
                                                 id='checkkAll'
                                                 type="checkbox"
                                                 className="checkbox checkbox-accent"
-                                                checked={selectedstaffIds.length === staffInfor.length}
+                                                checked={selectedstaffIds.length === filteredStaff.length}
                                                 onChange={handleSelectAll}
                                             />
                                         </label>
@@ -294,6 +316,7 @@ function TableStaff() {
                                 <th>ជំនាញ</th>
                                 <th>ឆ្នាំទី</th>
                                 <th>វេនធ្នើការ</th>
+                                <th>ស្ថានភាព</th>
                                 <th>កែប្រ-លុប</th>
                             </tr>
                         </thead>
@@ -329,6 +352,7 @@ function TableStaff() {
                                     </td>
                                     <td>{data.year === null ? "មិនមាន" : data.year}</td>
                                     <td>{data.shiftWork}</td>
+                                    <td>{data.isActive ? "កំពុងបំរើការ" : "ឈប់"}</td>
                                     <td className='space-x-2 grid  place-items-center grid-cols-2 lg:block'>
                                         {selectedstaffIds.length > 1 ? "" : (
                                             <button className='text-blue-500 active:scale-110' onClick={() => handleEditModalOpen(data.staffId)}>
@@ -433,15 +457,16 @@ function TableStaff() {
                                     id="studyYear"
                                     className="select select-bordered bg-secondary w-full"
                                     onChange={handleInputChange}
-                                    defaultValue={staffInfor.studyYear}
+                                    value={staffInfor.studyYear}  // Ensure this is correctly set
                                 >
                                     <option value="" disabled>ជ្រើសរើសឆ្នាំសិក្សា</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
+                                    <option value={1}>1</option>
+                                    <option value={2}>2</option>
+                                    <option value={3}>3</option>
+                                    <option value={4}>4</option>
                                     <option value="">រំលង</option>
                                 </select>
+
                             </div>
                         </div>
 
