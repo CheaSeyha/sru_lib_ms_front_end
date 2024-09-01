@@ -3,33 +3,10 @@ import BtnGredient from '../../../layout/Component/BtnGredient'
 import { UserPlus } from 'lucide-react'
 import { UserRoundPlus, X, Save, Trash2, SquarePen, EditIcon } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
-import useCollage from '../../../Hook/useCollege';
 import useCRUDStaff from '../Hook/useCRUDStaff'
-
-//Staff Data
-const StaffData = [
-    {
-        staffId: 300134,
-        staffName: "សាស្ត្រាចារ្យជំនួយ ប៉ែន ឌីណា",
-        gender: "ប្រុស",
-        position: "មន្ត្រីទទួលបន្ទុក",
-        degreeLevel: "បរិញ្ញាប័ត្រជាន់ខ្ពស់",
-        major: ["វិទ្យាសាស្ត្រនយោបាយ", "វិទ្យាសាស្ត្រអប់រំ"],
-        studyYear: "",
-        shiftWork: "ពេញម៉ោង",
-    },
-    {
-        staffId: 300001,
-        staffName: "ណន ស្រីស្រស់",
-        gender: "ស្រី",
-        position: "ហាត់ការ",
-        degreeLevel: "បរិញ្ញាបត្រ",
-        major: ["អក្សរសាស្ត្រអង់គ្លេស"],
-        studyYear: "៣",
-        shiftWork: "ព្រឹក-យប់",
-    }
-]
-
+import useMajor from '../../../Hook/useMajor'
+import useDegreeLevel from '../../../Hook/useDegreeLevel';
+import toast, { Toaster } from 'react-hot-toast';
 
 function TableStaff() {
     // Function to handle the "Select All" checkbox End
@@ -47,29 +24,30 @@ function TableStaff() {
         major: [],
         studyYear: "",
         shiftWork: "",
+        isActive: true
     })
 
-
-    const { staffList } = useCRUDStaff()
+    const { staffList, saveStaff, getAllStaff, deleteStaff } = useCRUDStaff()
     const [filteredStaff, setFilteredStaff] = useState([]);
-
-
-    const { collageName, loading, error } = useCollage();
-    const [college, setCollege] = useState([]);
-
-    // Update college state whenever collageName changes
+    // const { majorData, loading, error } = useCollage();
+    const { majorData } = useMajor()
+    const [majorSelect, setmajorSelect] = useState([]);
+    const { degreeLevel } = useDegreeLevel()
+    // Update majorSelect state whenever majorData changes
     useEffect(() => {
-        setFilteredStaff(staffList)
-        if (collageName.length > 0) {
-            // Filter out colleges that are in staffInfor.major
-            const filteredCollege = collageName.filter(
-                (data) => !staffInfor.major.includes(data.collegeId)
+        setFilteredStaff(staffList); // Update filteredStaff whenever staffList changes
+        if (majorData.length > 0) {
+            // Filter out majorSelects that are in staffInfor.major
+            const filteredmajorSelect = majorData.filter(
+                (data) => !staffInfor.major.includes(data.majorId)
             );
-            setCollege(filteredCollege);
+            setmajorSelect(filteredmajorSelect);
         }
-    }, [collageName, staffInfor.major]);
+    }, [staffList, majorData, staffInfor.major]);
+    
 
-    const handleGetCollege = (event) => {
+
+    const handleGetmajorSelect = (event) => {
         const value = event.target.value;
 
         setStaffInfor((prevStaffInfor) => {
@@ -92,17 +70,6 @@ function TableStaff() {
             major: prevStaffInfor.major.filter((major) => major !== majorToRemove),
         }));
     };
-
-
-
-
-
-
-
-
-
-
-
 
     // Toggle modal visibility Add And Delete
     const handleOpenModal = (clickEven) => {
@@ -136,7 +103,34 @@ function TableStaff() {
             // Add the new staffId to the existing array of selectedstaffIds
             setSelectedstaffIds(prevSelectedstaffIds => [...prevSelectedstaffIds, staffId]);
         }
+        console.log(selectedstaffIds)
     }
+
+    const handelDelteStaff = async () => {
+        try {
+            // Create an array of promises for deletion
+            const deletePromises = selectedstaffIds.map((data) => deleteStaff(data));
+
+            // Wait for all delete operations to complete
+            await Promise.all(deletePromises);
+
+            // Refetch and immediately use the updated list
+            const updatedStaffList = await getAllStaff();
+
+            // Log the updated staff list
+            console.log('After deletion and fetching new staff list:', updatedStaffList);
+
+            // Close the delete modal
+            setEditDeletModalVisble(false);
+
+            // Show success message
+            toast.success("ទិន្ន័យបុគ្គលិកបានលុបជោគជ័យ");
+        } catch (error) {
+            toast.error("បរាជ័យក្នុងការលុប");
+        }
+    };
+
+
 
     //Handle Edit Modal
     const handleEditModalOpen = (updatestaffId) => {
@@ -170,20 +164,39 @@ function TableStaff() {
         }));
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault(); // Prevent the default form submission
 
         const form = e.target;
 
         // Check if the form is valid
         if (form.checkValidity()) {
-            // Proceed with form submission or any action
-            console.log(staffInfor)
+            try {
+                const saveStaffData = await saveStaff(staffInfor); // Pass staffInfor here
+                // Refetch the staff list after successful submission
+                await getAllStaff();
+                // Optionally clear the form or reset staffInfor
+                setStaffInfor({
+                    staffName: '',
+                    gender: '',
+                    position: '',
+                    degreeLevel: '',
+                    major: '',
+                    studyYear: '',
+                    shiftWork: '',
+                    isActive: false,
+                });
+                setIsModalVisible(false)
+                toast.success("បុគ្គលិកបានបញ្ចូលជោគជ័យ")
+            } catch (error) {
+                console.error('Error saving staff data:', error);
+                toast.error("ការបញ្ចូលបរាជ័យ។សូមព្យាយាមម្តងទៀត...") // Handle the error properly
+            }
         } else {
             // Display custom error messages if needed
             alert('Please fill out the form correctly.');
         }
-    }
+    };
 
     //Get Data Add Form--------------------
 
@@ -191,7 +204,7 @@ function TableStaff() {
     const handleSelectAll = (e) => {
         if (e.target.checked) {
             // If checked, select all staff IDs
-            const allstaffIds = StaffData.map(data => data.staffId);
+            const allstaffIds = staffInfor.map(data => data.staffId);
             setSelectedstaffIds(allstaffIds);
         } else {
             // If unchecked, clear the selection
@@ -215,11 +228,10 @@ function TableStaff() {
         const query = e.target.value.toLowerCase();
         setSearchStaff(query);
 
-        const filteredData = StaffData.filter((staff) =>
+        const filteredData = staffList.filter((staff) =>
             staff.staffName.toLowerCase().includes(query) ||  // Search by name
             staff.staffId.toString().includes(query)          // Search by ID
         );
-
         setFilteredStaff(filteredData);
     };
 
@@ -240,7 +252,7 @@ function TableStaff() {
                                 id='searchStaff'
                                 type="text"
                                 className="w-full"
-                                placeholder="ស្វែងរក"
+                                placeholder="ស្វែងរកឈ្មោះ,ID"
                                 onChange={handleSearchStaff}
                             />
                             <svg
@@ -268,7 +280,7 @@ function TableStaff() {
                                                 id='checkkAll'
                                                 type="checkbox"
                                                 className="checkbox checkbox-accent"
-                                                checked={selectedstaffIds.length === StaffData.length}
+                                                checked={selectedstaffIds.length === staffInfor.length}
                                                 onChange={handleSelectAll}
                                             />
                                         </label>
@@ -305,17 +317,17 @@ function TableStaff() {
                                     <td>{data.staffName}</td>
                                     <td>{data.gender}</td>
                                     <td>{data.position}</td>
-                                    <td>{data.degreeLevel === "" ? "មិនមាន" : data.degreeLevel}</td>
+                                    <td >{data.degreeLevel === "" ? "មិនមាន" : data.degreeLevel}</td>
                                     <td>
                                         {data.majorId.length === 0 ? (
                                             "មិនមាន"
                                         ) : (
                                             data.majorId.map((item, index) => (
-                                                <div key={index}>{(index+1)+"."+item}</div>
+                                                <div key={index}>{(index + 1) + "." + item}</div>
                                             ))
                                         )}
                                     </td>
-                                    <td>{data.year === "" ? "មិនមាន" : data.studyYear}</td>
+                                    <td>{data.year === null ? "មិនមាន" : data.year}</td>
                                     <td>{data.shiftWork}</td>
                                     <td className='space-x-2 grid  place-items-center grid-cols-2 lg:block'>
                                         {selectedstaffIds.length > 1 ? "" : (
@@ -335,7 +347,7 @@ function TableStaff() {
                         </tbody>
                     </table>
                 </div>
-
+                <Toaster position='bottom-center' />
             </div>
 
             {/* Add Edit Modal  */}
@@ -407,15 +419,12 @@ function TableStaff() {
                                     id="degreeLevel"
                                     className="select select-bordered bg-secondary w-full"
                                     onChange={handleInputChange}
-                                    defaultValue={staffInfor.degreeLevel}
+                                    defaultValue={staffInfor.degreeLevel || ""}
                                 >
                                     <option value="" disabled>ជ្រើសរើសកម្រិតសិក្សា</option>
-                                    <option value="បណ្ឌិត">បណ្ឌិត</option>
-                                    <option value="អនុបណ្ឌិត">អនុបណ្ឌិត</option>
-                                    <option value="បរិញ្ញាប័ត្រជាន់ខ្ពស់">បរិញ្ញាប័ត្រជាន់ខ្ពស់</option>
-                                    <option value="បរិញ្ញាប័ត្រ">បរិញ្ញាប័ត្រ</option>
-                                    <option value="បរិញ្ញាប័ត្ររង">បរិញ្ញាប័ត្ររង</option>
-                                    <option value="">រំលង</option>
+                                    {degreeLevel.map((data, index) => (
+                                        <option key={data.degreeLevelId} value={data.degreeLevelId}>{data.degreeLevel}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="space-y-2 mt-2 w-full">
@@ -427,10 +436,10 @@ function TableStaff() {
                                     defaultValue={staffInfor.studyYear}
                                 >
                                     <option value="" disabled>ជ្រើសរើសឆ្នាំសិក្សា</option>
-                                    <option value="១">១</option>
-                                    <option value="២">២</option>
-                                    <option value="៣">៣</option>
-                                    <option value="៤">៤</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
                                     <option value="">រំលង</option>
                                 </select>
                             </div>
@@ -442,18 +451,14 @@ function TableStaff() {
                             <select
                                 id="major"
                                 className="select select-bordered bg-secondary w-full"
-                                onChange={handleGetCollege} // Add selected major
+                                onChange={handleGetmajorSelect} // Add selected major
                             >
                                 <option>ជ្រើសរើសជំនាញ</option>
-                                {college.length > 0 ? (
-                                    college.map((data) => (
-                                        <option key={data.collegeId} value={data.collegeId}>
-                                            {data.collegeName}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option>No colleges available</option>
-                                )}
+                                {majorSelect.map((data) => (
+                                    <option key={data.majorId} value={data.majorId}>
+                                        {data.majorName}
+                                    </option>
+                                ))}
                             </select>
 
                             {/* Render selected majors */}
@@ -466,7 +471,7 @@ function TableStaff() {
                                             className="btn text-accent h-fit w-fit bg-primary rounded-full"
                                             onClick={() => handleRemoveMajor(data)} // Remove major on click
                                         >
-                                            {collageName.find(college => college.collegeId === data)?.collegeName || data}
+                                            {majorData.find(majorSelect => majorSelect.majorId === data)?.majorName || data}
                                         </button>
                                     ))
                                 ) : (
@@ -493,6 +498,30 @@ function TableStaff() {
                                         <label htmlFor={shift} className="label-text text-[#32E2FF]">{shift}</label>
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                        <div className="space-y-2 mt-2">
+                            <p>ស្ថានភាព</p>
+                            <div className="container-check-shiftTime flex gap-2">
+                                {['កំពុងបម្រើការ', 'ឈប់'].map((label) => {
+                                    const isActive = label === 'កំពុងបម្រើការ'; // True for 'កំពុងបម្រើការ', false for 'ឈប់'
+                                    return (
+                                        <div key={label} className="check-purpose flex items-center space-x-2">
+                                            <input
+                                                type="radio"
+                                                id={label}
+                                                required
+                                                name="isActive" // Ensure all radios share the same name to be mutually exclusive
+                                                className="radio border-[#32E2FF] radio-info radio-sm"
+                                                onChange={() => setStaffInfor({ ...staffInfor, isActive })} // Set the isActive directly as a boolean
+                                                value={label} // The value is the label but stored as boolean in isActive
+                                                checked={staffInfor.isActive === isActive} // Check if the current isActive matches the boolean
+                                            />
+                                            <label htmlFor={label} className="label-text text-[#32E2FF]">{label}</label>
+                                        </div>
+                                    );
+                                })}
+
                             </div>
                         </div>
                     </div>
@@ -526,10 +555,9 @@ function TableStaff() {
                     <br></br>
                     <p className='text-red-600'>{selectedstaffIds.join(' - ')}</p>
                 </div>
-
-
                 <div className="contianer-btn">
                     <button
+                        onClick={() => handelDelteStaff()}
                         className="btn w-full font-noto rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#d45757] to-[#E7FBFF] hover:from-[#5e2626] hover:to-[#ffffff] transition-all ease-in-out duration-300"
                     >
                         <Trash2 />
