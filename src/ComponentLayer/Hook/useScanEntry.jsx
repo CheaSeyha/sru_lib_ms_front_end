@@ -20,7 +20,7 @@ function useScanEntry() {
     });
     const [timeoutId, setTimeoutId] = useState(null);
 
-    // Fetch recent entry ch
+    // Fetch recent entry data
     const fetchRecentEntryData = async () => {
         try {
             const response = await axios.get("/entry");
@@ -35,12 +35,17 @@ function useScanEntry() {
     const handleCheckScanEntryExit = async () => {
         if (scanResultID !== 0) {
             try {
-                const result = await axios.get(`entry/check?studentId=${scanResultID}`);
+                // Checking the student's entry/exit status
+                const result = await axios.get(`entry/check`, {
+                    params: { entryId: scanResultID }
+                });
+
                 if (result.data === "exited" || result.data === "new attend!") {
-                    const studentResult = await axios.get(`/student/${scanResultID}`);
-                    if (studentResult.data === "") {
-                        toast.error("Can't not find a student data")
-                        handleClearFormData()
+                    const studentResult = await axios.get(`student/${scanResultID}`);
+
+                    if (!studentResult.data) {
+                        toast.error("Can't find student data");
+                        handleClearFormData();
                     } else {
                         setStopScan(true);
                         setStuEntryInfor(studentResult.data);
@@ -49,7 +54,9 @@ function useScanEntry() {
                     }
                 } else {
                     await toast.promise(
-                        axios.put(`entry?studentId=${scanResultID}`),
+                        axios.put(`entry`, null, {
+                            params: { entryId: scanResultID }
+                        }),
                         {
                             loading: 'Updating...',
                             success: `Student ID ${scanResultID} Exited`,
@@ -62,6 +69,7 @@ function useScanEntry() {
                     startTimeout();
                 }
             } catch (error) {
+                console.error("Error checking scan result:", error);
                 toast.error("Error checking scan result.");
             }
         }
@@ -69,9 +77,9 @@ function useScanEntry() {
 
     // Start timeout to restart scan
     const startTimeout = () => {
-        clearTimeout(timeoutId); // Clear previous timeout if any
+        clearTimeout(timeoutId);
         const id = setTimeout(() => {
-            setScanResultID(0); // Reset scan result ID after timeout
+            setScanResultID(0);
             setStopScan(false);
             setCheckPurpose("");
             setStuEntryInfor({
@@ -79,14 +87,14 @@ function useScanEntry() {
                 degreeLevel: "", majorName: "", generation: ""
             });
             setDisCheckPur(true);
-            toast.error("Scan reset due to inactivity."); // Notify user of reset
-        }, 60000); // 1 minute timeout
-        setTimeoutId(id); // Save timeout ID to state
+            toast.error("Scan reset due to inactivity.");
+        }, 60000);
+        setTimeoutId(id);
     };
 
     // Clear form data
     const handleClearFormData = () => {
-        clearTimeout(timeoutId); // Clear timeout when clearing form data
+        clearTimeout(timeoutId);
         setScanResultID(0);
         setStopScan(false);
         setCheckPurpose("");
@@ -99,25 +107,25 @@ function useScanEntry() {
 
     // Save entry
     const handleSaveEntry = () => {
-        clearTimeout(timeoutId); // Clear timeout when saving entry
+        clearTimeout(timeoutId);
         if (scanResultID === 0) {
-            toast.error("Please scan your card before entry...")
-        }
-        else if (checkPurpose === "") {
+            toast.error("Please scan your card before entry...");
+        } else if (checkPurpose === "") {
             toast.error("Please select an entry purpose.");
         } else {
             axios.post('/entry', null, {
                 params: {
-                    studentId: Number(scanResultID),
+                    entryId: Number(scanResultID),
                     purpose: checkPurpose
                 }
             })
-                .then(result => {
+                .then(() => {
                     toast.success(`Student ID ${scanResultID} Entry successfully.`);
                     handleClearFormData();
                     fetchRecentEntryData(); // Fetch latest data after save
                 })
                 .catch(error => {
+                    console.error("Error saving entry:", error);
                     toast.error("Error saving entry.");
                 });
         }

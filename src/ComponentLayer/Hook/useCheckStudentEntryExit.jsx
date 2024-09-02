@@ -1,11 +1,11 @@
 import axios from '../../api/axios';
 
-function useScanEntry(checkPurpose) {
+function useScanEntry() {
 
-    const handleSearchStudent = async (studentID) => {//This function will return student data if found 
+    const handleSearchStudent = async (studentID) => {
         try {
             const searchResult = await axios.get(`/student/${studentID}`);
-            if (!searchResult.data) { // Check for empty or null data
+            if (!searchResult.data) {
                 return { status: "not found", data: null };
             } else {
                 return { status: "success", data: searchResult.data };
@@ -14,19 +14,24 @@ function useScanEntry(checkPurpose) {
             console.error("Error occurred while searching student:", error);
             return { status: "error", message: "Error occurred while searching student." };
         }
-    }
+    };
 
-    const handleCheckScanEntryExit = async (studentID) => {//This func will update exiting time and of student if student already entry 
-        if (!studentID) {
-            return { status: "error", message: "Invalid student ID." };
+    const handleCheckScanEntryExit = async (entryId) => {
+        if (!entryId) {
+            return { status: "error", message: "Invalid entry ID." };
         }
-        
+
         try {
-            const result = await axios.get(`entry/check?studentId=${studentID}`);
+            const result = await axios.get(`entry/check`, {
+                params: { entryId }
+            });
+
             if (result.data === "exited" || result.data === "new attend!") {
                 return { status: "entry", message: "Student entry." };
             } else {
-                await axios.put(`entry?studentId=${studentID}`);
+                await axios.put(`entry`, null, {
+                    params: { entryId }
+                });
                 return { status: "exit", message: "Student exit." };
             }
         } catch (error) {
@@ -35,11 +40,11 @@ function useScanEntry(checkPurpose) {
         }
     };
 
-    const handleSaveEntry = async (studentID, checkPurpose) => {//This Func will add student by id to entry 
+    const handleSaveEntry = async (studentID, checkPurpose) => {
         try {
             const saveEntry = await axios.post('/entry', null, {
                 params: {
-                    studentId: Number(studentID),
+                    entryId: Number(studentID),
                     purpose: checkPurpose
                 }
             });

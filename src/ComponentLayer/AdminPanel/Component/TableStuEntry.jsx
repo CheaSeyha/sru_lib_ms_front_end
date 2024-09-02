@@ -4,13 +4,13 @@ import BtnGredient from './BtnGredient';
 import Modal from '../../../layout/Component/Modal';
 import axios from '../../../api/axios';
 import useScanEntry from '../../Hook/useScanEntry';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { Search, ShieldAlert, ShieldCheck } from 'lucide-react';
 import useCheckStudentEntryExit from '../../Hook/useCheckStudentEntryExit'
 
 
 
-export default function TableStuEntry({getCardDataApi}) {
+export default function TableStuEntry({ getCardDataApi }) {
     // State variables
     const [stuEntryInfor, setstuEntryInfor] = useState({
         studentName: '',
@@ -124,8 +124,6 @@ export default function TableStuEntry({getCardDataApi}) {
         clearAllCheckboxes()
     };
 
-
-
     const handleCheckPurpose = (event) => {
         const { id, checked } = event.target;
         const value = id.replace('_', ' ');
@@ -156,7 +154,7 @@ export default function TableStuEntry({getCardDataApi}) {
 
     let currentIntervalId = null;
     let currentTimeoutId = null;
-    
+
     function showMessageErrorSuccess(studentID, message, countdownDuration = 5) {
         // Clear existing countdown if any
         if (currentIntervalId) {
@@ -165,19 +163,19 @@ export default function TableStuEntry({getCardDataApi}) {
         if (currentTimeoutId) {
             clearTimeout(currentTimeoutId);
         }
-    
+
         let remainingTime = countdownDuration;
-    
+
         // Function to update the countdown message
         const updateCountdownMessage = () => {
             setStudentIDErrorMsx(`${message} ${remainingTime}`);
         };
-    
+
         // Initial setup
         setStudentIDErrorColor(false); // Show green on text error
         setStudentID(""); // Clear old student ID after update
         fetchRecentEntryData();
-    
+
         // Start the countdown
         updateCountdownMessage(); // Initial call to set the message
         currentIntervalId = setInterval(() => {
@@ -186,7 +184,7 @@ export default function TableStuEntry({getCardDataApi}) {
                 updateCountdownMessage();
             }
         }, 1000);
-    
+
         // Set Student ID error to false after countdown duration
         currentTimeoutId = setTimeout(() => {
             clearInterval(currentIntervalId); // Stop the interval
@@ -206,11 +204,13 @@ export default function TableStuEntry({getCardDataApi}) {
                 { condition: guestName.trim() === '', action: () => setGuestNameError(true), reset: () => setGuestNameError(false) },
                 { condition: gender.trim() === '', action: () => setGenderError(true), reset: () => setGenderError(false) },
                 { condition: position.trim() === '', action: () => setPositionError(true), reset: () => setPositionError(false) },
-                { condition: checkPurpose === '', action: () => {
-                    setFormErrorMessage("Please Check Purpose Before Entry");
-                }, reset: () => setFormErrorMessage("") }
+                {
+                    condition: checkPurpose === '', action: () => {
+                        setFormErrorMessage("Please Check Purpose Before Entry");
+                    }, reset: () => setFormErrorMessage("")
+                }
             ];
-            
+
             let hasError = false;
             checks.forEach(check => {
                 if (check.condition) {
@@ -220,26 +220,27 @@ export default function TableStuEntry({getCardDataApi}) {
                     check.reset();
                 }
             });
-            
+
             if (!hasError) {
                 setGuestNameError(false);
                 setGenderError(false);
                 setPositionError(false);
                 setFormErrorMessage("");
             }
-            
         } else {
-            const saveEntry = await handleSaveEntry(studentID, checkPurpose)
-
-            if (saveEntry.status === 'error') {
-                console.log(saveEntry.message)
+            if (checkPurpose === '') {
+                toast.error("Please Check Entry Purpose")
             } else {
-                
-                showMessageErrorSuccess(studentID, `Student ID ${studentID} Entry Success.`, 5);
-                console.log("Work")
-                fetchRecentEntryData()//get new table data
-                getCardDataApi()//updatre number card student entry today in dasbaord
+                const saveEntry = await handleSaveEntry(studentID, checkPurpose)
+                if (saveEntry.status === 'error') {
+                    toast.error(saveEntry.message)
+                } else {
+                    fetchRecentEntryData()//get new table data
+                    clearForm()
+                    toast.success(saveEntry.message)
+                }
             }
+
         }
 
     };
@@ -248,7 +249,6 @@ export default function TableStuEntry({getCardDataApi}) {
         if (studentID !== "") {
             const searchStu = await handleSearchStudent(studentID); // search student
             if (searchStu.status === "not found") { // If student not found
-                
                 setStudentIDErrorMsx(`Student ID ${studentID} Not Found, Try Different ID...`);
                 setStudentIDErrorColor(true)
                 setStudentID("");
@@ -317,6 +317,9 @@ export default function TableStuEntry({getCardDataApi}) {
                         </tbody>
                     </table>
                 </div>
+                <Toaster
+                    position="bottom-center"
+                />
             </div>
 
             <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
