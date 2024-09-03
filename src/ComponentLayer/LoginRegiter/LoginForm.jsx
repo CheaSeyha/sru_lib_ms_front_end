@@ -3,6 +3,7 @@ import BGImag from '../../assets/image/sru_lib_Vector1.jpg';
 import SRUlogo from '../../assets/logo/sru_logo.png';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast, { Toaster } from 'react-hot-toast';
 
 function LoginForm({ handleLogin }) {
     const [loginEmail, setLoginEmail] = useState('');
@@ -21,12 +22,13 @@ function LoginForm({ handleLogin }) {
 
     const handleLoginSubmit = (e) => {
         e.preventDefault();
-        console.log("Login CHeck")
+
         if (loginEmail === "admin@gmail.com" && loginPassword === "123") {
             handleLogin(); // Call handleLogin if credentials are correct
+            
         } else {
             // Optionally, handle invalid credentials here
-            console.log("Invalid credentials");
+            toast.error("User Not Found")
         }
     };
 
@@ -37,16 +39,13 @@ function LoginForm({ handleLogin }) {
     };
 
     return (
-        <div className='grid place-items-center h-screen sm:h-screen relative'
+        <div className='grid place-items-center h-screen w-full relative'
             style={{
                 backgroundImage: `linear-gradient(to bottom, #00B2FFbb ,#FFFFFF), url(${BGImag})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                objectFit: 'cover'
             }}>
-            <div className="container-circle absolute w-[112px] h-[112px]">
-                <div className="circle w-36 h-36 bg-[#1e61f1] rounded-full absolute left-[120%] md:left-[180%] bottom-[50%]"></div>
-                <div className="circle w-28 h-28 bg-[#1e61f1] rounded-full absolute right-[130%] md:right-[200%]"></div>
-            </div>
             <AnimatePresence>
                 <motion.div
                     className="fixed inset-0 flex items-center justify-center z-50"
@@ -229,6 +228,9 @@ function LoginForm({ handleLogin }) {
                     </motion.div>
                 </motion.div>
             </AnimatePresence>
+            <Toaster
+                position='bottom-center'
+            />
         </div>
     );
 }

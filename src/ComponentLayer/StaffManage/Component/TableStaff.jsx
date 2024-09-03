@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BtnGredient from '../../../layout/Component/BtnGredient'
 import { UserPlus } from 'lucide-react'
-import { UserRoundPlus, X, Save, Trash2, SquarePen, EditIcon, ArrowDownToLine } from 'lucide-react';
+import { UserRoundPlus, X, Save, UserCheck, UserX, Trash2, SquarePen, EditIcon, ArrowDownToLine } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal'
 import useCRUDStaff from '../Hook/useCRUDStaff'
 import useMajor from '../../../Hook/useMajor'
 import useDegreeLevel from '../../../Hook/useDegreeLevel';
 import toast, { Toaster } from 'react-hot-toast';
 import * as XLSX from 'xlsx';
+import axios from '../../../api/axios';
 function TableStaff() {
     // Function to handle the "Select All" checkbox End
+    const [showInactive, setShowInactive] = useState(false);
     const [searchStaff, setSearchStaff] = useState("")
     const [clickEvenModal, setClickEvenShowModal] = useState("")
     const [isModalVisible, setIsModalVisible] = useState(false)//Modal For Add Staff
@@ -27,7 +29,21 @@ function TableStaff() {
         isActive: true
     })
 
-    const { staffList, saveStaff, getAllStaff, deleteStaff,updateStaff } = useCRUDStaff()
+    const clearStaffInfor = () => {
+        setStaffInfor({
+            staffId: 0,
+            staffName: "",
+            gender: "",
+            position: "",
+            degreeLevel: "",
+            major: [],
+            studyYear: 0,
+            shiftWork: "",
+            isActive: true
+        });
+    };
+
+    const { staffList, saveStaff, getAllStaff, deleteStaff, updateStaff } = useCRUDStaff()
     const [filteredStaff, setFilteredStaff] = useState([]);
     // const { majorData, loading, error } = useCollage();
     const { majorData } = useMajor()
@@ -105,15 +121,42 @@ function TableStaff() {
     }
 
     const handleExportToExcel = (data) => {
-        // Convert JSON data to worksheet
-        const ws = XLSX.utils.json_to_sheet(data);
+
+        // Define the headers
+        const headers = [
+            'អត្តលេខ', // staffId
+            'នាម គោត្តនាម', // staffName
+            'ភេទ', // gender
+            'តួនាទី', // position
+            'កម្រិតសិក្សា', // degreeLevel
+            'ជំនាញ', // majorId
+            'ឆ្នាំទី', // year
+            'វេនធ្នើការ', // shiftWork
+            'ស្ថានភាព' // isActive
+        ];
+
+        // Map data to match the headers
+        const formattedData = data.map(item => ({
+            'អត្តលេខ': item.staffId,
+            'នាម គោត្តនាម': item.staffName,
+            'ភេទ': item.gender,
+            'តួនាទី': item.position,
+            'កម្រិតសិក្សា': item.degreeLevel,
+            'ជំនាញ': item.majorId.join(', '), // Convert array to string
+            'ឆ្នាំទី': item.year,
+            'វេនធ្នើការ': item.shiftWork,
+            'ស្ថានភាព': item.isActive ? 'កំពុងបម្រើការ' : 'ឈប់' // Format boolean
+        }));
+
+        // Create worksheet from formatted data
+        const ws = XLSX.utils.json_to_sheet(formattedData, { header: headers });
 
         // Create a new workbook and append the worksheet
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.utils.book_append_sheet(wb, ws, 'SRU_STAFF_DATA');
 
         // Write the workbook to a binary string and create a download link
-        XLSX.writeFile(wb, 'data.xlsx');
+        XLSX.writeFile(wb, 'staff_data.xlsx');
     };
 
 
@@ -146,18 +189,22 @@ function TableStaff() {
     const handleEditModalOpen = (updatestaffId) => {
         // Find the staff data by staffId
         const staffToUpdate = filteredStaff.find(staff => staff.staffId === updatestaffId);
+        //Convert Major Name To Major ID
+        const majorName = staffToUpdate.majorId
+        const majorId = majorData.filter(majorData => majorName.includes(majorData.majorName))
+            .map(majorData => majorData.majorId);
 
         if (staffToUpdate) {
-
             setStaffInfor({
                 staffId: staffToUpdate.staffId,
                 staffName: staffToUpdate.staffName,
                 gender: staffToUpdate.gender,
                 position: staffToUpdate.position,
                 degreeLevel: staffToUpdate.degreeLevel,
-                major: staffToUpdate.majorId,
-                studyYear: staffToUpdate.studyYear, // Ensure this is correct
+                major: majorId,
+                studyYear: staffToUpdate.year, // Ensure this is correct
                 shiftWork: staffToUpdate.shiftWork,
+                isActive: staffToUpdate.isActive,
             });
 
         } else {
@@ -185,8 +232,30 @@ function TableStaff() {
         // Check if the form is valid
         if (form.checkValidity()) {
             if (clickEvenModal === "កែទិន្ន័យ") {
-                console.log(staffInfor.staffId)
-                
+                try {
+                    const updateStaff = await axios.put("/staff",
+                        {
+                            "staffId": staffInfor.staffId,
+                            "staffName": staffInfor.staffName,
+                            "gender": staffInfor.gender,
+                            "position": staffInfor.position,
+                            "degreeLevel": staffInfor.degreeLevel,
+                            "majorId": staffInfor.major,
+                            "year": staffInfor.studyYear,
+                            "shiftWork": staffInfor.shiftWork,
+                            "isActive": staffInfor.isActive
+                        }
+                    )
+                    if (updateStaff.data === "Update successful") {
+                        toast.success(`Staff ID ${staffInfor.staffId} Update success`)
+                        handleCloseModal()
+                        getAllStaff()
+                    } else {
+                        toast.error("Fail to update staff try again")
+                    }
+                } catch (error) {
+                    toast.error(error)
+                }
             } else {
                 try {
                     const saveStaffData = await saveStaff(staffInfor); // Pass staffInfor here
@@ -254,21 +323,40 @@ function TableStaff() {
         setFilteredStaff(filteredData);
     };
 
-    //Handle Search Input End
+    // Toggle between showing active and inactive staff
+    const handleShowExStaff = () => {
+        setShowInactive(!showInactive);
+    };
 
+    // Filter staff based on the current state
+    const displayedStaff = showInactive
+        ? filteredStaff.filter(data => !data.isActive) // Show only inactive staff if showInactive is true
+        : filteredStaff.filter(data => data.isActive);
+
+    //Handle Search Input End
+    const getDegreeLevelNameById = (id) => {
+        const degree = degreeLevel.find(d => d.degreeLevelId === id);
+        return degree ? degree.degreeLevel : "មិនមាន"; // Return "មិនមាន" if not found
+    };
     return (
         <>
             <div className='w-full h-full bg-secondary rounded-[20px] p-5 font-noto space-y-5 '>
                 <div className="header flex  justify-between">
                     <p>នាមសមាសភាពមន្ត្រីកំពុងបម្រើការងារនៅក្នុងបណ្ណាល័យ </p>
                     <div className="button-container flex flex-col md:flex-row gap-2">
-                        <button className='btn btn-primary' onClick={() => handleExportToExcel(staffList)}>
-                            <ArrowDownToLine />
-                        </button>
                         <BtnGredient onClick={() => handleOpenModal("បញ្ចូលបុគ្គលិកថ្មី")}>
                             <UserPlus />
                             <p className='hidden md:block'>បញ្ចូលបុគ្គលិក</p>
                         </BtnGredient>
+                        <button className='btn btn-primary' onClick={() => handleExportToExcel(staffList)}>
+                            <ArrowDownToLine />
+                            <p>ទាញយកទិន្ន័យបុគ្គលិក</p>
+                        </button>
+                        <button className='btn btn-primary' onClick={handleShowExStaff}>
+                            {showInactive ? <UserCheck /> : <UserX />}
+                            <p>{showInactive ? "បុគ្គលិកកំពុងបម្រើការ" : "អតិតបុគ្គលិក"}</p>
+                        </button>
+
                         <label className="input input-bordered w-[190px] md:w-full flex items-center gap-2">
                             <input
                                 id='searchStaff'
@@ -321,7 +409,7 @@ function TableStaff() {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredStaff.map((data) => (
+                            {displayedStaff.map((data) => (
                                 <tr key={data.staffId} className='text-[15px] hover:bg-primary cursor-pointer active:bg-primary'>
                                     <td>
                                         <div className="form-control">
@@ -331,7 +419,7 @@ function TableStaff() {
                                                     type="checkbox"
                                                     className="checkbox checkbox-accent"
                                                     checked={selectedstaffIds.includes(data.staffId)}
-                                                    onChange={handleSelectSingle(data.staffId)}
+                                                    onChange={() => handleSelectSingle(data.staffId)}
                                                 />
                                             </label>
                                         </div>
@@ -340,7 +428,7 @@ function TableStaff() {
                                     <td>{data.staffName}</td>
                                     <td>{data.gender}</td>
                                     <td>{data.position}</td>
-                                    <td >{data.degreeLevel === "" ? "មិនមាន" : data.degreeLevel}</td>
+                                    <td>{getDegreeLevelNameById(data.degreeLevel)}</td>
                                     <td>
                                         {data.majorId.length === 0 ? (
                                             "មិនមាន"
@@ -353,7 +441,7 @@ function TableStaff() {
                                     <td>{data.year === null ? "មិនមាន" : data.year}</td>
                                     <td>{data.shiftWork}</td>
                                     <td>{data.isActive ? "កំពុងបំរើការ" : "ឈប់"}</td>
-                                    <td className='space-x-2 grid  place-items-center grid-cols-2 lg:block'>
+                                    <td className='space-x-2 grid place-items-center grid-cols-2 lg:block'>
                                         {selectedstaffIds.length > 1 ? "" : (
                                             <button className='text-blue-500 active:scale-110' onClick={() => handleEditModalOpen(data.staffId)}>
                                                 <SquarePen />
@@ -457,7 +545,7 @@ function TableStaff() {
                                     id="studyYear"
                                     className="select select-bordered bg-secondary w-full"
                                     onChange={handleInputChange}
-                                    value={staffInfor.studyYear}  // Ensure this is correctly set
+                                    defaultValue={staffInfor.studyYear || ""}  // Ensure this is correctly set
                                 >
                                     <option value="" disabled>ជ្រើសរើសឆ្នាំសិក្សា</option>
                                     <option value={1}>1</option>
