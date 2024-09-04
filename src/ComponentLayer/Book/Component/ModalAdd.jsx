@@ -53,14 +53,23 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
       // Convert bookQuan to a number if necessary
       bookQuan: Number(formData.bookQuan),
     },];
-    console.log(submissionData);
     // try {
        axios.post('/book', submissionData, {
         headers: {
           'Content-Type': 'application/json',
         },
       }).then(response => {
-          toast.success('Form submitted successfully!'); 
+          toast.success('បានបញ្ចូលសៀវភៅដោយជោគជ័យ!!!',{style:{fontFamily:' NotoSansKhmer-Regular, sans-serif'}}); 
+          setFormData({
+            bookId: "",
+    bookTitle: "",
+    bookQuan: "",
+    languageId: "",
+    collegeId: "",
+    author: "",
+    publicationYear: "",
+    genre: ""
+          })
           fetchBooks(); // Refresh the list after adding the new book
       })
       .catch(error => {
@@ -86,7 +95,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
         <div className="container w-full h-full space-y-5">
           <div className="header-modal flex items-center justify-between">
             {/* <input type="radio" id='guestRadio' name="entryType" value="guest" className="radio radio-accent" onChange={handleRadioChange} checked={!isStudent} /> */}
-            <label>Add Book</label>
+            <label className='font-noto font-semibold text-lg'>បញ្ចូលសៀវភៅ</label>
             <div className="flex justify-end mt-0 w-2/3">
               <ExcelImported fetchBooks={fetchBooks}/>
             </div>
@@ -101,29 +110,29 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
               {/* Write here */}
               <div className='flex'>
                 <div className="w-full mt-5 mr-1">
-                  <div className="w-full">ID :</div>
-                  <input type="text" className="input input-bordered  w-full" name="bookId" value={formData.bookId} onChange={handleChange} required />
+                  <div className="w-full font-noto font-semibold">លេខសម្គាល់ :</div>
+                  <input type="text" className="input input-bordered  w-full bg-secondary font-noto" name="bookId" value={formData.bookId} onChange={handleChange} required />
                 </div>
                 <div className="w-full mt-5 ml-1">
-                  <div className=" w-full">Title :</div>
-                  <input type="text" className="input input-bordered  w-full" name="bookTitle" value={formData.bookTitle} onChange={handleChange} required />
+                  <div className=" w-full font-noto font-semibold">ចំណងជើង :</div>
+                  <input type="text" className="input input-bordered  w-full bg-secondary font-noto" name="bookTitle" value={formData.bookTitle} onChange={handleChange} required />
                 </div>
               </div>
               <div className='flex'>
                 <div className="w-full mr-1">
-                  <div className=" w-full ">College :</div>
+                  <div className=" w-full font-noto font-semibold">មហាវិទ្យាល័យ :</div>
                   <select
         name="collegeId"
         value={formData.collegeId}
         onChange={handleChange}
         required
-        className="input input-bordered w-full"
+        className="select select-bordered w-full font-noto bg-secondary"
     >
       {/* <option value="ST">English</option>
     <option value="ST">Khmer</option>
     <option value="ST">Other</option> */}
     <option disabled className="refresh" value="">
-                Select college
+                ជ្រើសរើសមហាវិទ្យាល័យ
               </option>
     {collegeData.map((e, index) => (
                       <option key={index} value={e.collegeId}>{e.collegeName}</option>
@@ -132,30 +141,30 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
 </select>
                 </div>
                 <div className="w-full ml-1">
-                  <div className=" w-full">Author :</div>
-                  <input type="text" className="input input-bordered  w-full" name="author" value={formData.author || ''} onChange={handleChange} />
+                  <div className=" w-full font-noto font-semibold">អ្នកនិពន្ធ :</div>
+                  <input type="text" className="input input-bordered  w-full bg-secondary font-noto" name="author" value={formData.author || ''} onChange={handleChange} />
                 </div>
               </div>
               <div className='flex'>
                 <div className="w-full mr-1">
-                  <div className=" w-full">Genre :</div>
-                  <input type="text" className="input input-bordered  w-full" name="genre" value={formData.genre} onChange={handleChange} required />
+                  <div className=" w-full font-noto font-semibold">ប្រភេទ :</div>
+                  <input type="text" className="input input-bordered  w-full bg-secondary font-noto" name="genre" value={formData.genre} onChange={handleChange} required />
                 </div>
                 <div className="w-full ml-1">
-                  <div className=" w-full">Public Year :</div>
-                  <input type="text" className="input input-bordered  w-full" name="publicationYear" value={formData.publicationYear || ''} onChange={handleChange} />
+                  <div className=" w-full font-noto font-semibold">ឆ្នាំបោះពុម្ព :</div>
+                  <input type="number" className="input input-bordered  w-full bg-secondary font-noto" name="publicationYear" value={formData.publicationYear || ''} onChange={handleChange} />
                 </div>
               </div>
               <div className='flex'>
                 <div className="w-full mr-1">
-                  <div className=" w-full">Quantity :</div>
-                  <input type="text" className="input input-bordered  w-full" name="bookQuan" value={formData.bookQuan} onChange={handleChange} required />
+                  <div className=" w-full font-noto font-semibold">ចំនួន :</div>
+                  <input type="number" className="input input-bordered  w-full bg-secondary font-noto" name="bookQuan" value={formData.bookQuan} onChange={handleChange} required />
                 </div>
                 <div className="w-full">
                   <div className='ml-1'>
-                    <label className="w-full">Choose Language</label>
+                    <label className="w-full font-noto font-semibold">ជ្រើសរើសភាសា</label>
                     <div className="mt-3">
-                      <label className="inline-flex items-center w-1/3">
+                      <label className="inline-flex items-center w-1/2">
                         <input
                           type="radio"
                           name="languageId"
@@ -163,11 +172,11 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
                           checked={formData.languageId === 'eng'}
                           onChange={handleChange}
                           required
-                          className="form-radio h-7 text-blue-600"
+                          className="radio radio-accent"
                         />
-                        <span className="ml-2 text-accent">english</span>
+                        <span className="ml-2 text-accent font-noto">អង់គ្លេស</span>
                       </label>
-                      <label className="inline-flex items-center w-1/3">
+                      <label className="inline-flex items-center w-1/2">
                         <input
                           type="radio"
                           name="languageId"
@@ -175,21 +184,9 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
                           checked={formData.languageId === 'kh'}
                           onChange={handleChange}
                           required
-                          className="form-radio h-7 text-blue-600"
+                          className="radio radio-accent"
                         />
-                        <span className="ml-2 text-accent">Khmer</span>
-                      </label>
-                      <label className="inline-flex items-center w-1/3">
-                        <input
-                          type="radio"
-                          name="languageId"
-                          value="other"
-                          checked={formData.languageId === 'other'}
-                          onChange={handleChange}
-                          required
-                          className="form-radio h-7 text-blue-600"
-                        />
-                        <span className="ml-2 text-accent">other</span>
+                        <span className="ml-2 text-accent font-noto">ខ្មែរ</span>
                       </label>
                     </div></div>
                 </div>
@@ -197,12 +194,11 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
             </div>
             <div className="grid grid-cols-1 gap-4 content-center pt-5 pb-5">
               <BtnGredient type='submit' className="rounded-" color={'from-[#00d0ffb1] to-[#E7FBFF]'} hover={'from-[#00D9FF] to-[#a5cef3]'}>
-                <label className='text-xl'>Add</label>
+                <label className='text-xl font-noto'>បញ្ចូល</label>
                 {/* <button type='submit' className='text-xl text-accent'>Add</button> */}
               </BtnGredient>
             </div>
           </form></>
-        <Toaster position='bottom-center' />
       </Modal>
     </>
   )

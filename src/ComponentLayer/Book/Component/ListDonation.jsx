@@ -8,10 +8,7 @@ export default function ListDonation() {
   // Data of All Book
   const [books, setBooks] = useState([]);
   const [genre, setgenre] = useState([]);
-  useEffect(() => {
-    fetchDonation();
-  }, []);
-const fetchDonation=()=>{
+const fetchDonation = () =>{
   axios.get('/donation')
       .then(response => {
         setBooks(response.data);
@@ -21,7 +18,10 @@ const fetchDonation=()=>{
       .catch(error => {
         console.error("There was an error fetching the books!", error);
       });
-}
+};
+useEffect(() => {
+  fetchDonation();
+}, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectType] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,7 +41,7 @@ const fetchDonation=()=>{
 
   const filteredBooks = books.filter(book => 
     (book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.sponsorName.toString().toLowerCase().includes(searchTerm.toLowerCase())||
+    book.donatorName.toString().toLowerCase().includes(searchTerm.toLowerCase())||
     book.bookId.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
     (selectedGenre === '' || book.genre === selectedGenre)
   );
@@ -52,13 +52,14 @@ const fetchDonation=()=>{
 
   return (
     <>
-      <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
-      <div className="w-full flex flex-row m-0">
+      <div className="flex flex-col w-full h-full font-noto space-y-5 scrollbar-hide">
+      <div className="flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
+      <div className="flex w-full">
           <div className="inline-block w-full h-full">
             <label htmlFor="" className="input input-bordered rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2">
             <input
               type="text"
-              placeholder="ID, Title or Sponsor Name"
+              placeholder="ស្វែងរកតាមលេខសៀវភៅ ចំណងជើង ឬឈ្មោះអ្នកឧបត្ថម្ភ"
               value={searchTerm}
               onChange={handleSearchChange}
               className="w-full h-full"
@@ -75,14 +76,14 @@ const fetchDonation=()=>{
                             </svg>
                             </label>
           </div>
-          <div className="inline-block w-3/5 h-full pl-5 pr-5">
+          <div className="inline-block w-3/5 h-full pl-5">
             <select
               value={selectedGenre}
               onChange={handleSelectType}
               className="p-2 border rounded-[50px] input-bordered bg-base-100 h-full w-full"
             >
               <option disabled className="refresh" value="">
-                Select Genre
+                ជ្រើសរើសប្រភេទ
               </option>
               {genre.map((type, index) => (
                 <option key={index} value={type}>
@@ -90,48 +91,51 @@ const fetchDonation=()=>{
                 </option>
               ))}
             </select>
-
           </div>
-          <div className="inline-block w-4/5">
+          </div>
+          {/* block one */}
+          <div className="flex w-full pb-5 sm:pb-5 xl:pb-0">
+          <div className="inline-block w-full">
             <BtnGredient className="w-full h-full" onClick={resetSelection} color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
-            <p>Refresh</p>
+            <p>ធ្វើឡើងវិញ</p>
             </BtnGredient>
           </div>
           <div className="inline-block">
           <BtnGredient onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
             hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
-            <p>ADD</p>
+            <p>បញ្ចូល</p>
           </BtnGredient>
+        </div>
         </div>
         </div>
         <div className="variable-book  overflow-y-auto flex-1 w-full grid items-start scrollbar-hide">
           <table className="table tectav min-w-full divide-y divide-gray-200">
             <thead className='text-accent'>
               <tr>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">NO</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Sponsor Name</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Book ID</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Title</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">College</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Author</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Genre</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Public Year</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Sponsor Date</th>
-                <th className="sticky top-0 text-left text-xs font-bold bg-secondary">Quantity</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">ល.រ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">អ្នកឧបត្ថម្ភ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">លេខសៀវភៅ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">ចំណងជើង</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">មហាវិទ្យាល័យ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">អ្នកនិពន្ធ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">ប្រភេទ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">ឆ្នាំបោះពុម្ព</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">កាលបរិច្ឆេទឧបត្ថម្ភ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">ចំនួន</th>
               </tr>
             </thead>
             <tbody>
               {filteredBooks.map((entry, index) => (
                 <tr key={index}>
                   <th>{index + 1}</th>
-                  <td>{entry.sponsorName}</td>
+                  <td>{entry.donatorName}</td>
                   <td>{entry.bookId}</td>
                   <td>{entry.bookTitle}</td>
                   <td>{entry.collegeName}</td>
                   <td>{entry.author?? 'N/A'}</td>
                   <td>{entry.genre}</td>
                   <td>{entry.publicationYear?? 'N/A'}</td>
-                  <td>{entry.sponsorDate}</td>
+                  <td>{entry.donateDate}</td>
                   <td>{entry.bookQuan}</td>
                   <td>
                     <CerAppreciation certificate={entry}/>

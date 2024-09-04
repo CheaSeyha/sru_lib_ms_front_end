@@ -3,7 +3,7 @@ import ListOfAllBook from './ListOfAllBook';
 import ListDonation from './ListDonation';
 import ListOfBorrow from '../Borrow/ListOfBorrow'
 import ListCertificate from '../../ScoreStudent/Component/ListCertificate';
-import ListBackup from "../../Backup/Component/NavBar";
+import ListBackup from "../../Backup/Component/BackupBook";
 import { useLocation } from 'react-router-dom';
 const NavBarBook = () => {
     const location = useLocation();

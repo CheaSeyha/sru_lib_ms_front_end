@@ -6,8 +6,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from '../../../api/axios';
 import { parse, format,isEqual } from 'date-fns';
 import AlertWithSound from './Alert';
-import Snackbar from '@mui/material/Snackbar';
-import refresh from "../../../assets/logo/refresh.svg";
 const ListOfBorrow = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [latestBorrowId, setLatestBorrowId] = useState([]);
@@ -56,6 +54,9 @@ const ListOfBorrow = () => {
   const handlerefresh = () => {
     setSearchTerm("");
     setSearchDate(null);
+    if(!isChecked){
+      fetchBorrow();
+    }else{fetchOver();}
   };
   const closeModal = () => {
     setIsModalLstVisible(false);
@@ -71,22 +72,14 @@ const ListOfBorrow = () => {
   };
   return (
     <>
-    <div className="flex flex-col w-full h-full space-y-5">
-      <div className="flex flex-row w-full m-0">
-        {/* <div className="inline-block pr-5 w-2/5">
-                <input
-        type="text"
-        placeholder="Student ID or Book ID"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        className="p-2 h-full w-full border input-bordered rounded-[50px] bg-primary"
-      />
-      </div> */}
-      <div className="inline-block h-full pr-5 w-2/5">
+    <div className="flex flex-col w-full h-full space-y-5 font-noto">
+      <div className="w-full flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
+      <div className="flex w-full">
+      <div className="inline-block h-full pr-5 w-full">
             <label htmlFor="" className="input input-bordered rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2">
             <input
               type="text"
-              placeholder="Student ID or Book ID"
+              placeholder="ស្វែងរកតាមអត្តលេខនិស្សិត ឬលេខសម្គាល់សៀវភៅ"
               value={searchTerm}
               onChange={handleSearchChange}
               className="w-full h-full"
@@ -103,18 +96,20 @@ const ListOfBorrow = () => {
                             </svg>
                             </label>
           </div>
-      <div className="inline-block pr-5">
+      <div className="inline-block">
       <DatePicker
                         selected={searchDate}
                         onChange={date => setSearchDate(date)}
                         dateFormat="yyyy-MM-dd"
-                        placeholderText="Select return Date"
+                        placeholderText="ជ្រើសរើសថ្ងៃសង"
                         className="input input-bordered rounded-[50px] w-full bg-primary"
                     />
         </div>
-        <div className="inline-block w-1/4">
+        </div>
+        <div className="flex w-full pb-5 sm:pb-5 xl:pb-0">
+        <div className="inline-block w-4/5">
           <BtnGredient onClick={handlerefresh} className="rounded-" color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
-          <p>Refresh</p>
+          <p>ធ្វើឡើងវិញ</p>
           </BtnGredient>
         </div>
         <div className="inline-block">
@@ -125,19 +120,21 @@ const ListOfBorrow = () => {
           onChange={handleCheckboxChange}
           className='form-checkbox mr-2 w-[25px] h-[25px] text-secondary'
         />
-         Over Due
+         បានផុតកំណត់
       </div>
+        </div>
         </div>
         </div>
       <div className="table-container overflow-y-auto flex-1 w-full grid items-start scrollbar-hide">
         <table className="table tectav min-w-full divide-y divide-gray-200">
           <thead className='text-accent'>
               <tr>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">NO</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Student ID</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Book ID</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Date</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Return Date</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">ល.រ</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">អត្តលេខនិស្សិត</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">លេខសម្គាល់</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">ចំនួនខ្ចី</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">កាលបរិច្ឆេទខ្ចី</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">កាលបរិច្ឆេទត្រូវសង</th>
               </tr>
           </thead>
           <tbody>
@@ -146,6 +143,7 @@ const ListOfBorrow = () => {
                                 <td>{index + 1}</td>
                                 <td>{entry.studentId}</td>
                                 <td>{entry.bookId}</td>
+                                <td>{entry.bookQuan}</td>
                                 <td>{entry.borrowDate}</td>
                                 <td>{entry.giveBackDate}</td>
                             </tr>
@@ -165,7 +163,7 @@ const ListOfBorrow = () => {
       </Snackbar> */}
       <AlertWithSound newData={latestBorrowId.length > 0 && latestBorrowId[latestBorrowId.length - 1]} />
     </div>
-    <ModalBorrow entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} fetchBorrow={fetchBorrow} isChecked={handleCheckboxChange}/>
+    <ModalBorrow entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} setIsModalLstVisible={setIsModalLstVisible} fetchBorrow={fetchBorrow}/>
     </>
   );
 };

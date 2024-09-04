@@ -40,7 +40,8 @@ const ListCertificate = () => {
 
   const filteredData = sortedData.filter(item => 
     item.studentId.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.studentName.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    item.studentName.toString().toLowerCase().includes(searchTerm.toLowerCase())||
+    item.major.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -56,14 +57,14 @@ const ListCertificate = () => {
               className="p-2 border rounded-[50px] input-bordered bg-base-100 h-full w-full"
             />
           </div> */}
-          <div className="inline-block h-full w-1/2">
+          <div className="inline-block h-full w-full xl:w-1/3 lg:w-1/2 md:w-1/2 sm:w-full">
             <label htmlFor="" className="input input-bordered rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2">
             <input
               type="text"
-              placeholder="Student ID or Student Name"
+              placeholder="ស្វែងរកតាមអត្តលេខ ឈ្មោះ ឬជំនាញ"
               value={searchTerm}
               onChange={handleSearchChange}
-              className="w-full h-full"
+              className="w-full h-full font-noto"
             />
             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -79,17 +80,19 @@ const ListCertificate = () => {
           </div>
         </div>
         <div className="table-container overflow-y-auto flex-1 w-full grid items-start">
-          <table className="table tectav min-w-full divide-y divide-gray-200">
+          <table className="table tectav min-w-full font-noto divide-y divide-gray-200">
             <thead className='text-accent items-center'>
               <tr>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">NO</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Student ID</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Student Name</th>
-                <th className="sticky top-0 text-left text-xs font-medium bg-secondary">Major</th>
-                <th className="sticky top-0 text-center text-xs font-medium bg-secondary">
-                  <button onClick={handleSortToggle}>Spent Time {sortOrder === "asc" ? "▲" : "▼"}</button>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">ល.រ</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">អត្តលេខនិស្សិត</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">ឈ្មោះនិស្សិត</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">ជំនាញ</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">ជំនាន់</th>
+                <th className="sticky top-0 text-left text-sm font-semibold bg-secondary">កម្រិត</th>
+                <th className="sticky top-0 text-center text-sm font-semibold bg-secondary">
+                  <button onClick={handleSortToggle}>ម៉ោងសរុប {sortOrder === "asc" ? "▲" : "▼"}</button>
                 </th>
-                <th className="sticky top-0 text-center text-xs font-medium bg-secondary"></th>
+                <th className="sticky top-0 text-center text-sm font-semibold bg-secondary"></th>
 
               </tr>
             </thead>

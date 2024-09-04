@@ -11,7 +11,7 @@ function CartBR({ bgColor, bgR, bgB,iconB,iconR,Bdata,Rdata,Btype,Rtype }) {
                                 {iconB}
                             </div>
                             <div className="container-card-type text-white h-full grid justify-center items-center ps-0 lg:ps-5">
-                                <p className='text-[13px] xl:text-[12px] '>{Btype}</p>
+                                <p className='text-[14px] xl:text-[16px] font-noto'>{Btype}</p>
                                 <p className='text-[35px] font-bold'>{Bdata}</p>
                             </div>
                         </div>
@@ -20,7 +20,7 @@ function CartBR({ bgColor, bgR, bgB,iconB,iconR,Bdata,Rdata,Btype,Rtype }) {
                                 {iconR}
                             </div>
                             <div className="container-card-type text-white h-full grid justify-center items-center ps-0 lg:ps-5">
-                                <p className='text-[13px] xl:text-[12px]'>{Rtype}</p>
+                                <p className='text-[14px] xl:text-[16px] font-noto'>{Rtype}</p>
                                 <p className='text-[35px] font-bold'>{Rdata}</p>
                             </div>
                         </div>

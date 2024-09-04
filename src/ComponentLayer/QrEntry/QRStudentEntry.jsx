@@ -23,14 +23,6 @@ function QRStudentEntry() {
         <div className='z-30 w-full h-fit sm:h-full flex flex-col-reverse sm:flex-row space-x-0 sm:space-x-5'>
             <div className="flex flex-col space-y-5 ScanQR-ConfirmForm w-full sm:w-[230px] lg:w-[290px] xl:w-[390px] rounded-[20px]">
                 <CameraScanQR stopScan={stopScan} />
-                {/* <FormConfirmEntry
-                    checkPurpose={checkPurpose}
-                    setCheckPurpose={setCheckPurpose}
-                    disCheckPur={disCheckPur}
-                    stuEntryInfor={stuEntryInfor}
-                    handleClearFormData={handleClearFormData}
-                    handleSaveEntry={handleSaveEntry}
-                /> */}
                 <StudentCardInfor
                     checkPurpose={checkPurpose}
                     setCheckPurpose={setCheckPurpose}
