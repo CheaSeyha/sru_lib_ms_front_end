@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import sruLogo from '../../../assets/logo/sru_logo.png'
-import { User } from 'lucide-react';
+import { User, UserCheck } from 'lucide-react';
 import BtnGredien from '../../../ComponentLayer/AdminPanel/Component/BtnGredient'
-import userPF from '../../../assets/profileCard/test.jpg'
 import toast, { Toaster } from 'react-hot-toast';
 function StudentCardInfor({ checkPurpose, setCheckPurpose, disCheckPur, stuEntryInfor, handleClearFormData, handleSaveEntry }) {
     const checkboxesRef = useRef([]);
     const handleCheckPurpose = (event) => {
         const { id, checked } = event.target;
-        const value = id.replace('_', ' ');
+        // Convert id to Title Case with a space between words
+        const value = id.replace('_', ' ').replace(/\b\w/g, char => char.toUpperCase());
 
         setCheckPurpose(prevValue => {
             const values = prevValue ? prevValue.split(', ') : [];
@@ -25,6 +25,7 @@ function StudentCardInfor({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
             return values.join(', ');
         });
     };
+
     useEffect(() => {//Disble enale Check Purpose
         checkboxesRef.current.forEach(checkbox => {
             checkbox.disabled = disCheckPur;
@@ -39,7 +40,6 @@ function StudentCardInfor({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-
     return (
         <div className="flex-1 flex flex-col studentCard w-full h-fit bg-secondary p-5 overflow-x-hidden scrollbar-hide rounded-[20px] relative items-center">
             <div className="flex flex-col container z-10 font-noto text-accent">
@@ -53,19 +53,19 @@ function StudentCardInfor({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
                     </div>
                 </div>
                 <div className="big-text py-3 text-white">
-                    <h1 className='text-[15px] xl:text-[20px] text-center font-bold'>STUDENT ENTRY INFO</h1>
+                    <h1 className='text-[15px] xl:text-[20px] text-center font-bold'>ENTRY INFO</h1>
                 </div>
                 <div className="profile-student w-full h-fit grid place-items-center">
                     <div className="profile w-[130px] h-[130px] bg-secondary rounded-full border-[3px]  grid place-items-center overflow-hidden">
 
-                        {stuEntryInfor.studentName === "Phel Viwath" ? (
-                            <img src={userPF} alt="" />
+                        {stuEntryInfor.studentName ? (
+                            <UserCheck className='w-[60px] h-[60px] text-blue-400 ps-2' />
                         ) : (
                             <User className='w-[60px] h-[60px] text-accent' />
                         )}
                     </div>
                     <div className="stu-info py-[10px]">
-                        <p className='font-bold text-[15px] xl:text-xl'>{stuEntryInfor.studentName === "" ? "STUDENT NAME" : stuEntryInfor.studentName}</p>
+                        <p className='font-bold text-[15px] xl:text-xl'>{stuEntryInfor.studentName === "" ? "NAME" : stuEntryInfor.studentName}</p>
                     </div>
                     <div className="stu-info-detail font-noto w-full xl:ms-10">
                         <table>
@@ -94,8 +94,8 @@ function StudentCardInfor({ checkPurpose, setCheckPurpose, disCheckPur, stuEntry
                             <p className='font-bold'>Entry Purpose</p>
                             <div className="container-check-purpose grid lg:grid-cols-2 xl:grid-cols-2 gap-2 pt-2">
                                 <div className="check-purpose flex items-center space-x-2">
-                                    <input type="checkbox" id='Read_Book' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[0] = el} />
-                                    <label htmlFor="Read_Book" className='label-text text-[#32E2FF]'>Reading</label>
+                                    <input type="checkbox" id='Reading' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[0] = el} />
+                                    <label htmlFor="Reading" className='label-text text-[#32E2FF]'>Reading</label>
                                 </div>
                                 <div className="check-purpose flex items-center space-x-2">
                                     <input type="checkbox" id='Assignment' className="checkbox border-[#32E2FF] checkbox-info checkbox-sm" onChange={handleCheckPurpose} ref={el => checkboxesRef.current[1] = el} />

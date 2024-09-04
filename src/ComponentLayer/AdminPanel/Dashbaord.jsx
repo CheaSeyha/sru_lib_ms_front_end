@@ -72,7 +72,7 @@ function Dashbaord() {
                     <span className="loading loading-dots text-accent loading-lg"></span>
                 </main>
             ) : (
-                <main className='flex flex-col w-full h-fit xl:h-full space-y-5'>
+                <main className='flex flex-col w-full h-fit xl:h-full space-y-5 font-noto '>
                     {/* Header content */}
                     <div className='flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-[20px] p-[20px] text-white gap-5 xl:gap-0'
                         style={{
@@ -106,7 +106,7 @@ function Dashbaord() {
                         <div className="table-chart flex gap-5">
                             {/* table List Of Student name */}
                             <div className="table-container table-stu-entry w-full md:w-full h-[500px] xl:h-full xl:w-[450px] 2xl:w-[885px] bg-secondary rounded-[20px] p-5">
-                                <TableStuEntry getCardDataApi={getCardDataApi} />
+                                <TableStuEntry getCardDataApi={getCardDataApi} refreshCardData={getCardDataApi}/>
                             </div>
                             {/* table List Of Student name */}
                         </div>
@@ -115,7 +115,7 @@ function Dashbaord() {
                             {/* Chart Data Mejor Visitor */}
                             <div className="chart-data flex flex-col w-full sm:w-[250px] xl:w-[304px] h-[405px] sm:h-full bg-secondary rounded-[20px] md:bg-none p-5">
                                 <div className="cardTitle h-[46px] w-full flex">
-                                    <p>Total Mejor Visitor</p>
+                                    <p>សរុបចំនួនចូលតាមមហាវិទ្យាល័យ</p>
                                 </div>
                                 <div className="pieChart-container flex-1 w-full h-full">
                                     <MejorPieChart DataMejorVisitor={dataMejorVisitor} />
@@ -127,7 +127,7 @@ function Dashbaord() {
                                     <WeeklyVisitorChart WeelyVisitorData={weelyVisitorData} />
                                 </div>
                                 <div className="flex flex-col book-available w-full h-[190px] p-5 bg-secondary rounded-[20px]">
-                                    <p className='p-0'>Total Book of This Month</p>
+                                    <p className='p-0 '>សរុបចំនួនសៀវភៅ</p>
                                     <div className="flex-1 container-radial grid grid-cols-2 h-full items-center">
                                         {bookAviable.map((e, index) => (
                                             <RadialBarChart key={index} bookLange={e.language} totalBook={e.totalBook} bookAvaible={e.available} />

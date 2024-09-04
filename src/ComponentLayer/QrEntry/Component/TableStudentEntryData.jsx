@@ -47,7 +47,7 @@ function TableStudentEntryData({ studentEntryData }) {
                 <div className="min-h-full overflow-y-auto">
                     <div className="relative">
                         <table className="table min-w-full">
-                            <thead className="sticky top-0 bg-secondary text-accent">
+                            <thead className="bg-secondary text-accent">
                                 <tr>
                                     <th>#</th>
                                     <th>Student ID</th>

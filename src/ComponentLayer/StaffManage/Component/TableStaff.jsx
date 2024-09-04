@@ -212,7 +212,7 @@ function TableStaff() {
         }
 
         setIsModalVisible(true); // Open the modal
-        setClickEvenShowModal("កែទិន្ន័យ"); // Set the modal title or purpose
+        setClickEvenShowModal("កែប្រែព័ត៌មានបុគ្គលិក"); // Set the modal title or purpose
     }
 
     //Get Data Add Form--------------------
@@ -231,7 +231,7 @@ function TableStaff() {
 
         // Check if the form is valid
         if (form.checkValidity()) {
-            if (clickEvenModal === "កែទិន្ន័យ") {
+            if (clickEvenModal === "កែប្រែព័ត៌មានបុគ្គលិក") {
                 try {
                     const updateStaff = await axios.put("/staff",
                         {
@@ -247,11 +247,11 @@ function TableStaff() {
                         }
                     )
                     if (updateStaff.data === "Update successful") {
-                        toast.success(`Staff ID ${staffInfor.staffId} Update success`)
+                        toast.success(`បុគ្គលិក​ ID ${staffInfor.staffId} កែព័ត៍មានជោគជ័យ`)
                         handleCloseModal()
                         getAllStaff()
                     } else {
-                        toast.error("Fail to update staff try again")
+                        toast.error("បរាជ័យក្នុងការកែប្រែព័ត៍មានបុគ្គលិក  ។សូមព្យាយាមម្តងទៀត")
                     }
                 } catch (error) {
                     toast.error(error)
@@ -344,9 +344,9 @@ function TableStaff() {
                 <div className="header flex  justify-between">
                     <p>នាមសមាសភាពមន្ត្រីកំពុងបម្រើការងារនៅក្នុងបណ្ណាល័យ </p>
                     <div className="button-container flex flex-col md:flex-row gap-2">
-                        <BtnGredient onClick={() => handleOpenModal("បញ្ចូលបុគ្គលិកថ្មី")}>
+                        <BtnGredient onClick={() => handleOpenModal("បំពេញព័ត៍មានបុគ្គលិកថ្មី")}>
                             <UserPlus />
-                            <p className='hidden md:block'>បញ្ចូលបុគ្គលិក</p>
+                            <p className='hidden md:block'>បន្ថែមបុគ្គលិកថ្មី</p>
                         </BtnGredient>
                         <button className='btn btn-primary' onClick={() => handleExportToExcel(staffList)}>
                             <ArrowDownToLine />
@@ -419,7 +419,7 @@ function TableStaff() {
                                                     type="checkbox"
                                                     className="checkbox checkbox-accent"
                                                     checked={selectedstaffIds.includes(data.staffId)}
-                                                    onChange={() => handleSelectSingle(data.staffId)}
+                                                    onChange={handleSelectSingle(data.staffId)}
                                                 />
                                             </label>
                                         </div>
@@ -479,11 +479,11 @@ function TableStaff() {
                     </div>
                     <div className="modal-form">
                         <div className="input-container w-full">
-                            <label htmlFor="staffName">ឈ្មោះ*</label>
+                            <label htmlFor="staffName">នាម គោត្តនាម*</label>
                             <input
                                 id='staffName'
                                 type="text"
-                                placeholder="ឈ្មោះ"
+                                placeholder="នាម គោត្តនាម"
                                 value={staffInfor.staffName}
                                 className="input input-bordered my-2 bg-secondary w-full"
                                 required
@@ -518,7 +518,7 @@ function TableStaff() {
                                 >
                                     <option value="" disabled>ជ្រើសរើសមុខដំណែង</option>
                                     <option value="មន្ត្រីទទួលបន្ទុក">មន្ត្រីទទួលបន្ទុក</option>
-                                    <option value="និស្សិតហាត់ការ">និស្សិតហាត់ការ</option>
+                                    <option value="ហាត់ការ">ហាត់ការ</option>
                                     <option value="អ្នកអានាម័យ">អ្នកអានាម័យ</option>
                                 </select>
                             </div>
@@ -643,8 +643,8 @@ function TableStaff() {
                         type="submit"
                         className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] hover:from-[#00D9FF] hover:to-[#a5cef3] transition-all ease-in-out duration-300"
                     >
-                        {clickEvenModal === "កែទិន្ន័យ" ? <EditIcon /> : <Save />}
-                        {clickEvenModal === "កែទិន្ន័យ" ? "កែទិន្ន័យ" : "បញ្ចូលថ្មី"}
+                        {clickEvenModal === "កែប្រែព័ត៌មានបុគ្គលិក" ? <EditIcon /> : <Save />}
+                        រួចរាល់
                     </button>
                 </form>
             </Modal>

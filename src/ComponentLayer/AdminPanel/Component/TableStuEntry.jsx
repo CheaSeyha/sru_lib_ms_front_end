@@ -10,7 +10,7 @@ import useCheckStudentEntryExit from '../../Hook/useCheckStudentEntryExit'
 
 
 
-export default function TableStuEntry({ getCardDataApi }) {
+export default function TableStuEntry({ getCardDataApi,refreshCardData }) {
     // State variables
     const [stuEntryInfor, setstuEntryInfor] = useState({
         studentName: '',
@@ -126,7 +126,8 @@ export default function TableStuEntry({ getCardDataApi }) {
 
     const handleCheckPurpose = (event) => {
         const { id, checked } = event.target;
-        const value = id.replace('_', ' ');
+        // Convert id to Title Case with a space between words
+        const value = id.replace('_', ' ').replace(/\b\w/g, char => char.toUpperCase());
 
         setCheckPurpose(prevValue => {
             const values = prevValue ? prevValue.split(', ') : [];
@@ -235,6 +236,7 @@ export default function TableStuEntry({ getCardDataApi }) {
                 if (saveEntry.status === 'error') {
                     toast.error(saveEntry.message)
                 } else {
+                    refreshCardData()
                     fetchRecentEntryData()//get new table data
                     clearForm()
                     toast.success(saveEntry.message)
@@ -275,18 +277,18 @@ export default function TableStuEntry({ getCardDataApi }) {
     };
     return (
         <>
-            <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
+            <div className="flex flex-col w-full font-noto  h-full space-y-5 scrollbar-hide">
                 <div className="text-table w-full h-[45px] flex justify-between">
-                    <p>Student Entry Today</p>
+                    <p>អ្នកចូលក្នុងថ្ងៃនេះ</p>
                     <BtnGredient onClick={handleOpenModal}>
                         <UserRoundPlus />
-                        <p>Guest Entry</p>
+                        <p>Add Entry</p>
                     </BtnGredient>
                 </div>
                 <div className="flex-1 w-full h-full overflow-auto 2xl:scrollbar-hide grid items-start">
                     <table className="table tectav overflow-auto">
                         {/* Table Head */}
-                        <thead className='text-accent'>
+                        <thead className='text-accent sticky top-0 bg-secondary'>
                             <tr>
                                 <th>NO</th>
                                 <th>Student ID</th>
@@ -457,42 +459,42 @@ export default function TableStuEntry({ getCardDataApi }) {
                             <div className="check-purpose flex items-center space-x-2">
                                 <input
                                     type="checkbox"
-                                    id='read_book'
+                                    id='Reading'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
                                     disabled={areDisabled}
                                     onChange={handleCheckPurpose}
                                 />
-                                <label htmlFor="read_book" className='label-text text-[#32E2FF]'>Read Book</label>
+                                <label htmlFor="Reading" className='label-text text-[#32E2FF]'>Read Book</label>
                             </div>
                             <div className="check-purpose flex items-center space-x-2">
                                 <input
                                     type="checkbox"
-                                    id='assignment'
+                                    id='Assignment'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
                                     disabled={areDisabled}
                                     onChange={handleCheckPurpose}
                                 />
-                                <label htmlFor="assignment" className='label-text text-[#32E2FF]'>Assignment</label>
+                                <label htmlFor="Assignment" className='label-text text-[#32E2FF]'>Assignment</label>
                             </div>
                             <div className="check-purpose flex items-center space-x-2">
                                 <input
                                     type="checkbox"
-                                    id='usePC'
+                                    id='Use_PC'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
                                     disabled={areDisabled}
                                     onChange={handleCheckPurpose}
                                 />
-                                <label htmlFor="usePC" className='label-text text-[#32E2FF]'>Use PC</label>
+                                <label htmlFor="Use_PC" className='label-text text-[#32E2FF]'>Use PC</label>
                             </div>
                             <div className="check-purpose flex items-center space-x-2">
                                 <input
                                     type="checkbox"
-                                    id='other'
+                                    id='Other'
                                     className="checkbox border-[#32E2FF] checkbox-info checkbox-sm"
                                     disabled={areDisabled}
                                     onChange={handleCheckPurpose}
                                 />
-                                <label htmlFor="other" className='label-text text-[#32E2FF]'>Other</label>
+                                <label htmlFor="Other" className='label-text text-[#32E2FF]'>Other</label>
                             </div>
                         </div>
                     </div>

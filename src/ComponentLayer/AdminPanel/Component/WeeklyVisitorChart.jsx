@@ -41,8 +41,8 @@ function WeeklyVisitorChart({ WeelyVisitorData }) {
 
     return (
         <>
-            <div className="text-title w-full h-[46px]">
-                <p>Number of participants last week.</p>
+            <div className="text-title w-full h-[46px] font-noto">
+                <p>ចំនួនចូលបណ្ណាល័យសប្តាហ៍មុន</p>
             </div>
             <div className="flex-1 chart-line w-full h-full flex space-x-5">
                 <div className="yxis-data w-fit h-full">
