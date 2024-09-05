@@ -9,11 +9,12 @@ import BookManagement from './Book/BookManagement';
 import AnalyticForm from './Analytic/AnalyticForm';
 import StaffManageForm from './StaffManage/StaffManageForm';
 import LoginForm from './LoginRegiter/LoginForm';
+import StudentManage from './StudentManage/StudentManage';
 
 function AdminPanel() {
     const GetLinkPath = useLocation().pathname
     const [isLogin, setisLogin] = useState(true)
-    const handleLogin = ()=>{
+    const handleLogin = () => {
         setisLogin(true)
     }
 
@@ -32,21 +33,23 @@ function AdminPanel() {
                     <section className="flex-1 p-5 xl:h-full overflow-y-auto sm:overscroll-y-none scrollbar-hide">
                         {/* This will make the content area take up the remaining space */}
                         <Routes>
-                            <Route path="/" element={<Dashbaord />} />
-                            <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
-                            <Route path="/BookManagement/AddBook" element={<BookManagement />} />
-                            <Route path="/StaffManage/" element={<StaffManageForm />} />
-                            <Route path="/Analytic" element={<AnalyticForm />} />
-                            <Route path="/BookManagement/BookBorrowed" element={<BookManagement />} />
-                            <Route path="/BookManagement/TimeSpent" element={<BookManagement />} />
-                            <Route path="/BookManagement/Backup" element={<BookManagement />} />
-                            <Route path="/BookManagement/Donation" element={<BookManagement />} />
+                            <Route path="" element={<Dashbaord />} />
+                            <Route path="QRStudentEntry" element={<QRStudentEntry />} />
+                            <Route path="BookManagement">
+                                <Route path="AddBook" element={<BookManagement />} />
+                                <Route path="BookBorrowed" element={<BookManagement />} />
+                                <Route path="BookBorrowed" element={<BookManagement />} />
+                                <Route path="TimeSpent" element={<BookManagement />} />
+                                <Route path="Backup" element={<BookManagement />} />
+                                <Route path="Donation" element={<BookManagement />} />
+                            </Route>
+                            <Route path="StaffManage" element={<StaffManageForm />} />
+                            <Route path="StudentManage" element={<StudentManage />} />
+                            <Route path="Analytic" element={<AnalyticForm />} />
                         </Routes>
                     </section>
                 </main>
             )}
-
-
         </ScanResultIDProvider>
     );
 }
