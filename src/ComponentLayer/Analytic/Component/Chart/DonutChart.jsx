@@ -29,7 +29,7 @@ const DonutChart = ({ data, labelsKey, dataKey, dataSetLabel, colors }) => {
     };
 
     const options = {
-        cutout: "70%", // Adjust thickness
+        cutout: '70%', // Adjust thickness of the donut
         plugins: {
             tooltip: {
                 callbacks: {
@@ -45,7 +45,7 @@ const DonutChart = ({ data, labelsKey, dataKey, dataSetLabel, colors }) => {
                 enabled: true, // Ensure tooltip is enabled
             },
             legend: {
-                display: false, // Set to false to hide the legend
+                display: false, // Hide the legend
             },
         },
     };

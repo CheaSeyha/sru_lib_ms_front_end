@@ -4,7 +4,9 @@ import { Sunrise, Sun, CloudMoon } from 'lucide-react';
 
 
 
-function TotalEntryCardForm() {
+function TotalEntryCardForm({studentEntryByTime}) {
+
+    
 
     return (
         <div className='w-full h-full bg-secondary rounded-[20px] p-5 text-accent flex flex-col space-y-5'>
@@ -16,14 +18,14 @@ function TotalEntryCardForm() {
                     <div className="card-container grid place-items-center items-center w-full h-full">
                         <p className='font-noto text-sm'>សរុបនិស្សិត</p>
                         <p className='font-bold text-[48px] bg-clip-text text-transparent bg-gradient-to-t from-accent to-[#00ccff] drop-shadow-md'>
-                            100
+                            {studentEntryByTime.totalAttend}
                         </p>
                     </div>
                     <span className='line-gred w-[7px] rounded-lg h-full bg-gradient-to-t from-accent to-[#00ccff]'></span>
                     <div className="card-container grid place-items-center items-center w-full h-full">
                         <p className='font-noto text-sm '>និស្សិតស្រី</p>
                         <p className='font-bold text-[48px] bg-clip-text text-transparent bg-gradient-to-t from-accent to-[#00ccff]'>
-                            45
+                            {studentEntryByTime.totalFemale}
                         </p>
                     </div>
                 </div>
@@ -36,7 +38,7 @@ function TotalEntryCardForm() {
                             <Sunrise />
                         </div>
                         <div className="amount text-[24px] font-bold">
-                            34
+                            {studentEntryByTime.morning}
                         </div>
                         <div className="text-time-shift font-noto ">
                             ព្រឹក
@@ -47,7 +49,7 @@ function TotalEntryCardForm() {
                             <Sun />
                         </div>
                         <div className="amount text-[24px] font-bold">
-                            34
+                            {studentEntryByTime.afternoon}
                         </div>
                         <div className="text-time-shift font-noto ">
                             រសៀល
@@ -58,7 +60,7 @@ function TotalEntryCardForm() {
                             <CloudMoon />
                         </div>
                         <div className="amount text-[24px] font-bold">
-                            34
+                            {studentEntryByTime.evening}
                         </div>
                         <div className="text-time-shift font-noto ">
                             យប់

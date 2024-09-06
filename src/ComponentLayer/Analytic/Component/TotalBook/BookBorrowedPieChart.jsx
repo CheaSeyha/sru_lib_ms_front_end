@@ -1,36 +1,7 @@
 import React from 'react';
-import DonutChart from '../Chart/DonutChart';
+import DonutChart from '../Chart/DonutChart'; // Adjust the import based on your directory structure
 
-function BookBorrowedPieChart() {
-    const bookBorrowed = [
-        {
-            majorName: "Computer Science",
-            borrowedNumber: 35,
-        },
-        {
-            majorName: "Public Administration",
-            borrowedNumber: 37,
-        },
-        {
-            majorName: "English",
-            borrowedNumber: 26,
-        },
-        {
-            majorName: "Math",
-            borrowedNumber: 94,
-        },
-        {
-            majorName: "Business",
-            borrowedNumber: 46,
-        }
-        ,
-        {
-            majorName: "Business",
-            borrowedNumber: 46,
-        }
-
-    ];
-
+function BookBorrowedPieChart({ bookBorrowedData }) {
     // Define a fixed set of colors
     const defaultColors = [
         '#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0', '#F7464A',
@@ -39,11 +10,11 @@ function BookBorrowedPieChart() {
         '#46BFBD', '#F4C542', '#9B59B6'
     ];
 
-    // Calculate the total borrowed number
-    const totalBorrowed = bookBorrowed.reduce((sum, item) => sum + item.borrowedNumber, 0);
+    // Calculate the total borrowed number dynamically
+    const totalBorrowed = bookBorrowedData.reduce((sum, item) => sum + item.borrowedNumber, 0);
 
     // Slice colors array to match the number of data points
-    const colors = defaultColors.slice(0, bookBorrowed.length);
+    const colors = defaultColors.slice(0, bookBorrowedData.length);
 
     return (
         <div className='w-full h-full font-noto flex flex-col text-accent'>
@@ -54,20 +25,19 @@ function BookBorrowedPieChart() {
                 <div className="danutChart w-full grid place-items-center">
                     <div className="w-[230px] h-full grid place-items-center">
                         <DonutChart
-                            data={bookBorrowed}
+                            data={bookBorrowedData}
                             labelsKey="majorName"
-                            dataKey="borrowedNumber"
+                            dataKey="times"
                             dataSetLabel="Books Borrowed"
-                            colors={colors} // Pass colors to the DonutChart component
+                            colors={colors}
                         />
                     </div>
                 </div>
                 <div className="table-container w-full h-[420px] overflow-y-scroll scrollbar-hide">
-
                     <table className="table text-accent font-noto">
                         {/* head */}
                         <thead className='text-accent sticky top-0 left-0 bg-secondary'>
-                            <tr className='border-none '>
+                            <tr className='border-none'>
                                 <th></th>
                                 <th>មហាវិទ្យាល័យ</th>
                                 <th>ចំនួនខ្ចី/ដង</th>
@@ -75,16 +45,15 @@ function BookBorrowedPieChart() {
                             </tr>
                         </thead>
                         <tbody>
-                            {bookBorrowed.map((item, index) => {
-                                const percentage = ((item.borrowedNumber / totalBorrowed) * 100).toFixed(2);
+                            {bookBorrowedData.map((item, index) => {
                                 return (
                                     <tr key={index} className='hover:bg-primary border-none'>
                                         <th>
                                             <div className='w-4 h-4 rounded-full' style={{ backgroundColor: colors[index] }}></div>
                                         </th>
                                         <td>{item.majorName}</td>
-                                        <td>{item.borrowedNumber}</td>
-                                        <td>{percentage}%</td>
+                                        <td>{item.times}</td>
+                                        <td>{item.percentage}%</td>
                                     </tr>
                                 );
                             })}

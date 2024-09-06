@@ -1,9 +1,28 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Chart from 'react-apexcharts';
 import { useThemeSwitch } from '../../../../Context/ThemeSwitchContext';
 
-const BarChart = () => {
+const BarChart = ({ chartData }) => {
   const { theme } = useThemeSwitch();
+  const [categories, setCategories] = useState([]);
+  const [series, setSeries] = useState([]);
+
+  useEffect(() => {
+    if (chartData) {
+      // Extract college names for categories
+      const colleges = chartData.map(college => college.collegeName);
+      setCategories(colleges);
+
+      // Extract book data for both languages (with fallback for missing data)
+      const khmerData = chartData.map(college => college.bookEachLanguage.kh || 0); // Default to 0 if missing
+      const englishData = chartData.map(college => college.bookEachLanguage.eng || 0); // Default to 0 if missing
+
+      setSeries([
+        { name: "សៀវភៅភាសាខ្មែរ", data: khmerData },
+        { name: "សៀវភៅភាសាអង់គ្លេស", data: englishData }
+      ]);
+    }
+  }, [chartData]);
 
   // Precompute colors based on the theme
   const axisLabelsColors = useMemo(() => {
@@ -37,7 +56,7 @@ const BarChart = () => {
       theme: theme, // Use "dark" or "light" for theme-based styling
     },
     xaxis: {
-      categories: ["ENG", "BUS", "IT", "Agri", "LAW", "Other", "News"],
+      categories: categories,
       labels: {
         style: {
           colors: axisLabelsColors, // White for dark theme, black for light theme
@@ -65,18 +84,7 @@ const BarChart = () => {
       },
     },
     colors: ['#2845FF', '#00D0FF'],
-  }), [axisLabelsColors, theme]);
-
-  const series = [
-    {
-      name: "សៀវភៅភាសាខ្មែរ",
-      data: [44, 55, 41, 64, 22, 43, 21],
-    },
-    {
-      name: "សៀវភៅភាសាអង្គគ្លេស",
-      data: [53, 32, 33, 52, 13, 44, 32],
-    },
-  ];
+  }), [axisLabelsColors, theme, categories]);
 
   return (
     <div id="chart" className='w-full h-full'>

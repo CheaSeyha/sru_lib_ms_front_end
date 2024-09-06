@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BookType, MonitorCheck, BriefcaseBusiness, CircleEllipsis } from 'lucide-react';
 
-function CardPurposeData({ cardType, amountData }) {
+function CardPurposeData({ amountData, cardType }) {
     const [bgIcon, setBgicon] = useState("")
     const [iconCard, setIconCard] = useState(null)
     // bgIcon="bg-[#00FF29]"

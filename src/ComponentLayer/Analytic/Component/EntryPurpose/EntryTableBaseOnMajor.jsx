@@ -1,34 +1,34 @@
 import React from 'react'
 
-function EntryTableBaseOnMajor() {
-    const bookBorrowed = [
-        {
-            majorName: "Computer Science",
-            borrowedNumber: 35,
-        },
-        {
-            majorName: "Public Administration",
-            borrowedNumber: 37,
-        },
-        {
-            majorName: "English",
-            borrowedNumber: 26,
-        },
-        {
-            majorName: "Math",
-            borrowedNumber: 94,
-        },
-        {
-            majorName: "Business",
-            borrowedNumber: 46,
-        }
-        ,
-        {
-            majorName: "Business",
-            borrowedNumber: 46,
-        }
+function EntryTableBaseOnMajor({ bookBorrowed }) {
+    // const bookBorrowed = [
+    //     {
+    //         majorName: "Computer Science",
+    //         borrowedNumber: 35,
+    //     },
+    //     {
+    //         majorName: "Public Administration",
+    //         borrowedNumber: 37,
+    //     },
+    //     {
+    //         majorName: "English",
+    //         borrowedNumber: 26,
+    //     },
+    //     {
+    //         majorName: "Math",
+    //         borrowedNumber: 94,
+    //     },
+    //     {
+    //         majorName: "Business",
+    //         borrowedNumber: 46,
+    //     }
+    //     ,
+    //     {
+    //         majorName: "Business",
+    //         borrowedNumber: 46,
+    //     }
 
-    ];
+    // ];
     // Define a fixed set of colors
     const defaultColors = [
         '#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0', '#F7464A',
@@ -45,34 +45,59 @@ function EntryTableBaseOnMajor() {
 
 
     return (
-        <div className='w-full h-full text-white rounded-[20px] bg-secondary p-5 overflow-scroll scrollbar-hide'>
-            <div className="font-noto h-[46px] w-full text-center text-accent">សរុបចំនួនចូលបណ្ណាល័យតាមមហាវិទ្យាល័យ</div>
-            <table className="table text-accent font-noto overflow-auto">
-                {/* head */}
-                <thead className='text-accent sticky top-0 left-0 bg-secondary'>
-                    <tr className='border-none '>
-                        <th></th>
-                        <th>មហាវិទ្យាល័យ</th>
-                        <th>ចំនួនចូល</th>
-                        <th>គិតជាភាគរយ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {bookBorrowed.map((item, index) => {
-                        const percentage = ((item.borrowedNumber / totalBorrowed) * 100).toFixed(2);
-                        return (
-                            <tr key={index} className='hover:bg-primary border-none'>
-                                <th>
-                                    <div className='w-4 h-4 rounded-full' style={{ backgroundColor: colors[index] }}></div>
-                                </th>
-                                <td>{item.majorName}</td>
-                                <td>{item.borrowedNumber}</td>
-                                <td>{percentage}%</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+        <div className='w-full h-full flex flex-col text-white rounded-[20px] bg-secondary p-5 overflow-hidden'>
+            <div className="font-noto h-[46px] w-full text-center text-accent ticky top-0 left-0 bg-secondary">សរុបចំនួនចូលបណ្ណាល័យតាមមហាវិទ្យាល័យ</div>
+            <div className="table-container w-full h-full overflow-scroll scrollbar-hide">
+                <table className="table text-accent font-noto overflow-auto">
+                    {/* head */}
+                    <thead className='text-accent sticky top-0 left-0 bg-secondary'>
+                        <tr className='border-none '>
+                            <th></th>
+                            <th>មហាវិទ្យាល័យ</th>
+                            <th>ចំនួនចូល</th>
+                            <th>គិតជាភាគរយ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {bookBorrowed.map((item, index) => {
+                            return (
+                                <tr key={index} className='hover:bg-primary border-none'>
+                                    <th>
+                                        <div className='w-4 h-4 rounded-full' style={{ backgroundColor: colors[index] }}></div>
+                                    </th>
+                                    <td>{item.majorName}</td>
+                                    <td>{item.times}</td>
+                                    <td>{item.percentage}%</td>
+                                </tr>
+                            );
+                        })}
+                        {bookBorrowed.map((item, index) => {
+                            return (
+                                <tr key={index} className='hover:bg-primary border-none'>
+                                    <th>
+                                        <div className='w-4 h-4 rounded-full' style={{ backgroundColor: colors[index] }}></div>
+                                    </th>
+                                    <td>{item.majorName}</td>
+                                    <td>{item.times}</td>
+                                    <td>{item.percentage}%</td>
+                                </tr>
+                            );
+                        })}
+                        {bookBorrowed.map((item, index) => {
+                            return (
+                                <tr key={index} className='hover:bg-primary border-none'>
+                                    <th>
+                                        <div className='w-4 h-4 rounded-full' style={{ backgroundColor: colors[index] }}></div>
+                                    </th>
+                                    <td>{item.majorName}</td>
+                                    <td>{item.times}</td>
+                                    <td>{item.percentage}%</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }

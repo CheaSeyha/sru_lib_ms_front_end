@@ -1,24 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BookOpenText } from 'lucide-react';
 import Datepicker from "react-tailwindcss-datepicker";
 import DonutChart from './DonutChart';
-import useAnalyticData from '../../../Hook/useAnalyticData';
 
-function TotalBook() {
-
-    const { data } = useAnalyticData()
-
+function TotalBook({ totalKhmerBook, totalEnglishBook }) {
     const [bookData, setBookData] = useState([
         {
             lang: "Khmer",
-            Total: data.bookAnalysis.totalBooks.khmerBooks,
+            Total: 0,
         },
         {
             lang: "English",
-            Total: data.bookAnalysis.totalBooks.englishBooks,
+            Total: 0,
         }
-    ])
+    ]);
 
+    const TotalBook = () => {
+        return totalEnglishBook + totalKhmerBook
+    }
+
+    useEffect(() => {
+        // Update bookData with the new totals from props
+        setBookData([
+            {
+                lang: "Khmer",
+                Total: totalKhmerBook,
+            },
+            {
+                lang: "English",
+                Total: totalEnglishBook,
+            }
+        ]);
+    }, [totalEnglishBook, totalKhmerBook]); // Re-run the effect whenever the totals change
 
 
     return (
@@ -28,7 +41,7 @@ function TotalBook() {
                     <p className='font-noto'>ចំនួនសៀវភៅសរុប</p>
                     <div className="h-full grid col-span-2">
                         <div className="total-book-number flex items-center gap-2">
-                            <p className='text-[30px] sm:text-[40px] font-bold'>12,238</p>
+                            <p className='text-[30px] sm:text-[40px] font-bold'>{totalEnglishBook + totalKhmerBook}</p>
                             <BookOpenText className='text-yellow-300 w-[20px] sm:w-[30px] h-[30px]' />
                         </div>
                         <button className='w-fit btn px-5 h-[46px] rounded-xl bg-secondary font-noto grid place-items-center '>

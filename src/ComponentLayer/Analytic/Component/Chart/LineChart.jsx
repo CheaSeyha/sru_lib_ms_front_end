@@ -1,9 +1,35 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { useThemeSwitch } from '../../../../Context/ThemeSwitchContext';
 
-const LineChart = ({ seriesData = [], categories = [], title = '' }) => {
+// Function to convert "YYYY-MM" to month name
+const getMonthName = (month) => {
+    const [year, monthNum] = month.split('-');
+    const date = new Date(year, monthNum - 1); // Month is zero-indexed in JavaScript Date
+    return date.toLocaleString('default', { month: 'long' });
+};
+
+const LineChart = ({ bookIncomeData }) => {
     const { theme } = useThemeSwitch();
+    const [categories, setCategories] = useState([]);
+    const [series, setSeries] = useState([]);
+
+    useEffect(() => {
+        if (bookIncomeData) {
+            // Convert month numbers to month names
+            const months = bookIncomeData.map(data => getMonthName(data.month));
+            setCategories(months);
+
+            // Extract donation and universityFunding data
+            const donationData = bookIncomeData.map(data => data.donation || 0); // Default to 0 if missing
+            const universityFundingData = bookIncomeData.map(data => data.universityFunding || 0); // Default to 0 if missing
+
+            setSeries([
+                { name: "Donation", data: donationData },
+                { name: "University Funding", data: universityFundingData }
+            ]);
+        }
+    }, [bookIncomeData]);
 
     // Precompute colors based on the theme
     const axisLabelsColors = useMemo(() => {
@@ -15,7 +41,7 @@ const LineChart = ({ seriesData = [], categories = [], title = '' }) => {
     }, [theme]);
 
     const options = useMemo(() => ({
-        series: seriesData,
+        series: series,
         chart: {
             height: 430,
             type: 'line',
@@ -27,7 +53,7 @@ const LineChart = ({ seriesData = [], categories = [], title = '' }) => {
             enabled: false
         },
         title: {
-            text: title,
+            text: "ប្រភពដែលសៀវភៅទទួលបាន",
             align: 'left',
             style: {
                 fontFamily: "NotoSansKhmer-Regular",
@@ -73,12 +99,12 @@ const LineChart = ({ seriesData = [], categories = [], title = '' }) => {
             intersect: false,
             theme: theme, // Use "dark" or "light" for theme-based styling
         },
-        colors: ['#2845FF', '#00D0FF', '#FF5722', '#FFE100'], // Customize colors as needed
-    }), [axisLabelsColors, gridColor, seriesData, categories, title, theme]);
+        colors: ['#2845FF', '#00D0FF'] // Customize colors as needed
+    }), [axisLabelsColors, gridColor, series, categories, theme]);
 
     return (
         <div id="chart" className='w-full h-full'>
-            <Chart options={options} series={seriesData} type="line" width={"100%"} height={"100%"} />
+            <Chart options={options} series={series} type="line" width={"100%"} height={"100%"} />
         </div>
     );
 };
