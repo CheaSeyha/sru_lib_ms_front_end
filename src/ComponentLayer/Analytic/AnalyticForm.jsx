@@ -14,157 +14,129 @@ import BookBorrowedPieChart from './Component/TotalBook/BookBorrowedPieChart';
 import MostBorrowBookTable from './Component/TotalBook/MostBorrowBookTable';
 import TotalEntryCardForm from './Component/EntryPurpose/TotalEntryCardForm'
 import EntryTableBaseOnMajor from './Component/EntryPurpose/EntryTableBaseOnMajor'
+import LineChartEntry from './Component/Chart/LineChartEntry'
 
 function AnalyticForm() {
-
-    const [isShowModal, setisShowModal] = useState(false)
-    const [analyticData, setAnalyticData] = useState(
-        {
-            bookIncome: [
-                {
-                    month: "",
-                    donation: 0,
-                    universityFunding: 0
-                }
-            ],
-            purposeCount: [
-                {
-                    purposeType: "",
-                    amountData: 0
-                }
-            ],
-            totalBook: {
-                totalBook: 0,
-                bookEachLanguage: {
-                    Khmer: 0,
-                    English: 0
-                }
-            },
-            bookEachCollege: [
-                {
-                    collegeName: "",
-                    bookEachLanguage: {
-                        kh: 0,
-                        eng: 0
-                    }
-                }
-            ],
-            timeSpent: [
-                {
-                    studentId: 0,
-                    studentName: "",
-                    major: "",
-                    degree: "",
-                    generation: 0,
-                    totalTimeSpent: 0
-                }
-            ],
-            mostMajorBorrows: [
-                {
-                    majorName: "",
-                    times: 0,
-                    percentage: 0
-                }
-            ],
-            mostBorrowBook: [
-                {
-                    rank: 0,
-                    bookTitle: "",
-                    genre: "",
-                    borrowQuan: 0
-                }
-            ],
-            mostMajorAttend: [
-                {
-                    majorName: "",
-                    times: 0,
-                    percentage: 0
-                }
-            ],
-            studentEntryByTime: {
-                totalAttend: 0,
-                totalFemale: 0,
-                morning: 0,
-                afternoon: 0,
-                evening: 0
-            },
-            getPurpose: [
-                {
-                    other: 0,
-                    reading: 0,
-                    assignment: 0,
-                    usePc: 0,
-                    month: ""
-                },
-                {
-                    other: 0,
-                    reading: 0,
-                    assignment: 0,
-                    usePc: 0,
-                    month: ""
-                }
-            ]
-        }
-    )
-    const [hideDropDownButton, setHideShowDropDown] = useState(true)
-    const handleHideDropDownButton = () => hideDropDownButton ? setHideShowDropDown(false) : setHideShowDropDown(true)
-    const [value, setValue] = useState({
-        startDate: null,
-        endDate: null
+    const [isShowModal, setIsShowModal] = useState(false);
+    const [analyticData, setAnalyticData] = useState({
+        bookIncome: [{ month: "", donation: 0, universityFunding: 0 }],
+        purposeCount: [{ purposeType: "", amountData: 0 }],
+        totalBook: {
+            totalBook: 0,
+            bookEachLanguage: { Khmer: 0, English: 0 }
+        },
+        bookEachCollege: [{
+            collegeName: "",
+            bookEachLanguage: { kh: 0, eng: 0 }
+        }],
+        timeSpent: [{
+            studentId: 0,
+            studentName: "",
+            major: "",
+            degree: "",
+            generation: 0,
+            totalTimeSpent: 0
+        }],
+        mostMajorBorrows: [{
+            majorName: "",
+            times: 0,
+            percentage: 0
+        }],
+        mostBorrowBook: [{
+            rank: 0,
+            bookTitle: "",
+            genre: "",
+            borrowQuan: 0
+        }],
+        mostMajorAttend: [{
+            majorName: "",
+            times: 0,
+            percentage: 0
+        }],
+        studentEntryByTime: {
+            totalAttend: 0,
+            totalFemale: 0,
+            morning: 0,
+            afternoon: 0,
+            evening: 0
+        },
+        getPurpose: [
+            { other: 0, reading: 0, assignment: 0, usePc: 0, month: "" },
+            { other: 0, reading: 0, assignment: 0, usePc: 0, month: "" }
+        ]
     });
+    const [hideDropDownButton, setHideDropDownButton] = useState(true);
+    const [value, setValue] = useState({ startDate: null, endDate: null });
+    const [isLoading, setIsLoading] = useState(true);
 
+    // Set startDate to January 1st of the current year and endDate to the current date
     useEffect(() => {
-        // Get the current date
         const currentDate = new Date();
+        const startDate = new Date(currentDate.getFullYear(), 0, 1);
+        const endDate = currentDate;
 
-        // Set both startDate and endDate to the current date
-        setValue({
-            startDate: currentDate,
-            endDate: currentDate
-        });
+        setValue({ startDate, endDate });
     }, []);
 
-    const [isLoading, setIsLoading] = useState(true)
-    const fechData = async () => {
-        setIsLoading(true)
+    // Fetch data from the API
+    const fetchData = async () => {
+        setIsLoading(true);
         try {
-            const getData = await axios.get(`/analytic?startDate=2024-01-01&endDate=2024-09-01`)
-            setAnalyticData(getData.data)
-            setIsLoading(false)
+            const { startDate, endDate } = value;
+            const formattedStartDate = startDate ? startDate.toISOString().split('T')[0] : '';
+            const formattedEndDate = endDate ? endDate.toISOString().split('T')[0] : '';
+
+            const response = await axios.get('/analytic', {
+                params: { startDate: formattedStartDate, endDate: formattedEndDate }
+            });
+
+            setAnalyticData(response.data);
         } catch (error) {
-            console.log(error)
+            console.error(error);
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false)
-    }
+    };
 
+    // Fetch data whenever the startDate or endDate changes
     useEffect(() => {
-        fechData()
-    }, [])
-
-    useEffect(() => {
-        console.log(analyticData.mostBorrowBook)
-    }, [analyticData])
-
-
-    const mySeriesData = [
-        {
-            name: "Donations",
-            data: [26, 12, 23, 15, 16, 10, 24, 46, 8]
-        },
-        {
-            name: "University Funding",
-            data: [16, 36, 26, 17, 38, 27, 17, 24, 16]
-        },
-        {
-            name: "Thesis Income",
-            data: [3, 5, 8, 9, 11, 13, 16, 11, 13]
+        if (value.startDate && value.endDate) {
+            fetchData();
         }
-    ];
+    }, [value]);
 
-    const myCategories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
-    const myTitle = 'ប្រភពដែលសៀវភៅទទួលបាន';
+    // This effect can be used to perform actions based on the fetched data
+    useEffect(() => {
+        // Add any side effects related to analyticData here
+    }, [analyticData]);
 
+    const handleHideDropDownButton = () => {
+        setHideDropDownButton(prevState => !prevState);
+    };
 
+    //Table Student Time Spent Feauture--------------
+    // State to track the sorting order and current page
+    const [isAscending, setIsAscending] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // Number of items per page
+
+    // Function to handle sorting logic
+    const handleSort = () => {
+        setIsAscending(!isAscending); // Toggle the sorting order
+    };
+
+    // Calculate sorted data based on totalTimeSpent
+    const sortedData = [...analyticData.timeSpent].sort((a, b) => {
+        return isAscending ? a.totalTimeSpent - b.totalTimeSpent : b.totalTimeSpent - a.totalTimeSpent;
+    });
+
+    // Calculate the indices for slicing the data
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedData = sortedData.slice(startIndex, endIndex);
+
+    // Total number of pages
+    const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
     return (
         <>
@@ -205,7 +177,7 @@ function AnalyticForm() {
                                             <FileDown />
                                             <p>ទាញរបាយការណ៍ប្រចាំខែ</p>
                                         </button>
-                                        <button className="btn btn-secondary font-noto" onClick={() => setisShowModal(true)}>
+                                        <button className="btn btn-secondary font-noto" onClick={() => setIsShowModal(true)}>
                                             <FileBarChartIcon />
                                             បង្កើតរបាយករណ៏
                                         </button>
@@ -257,80 +229,9 @@ function AnalyticForm() {
                                             <EntryTableBaseOnMajor bookBorrowed={analyticData.mostMajorAttend} />
                                         </div>
                                         <div className="header-card h-[497px] flex gap-5 bg-secondary p-5 rounded-[20px]">
-                                            <LineChart
-                                                seriesData={mySeriesData}
-                                                categories={myCategories}
-                                                title={myTitle}
+                                            <LineChartEntry
+                                                entryMajor={analyticData.getPurpose}
                                             />
-                                        </div>
-                                    </div>
-                                    <div className="table-entry-hour h-[994px] xl:h-[497px]  grid xl:grid-cols-2 gap-5 w-full">
-                                        <div className="table-stu bg-secondary p-5 flex flex-col h-full rounded-[20px] font-noto overflow-hidden">
-                                            <div className="header h-[46px] text-accent">
-                                                <p>ចំនួនម៉ោងនិស្សិតចូលប្រើប្រាស់បណ្ណាល័យ</p>
-                                            </div>
-                                            <div className="overflow-auto w-full h-full scrollbar-hide ">
-                                                <table className="table">
-                                                    {/* head */}
-                                                    <thead className='sticky top-0 left-0 bg-secondary'>
-                                                        <tr className='text-accent'>
-                                                            <th>ចំណាត់ថ្នាក់</th>
-                                                            <th>អត្តលេខ</th>
-                                                            <th>ឈ្មោះនិស្សិត</th>
-                                                            <th>ជំនាញ</th>
-                                                            <th>កំរិត</th>
-                                                            <th>សរុបចំនួនម៉ោង</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {analyticData.timeSpent.map((item, index) => (
-                                                            <tr key={item.studentId} className='text-accent hover'>
-                                                                <td>{index + 1}</td>
-                                                                <td>{item.studentId}</td>
-                                                                <td>{item.studentName}</td>
-                                                                <td>{item.major}</td>
-                                                                <td>{item.degree}</td>
-                                                                <td>{item.totalTimeSpent} ម៉ោង</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div className="table-stu bg-secondary p-5 h-full rounded-[20px] font-noto  overflow-auto">
-                                            <div className="header h-[46px] text-accent">
-                                                <p>ចំនួនម៉ោងបុគ្គលិកSRUចូលប្រើប្រាស់បណ្ណាល័យ</p>
-                                            </div>
-                                            <div className="overflow-x-auto">
-                                                <table className="table">
-                                                    {/* head */}
-                                                    <thead>
-                                                        <tr className='text-accent'>
-                                                            <th>ចំណាត់ថ្នាក់</th>
-                                                            <th>អត្តលេខ</th>
-                                                            <th>ឈ្មោះបុគ្គលិក</th>
-                                                            <th>មុខដំណែង</th>
-                                                            <th>សរុបចំនួនម៉ោង</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr className='text-accent hover'>
-                                                            <td>1</td>
-                                                            <td>300124</td>
-                                                            <td>ព្រំ ចាន់ថន</td>
-                                                            <td>គ្រូ</td>
-                                                            <td>289 ម៉ោង</td>
-                                                        </tr>
-                                                        <tr className='text-accent hover'>
-                                                            <td>2</td>
-                                                            <td>300168</td>
-                                                            <td>ចន វិក</td>
-                                                            <td>និស្សិតហាត់ការ</td>
-                                                            <td>189 ម៉ោង</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -344,7 +245,7 @@ function AnalyticForm() {
                 <div className="header-modal flex items-center justify-between font-noto text-accent">
                     <p>បង្កើតរបាយករណ៏</p>
                     <button
-                        onClick={() => setisShowModal(false)}
+                        onClick={() => setIsShowModal(false)}
                         className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
                     >
                         <X />

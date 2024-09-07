@@ -4,24 +4,29 @@ import { BookType, MonitorCheck, BriefcaseBusiness, CircleEllipsis } from 'lucid
 function CardPurposeData({ amountData, cardType }) {
     const [bgIcon, setBgicon] = useState("")
     const [iconCard, setIconCard] = useState(null)
+    const [CardDetails, setCardDetails] = useState("")
     // bgIcon="bg-[#00FF29]"
     // bgIcon="bg-[#00D1FF]" 
     //  bgIcon="bg-[#C5F3B3]"
     useEffect(() => {
         switch (cardType) {
             case "Use PC":
+                setCardDetails("ប្រើប្រាស់កុំព្យូទ័រ")
                 setBgicon("bg-[#00FF29]")
                 setIconCard(<MonitorCheck className='w-full h-full text-white' />)
                 break;
-            case "Assigment":
+            case "Assignment":
+                setCardDetails("ធ្វើ់កិច្ចការ")
                 setBgicon("bg-[#FF0051]")
                 setIconCard(<BriefcaseBusiness className='w-full h-full text-white' />)
                 break;
             case "Other":
+                setCardDetails("ផ្សេងៗ")
                 setBgicon("bg-[#00FF88]")
                 setIconCard(<CircleEllipsis className='w-full h-full text-white' />)
                 break;
             default:
+                setCardDetails("អាននិងស្រាវជ្រាវ")
                 setBgicon("bg-[#0048FF]")
                 setIconCard(<BookType className='w-full h-full text-white' />)
         }
@@ -43,7 +48,7 @@ function CardPurposeData({ amountData, cardType }) {
                     <div className="amount-entry flex flex-col sm:flex-row xl:flex-col 2xl:flex-row  items-center justify-between text-[#32E2FF] w-full h-full">
                         <div className="container-card-type text-accent h-full grid justify-center items-center">
                             <p className='font-bold text-[10px] sm:text-[15px]'>{cardType}</p>
-                            <p className='text-[10px] xl:text-[13px] font-noto hidden sm:block xl:hidden 2xl:block'>សរុបក្នុងខែនេះ</p>
+                            <p className='text-[10px] xl:text-[13px] font-noto hidden sm:block xl:hidden 2xl:block'>{CardDetails}</p>
                         </div>
                         <p className='text-[18px] sm:text-[32px] text-accent font-bold'>{amountData}</p>
                     </div>

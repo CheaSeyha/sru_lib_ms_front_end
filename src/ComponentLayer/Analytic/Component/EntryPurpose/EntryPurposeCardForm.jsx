@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import { ListFilter } from 'lucide-react';
 import CardPurposeData from '../EntryPurpose/CardPurposeData';
@@ -10,6 +10,44 @@ function EntryPurposeCard({ purposeData }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [majorForFilter, setMajorForFilter] = useState(["All", "CS", "ENG", "BUS"]);
     const [value, setValue] = useState("");
+
+    // Default local purpose data with 0 as initial values
+    const defaultPurposeData = [
+        {
+            purposeType: "Use PC",
+            amountData: 0
+        },
+        {
+            purposeType: "Other",
+            amountData: 0
+        },
+        {
+            purposeType: "Reading",
+            amountData: 0
+        },
+        {
+            purposeType: "Assignment",
+            amountData: 0
+        }
+    ];
+
+    // Local state to store purpose data
+    const [pureposeDataLocal, setPurposeDataLocal] = useState(defaultPurposeData);
+
+    useEffect(() => {
+        if (purposeData && purposeData.length > 0) {
+            // Map over the local default data, merging with incoming `purposeData`
+            const updatedPurposeData = defaultPurposeData.map(localPurpose => {
+                // Find matching purpose in `purposeData`
+                const matchingPurpose = purposeData.find(p => p.purposeType === localPurpose.purposeType);
+                return {
+                    ...localPurpose,
+                    amountData: matchingPurpose ? matchingPurpose.amountData : localPurpose.amountData
+                };
+            });
+            setPurposeDataLocal(updatedPurposeData);
+        }
+    }, [purposeData]);
 
     // Handle selection
     const handleSelection = (value) => {
@@ -38,7 +76,7 @@ function EntryPurposeCard({ purposeData }) {
                 </details>
             </div>
             <div className="card-purpose-container w-full h-fit grid grid-cols-2 gap-5 items-end">
-                {purposeData.map((data, index) => (
+                {pureposeDataLocal.map((data, index) => (
                     <CardPurposeData
                         key={index}
                         amountData={data.amountData}

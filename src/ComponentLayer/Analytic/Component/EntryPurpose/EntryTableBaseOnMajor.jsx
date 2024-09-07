@@ -71,30 +71,6 @@ function EntryTableBaseOnMajor({ bookBorrowed }) {
                                 </tr>
                             );
                         })}
-                        {bookBorrowed.map((item, index) => {
-                            return (
-                                <tr key={index} className='hover:bg-primary border-none'>
-                                    <th>
-                                        <div className='w-4 h-4 rounded-full' style={{ backgroundColor: colors[index] }}></div>
-                                    </th>
-                                    <td>{item.majorName}</td>
-                                    <td>{item.times}</td>
-                                    <td>{item.percentage}%</td>
-                                </tr>
-                            );
-                        })}
-                        {bookBorrowed.map((item, index) => {
-                            return (
-                                <tr key={index} className='hover:bg-primary border-none'>
-                                    <th>
-                                        <div className='w-4 h-4 rounded-full' style={{ backgroundColor: colors[index] }}></div>
-                                    </th>
-                                    <td>{item.majorName}</td>
-                                    <td>{item.times}</td>
-                                    <td>{item.percentage}%</td>
-                                </tr>
-                            );
-                        })}
                     </tbody>
                 </table>
             </div>
