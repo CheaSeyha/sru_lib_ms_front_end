@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ChevronUp, BookPlus, NotebookPen } from 'lucide-react';
-import { useHideSideBar } from '../../Context/HideSidebarContext'
+import { ChevronUp } from 'lucide-react'; // Adjust imports as needed
+import { useHideSideBar } from '../../Context/HideSidebarContext';
+
 function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownButtonData }) {
     const GetLinkPath = useLocation().pathname;
-    const [showDropdown, setShowDropdown] = useState(false);//Use for show and hide Dropdown menu button
+    const [showDropdown, setShowDropdown] = useState(false); // Use for showing and hiding Dropdown menu button
     const { isHideSideBar, setIsHideSideBar } = useHideSideBar();
-    const handleHideShowDropDonw = () => {//Use for show and hide Dropdown menu button if it has dropdownButton
+
+    const handleHideShowDropDonw = () => {
         if (dropDownButton) {
-            showDropdown ? setShowDropdown(false) : setShowDropdown(true);
+            setShowDropdown(!showDropdown);
         }
-        isHideSideBar ? setIsHideSideBar(false) : setIsHideSideBar(true)
-    }
+        setIsHideSideBar(!isHideSideBar);
+    };
 
     useEffect(() => {
-        if (dropDownButton) {//Check link path it was in drop down or not if true show drop down
-            if (GetLinkPath === "/BookManagement/AddBook" || GetLinkPath === "/BookManagement/Donation" || GetLinkPath === "/BookManagement/BookBorrowed" || GetLinkPath === "/BookManagement/TimeSpent" || GetLinkPath === "/BookManagement/Backup") {
-                setShowDropdown(true);
-            } else {
-                setShowDropdown(false);
-            }
+        if (dropDownButton) {
+            // Check if the current path is in the dropdown menu
+            const dropdownPaths = [
+                "/BookManagement/AddBook",
+                "/BookManagement/Donation",
+                "/BookManagement/BookBorrowed",
+                "/BookManagement/TimeSpent",
+                "/BookManagement/Backup",
+            ];
+            setShowDropdown(dropdownPaths.includes(GetLinkPath));
         }
     }, [GetLinkPath, dropDownButton]);
 
@@ -27,11 +33,11 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownBu
         <>
             <NavLink
                 to={showDropdown ? GetLinkPath : path}
-                onClick={() => handleHideShowDropDonw()}
+                onClick={handleHideShowDropDonw}
                 className={({ isActive }) => (
                     `sidebar-button hover:bg-base-100 ps-5 sm:ps-0 lg:ps-3 space-x-3 cursor-pointer 
                     w-full h-[45px] flex sm:justify-center lg:justify-start items-center 
-                    rounded-[10px] ease-in-out duration-300 ${isActive || showDropdown ? 'bg-base-100 ' : 'text-neutral'} relative `
+                    rounded-[10px] ease-in-out duration-300 ${isActive || showDropdown ? 'bg-base-100' : 'text-neutral'} relative `
                 )}
             >
                 <div className="icon">{icon}</div>
@@ -42,12 +48,12 @@ function SidebarMenuButton({ btnMenuType, icon, path, dropDownButton, dropDownBu
                     </div>
                 )}
             </NavLink>
-            {/* drop down menu */}
+            {/* Dropdown menu */}
             <div className={`transition-max-height px-5 sm:px-0 lg:px-5 duration-500 rounded-none sm:rounded-[10px] lg:rounded-none ease-in-out sm:bg-base-300 lg:bg-secondary overflow-hidden ${showDropdown ? 'max-h-60' : 'max-h-0'}`}>
                 <ul className="ul border-s sm:border-s-0 lg:border-s border-accent text-[13px] sm:px-1 lg:px-0">
                     {dropDownButtonData.map((data, index) => (
                         <NavLink to={data.urlPath} key={index}>
-                            <li className={`li transition-all sm:border-b border-accent  lg:border-none flex items-center gap-1 duration-150 cursor-pointer hover:bg-base-300 w-full h-full py-3 justify-start sm:justify-center lg:justify-start ps-5 sm:ps-0 lg:ps-5 ${GetLinkPath === data.urlPath ? "text-accent" : "text-neutral"}`}>
+                            <li className={`li transition-all sm:border-b border-accent lg:border-none flex items-center gap-1 duration-150 cursor-pointer hover:bg-base-300 w-full h-full py-3 justify-start sm:justify-center lg:justify-start ps-5 sm:ps-0 lg:ps-5 ${GetLinkPath === data.urlPath ? "text-accent" : "text-neutral"}`}>
                                 {data.iconName}
                                 <p className='block sm:hidden lg:block text-[13px]'>{data.dropDownBtnType}</p>
                             </li>

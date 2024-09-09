@@ -10,46 +10,37 @@ import AnalyticForm from './Analytic/AnalyticForm';
 import StaffManageForm from './StaffManage/StaffManageForm';
 import LoginForm from './LoginRegiter/LoginForm';
 import StudentManage from './StudentManage/StudentManage';
+import ProtectedRoute from './ProtectedRoute'; // Correct import
 
 function AdminPanel() {
-    const GetLinkPath = useLocation().pathname
-    const [isLogin, setisLogin] = useState(true)
-    const handleLogin = () => {
-        setisLogin(true)
-    }
-
+    const { pathname } = useLocation();
     return (
         <ScanResultIDProvider>
-            {!isLogin ? (
-                <LoginForm handleLogin={handleLogin} />
-            ) : (
-                <main className="flex h-screen sm:h-screen relative">
-                    <div className={`sideBarToggle ${GetLinkPath === "/QRStudentEntry" ? "hidden" : "block"} absolute top-5 w-fit rounded-full right-5 flex flex-col sm:hidden items-end z-50`}>
-                        {/* for hide or show sidebar when in mobile view  */}
-                        <SideBarToggle />
-                    </div>
-                    <Sidebar />
-                    {/* Always render the Sidebar component */}
-                    <section className="flex-1 p-5 xl:h-full overflow-y-auto sm:overscroll-y-none scrollbar-hide">
-                        {/* This will make the content area take up the remaining space */}
-                        <Routes>
-                            <Route path="" element={<Dashbaord />} />
-                            <Route path="QRStudentEntry" element={<QRStudentEntry />} />
-                            <Route path="BookManagement">
-                                <Route path="AddBook" element={<BookManagement />} />
-                                <Route path="BookBorrowed" element={<BookManagement />} />
-                                <Route path="BookBorrowed" element={<BookManagement />} />
-                                <Route path="TimeSpent" element={<BookManagement />} />
-                                <Route path="Backup" element={<BookManagement />} />
-                                <Route path="Donation" element={<BookManagement />} />
-                            </Route>
-                            <Route path="StaffManage" element={<StaffManageForm />} />
-                            <Route path="StudentManage" element={<StudentManage />} />
-                            <Route path="Analytic" element={<AnalyticForm />} />
-                        </Routes>
-                    </section>
-                </main>
-            )}
+            <main className="flex h-screen relative">
+                <div className={`sideBarToggle ${pathname === "/QRStudentEntry" ? "hidden" : "block"} absolute top-5 right-5 flex flex-col sm:hidden items-end z-50`}>
+                    <SideBarToggle />
+                </div>
+
+                <Sidebar />
+
+                <section className="flex-1 p-5 overflow-y-auto scrollbar-hide">
+                    <Routes>
+                        <Route path="/" element={<ProtectedRoute><Dashbaord /></ProtectedRoute>} />
+                        <Route path="/QRStudentEntry" element={<ProtectedRoute><QRStudentEntry /></ProtectedRoute>} />
+                        <Route path="/BookManagement/*" element={<ProtectedRoute><Routes>
+                            <Route path="AddBook" element={<BookManagement />} />
+                            <Route path="BookBorrowed" element={<BookManagement />} />
+                            <Route path="TimeSpent" element={<BookManagement />} />
+                            <Route path="Backup" element={<BookManagement />} />
+                            <Route path="Donation" element={<BookManagement />} />
+                        </Routes></ProtectedRoute>} />
+                        <Route path="/StaffManage" element={<ProtectedRoute><StaffManageForm /></ProtectedRoute>} />
+                        <Route path="/StudentManage" element={<ProtectedRoute><StudentManage /></ProtectedRoute>} />
+                        <Route path="/Analytic" element={<ProtectedRoute><AnalyticForm /></ProtectedRoute>} />
+                        <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
+                    </Routes>
+                </section>
+            </main>
         </ScanResultIDProvider>
     );
 }
