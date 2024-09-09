@@ -15,7 +15,7 @@ function App() {
           <div className="bg-base-300">
             <Routes>
               {/* Public Route: Login Page */}
-              <Route path="/login" element={<LoginForm />} />
+              <Route path="/Login" element={<LoginForm />} />
 
               {/* Protected Routes: Only accessible after login */}
               <Route

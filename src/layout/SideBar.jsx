@@ -6,8 +6,11 @@ import { useThemeSwitch } from '../Context/ThemeSwitchContext';
 import { useLocation } from 'react-router-dom';
 import medal from '../../src/assets/image/medal.svg'
 import backup from '../../src/assets/image/backup.svg'
-import { ChevronUp, BookPlus, NotebookPen, ShieldCheck, DatabaseBackup,BookUser } from 'lucide-react';
+import { ChevronUp, BookPlus, NotebookPen, ShieldCheck, DatabaseBackup, BookUser } from 'lucide-react';
+import { useAuth } from '../Context/AuthProvider';
 function Sidebar() {
+
+    const { username, role } = useAuth()
     // State to track the current theme
     // const [theme, setTheme] = useState('dark');
     const { theme, toggleTheme } = useThemeSwitch()
@@ -16,7 +19,7 @@ function Sidebar() {
     //Get The Link Path To Know Is In /QRStudentEntry if true then hide the sidebar 
     const GetLinkPath = useLocation().pathname
 
-    const BtnMenu =
+    const BtnMenuData =
         [
             {
                 btnType: "Dashbaord",
@@ -102,7 +105,27 @@ function Sidebar() {
             }
         ]
 
+    // Function to filter menu items based on role
+    const getFilteredMenuItems = (role) => {
+        return BtnMenuData.filter(item => {
+            if (role === 'ADMIN') {
+                return true; // Show all items for admin
+            } else if (role === 'USER') {
+                // Show specific items for normal users
+                const allowedItems = [
+                    "Dashboard",
+                    "QR Student Entry",
+                    "Book Manage",
+                    "Student Manage"
+                ];
+                return allowedItems.includes(item.btnType);
+            } else {
+                return false; // Default case
+            }
+        });
+    };
 
+    const BtnMenu = getFilteredMenuItems(role)
     return (
         <>
             {/* if GetLinkPath = true it mean user in QRStudetnEntry Form So We need to hide the side bar and show only from for scan  */}
@@ -122,8 +145,8 @@ function Sidebar() {
                         <img src={imageProfile} alt="logo sru" />
                     </div>
                     <div className="user-name font-sans text-light-text ps-2 blok sm:hidden lg:block">
-                        <p className='font-bold'>JOHN SEY</p>
-                        <p className='text-[10px]'>ADMIN</p>
+                        <p className='font-bold'>{username}</p>
+                        <p className='text-[10px]'>{role}</p>
                     </div>
                 </header>
                 {/* User Frofile  */}

@@ -8,8 +8,11 @@ import RadialBarChart from './Component/RadialBarChart';
 import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../Context/AuthProvider';
 
 function Dashbaord() {
+    const {username} = useAuth()
+
     const defaultCardData = [
         { cardType: "Entry", amount: 0, analytic: 0.0 },
         { cardType: "Book Borrow", amount: 0, analytic: 0.0 },
@@ -83,7 +86,7 @@ function Dashbaord() {
                         <div className="tittle flex justify-between">
                             <div className="sruText">
                                 <p className="sm:text-[30px] xl:text-[30px] font-moul">{t("sruText")}</p>
-                                <p className="text-[10px] xl:text-[15px] font-bold font-noto">WELCOME BACK JOHNSEY</p>
+                                <p className="text-[10px] xl:text-[15px] font-bold font-noto">WELCOME BACK {username}</p>
                             </div>
                             <NavLink className="btn text-accent hidden sm:flex items-center justify-center rounded-[50px]" to="/Analytic">
                                 View Analytic

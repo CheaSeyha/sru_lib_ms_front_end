@@ -30,8 +30,11 @@ function LoginForm() {
 
     const handleSendOTP = async (e) => {
         e.preventDefault();
+        if (email === "") {
+            toast.error("Please entry email")
+            return
+        }
         setIsLoading(true); // Show loading spinner
-
         try {
             await requestOtp(email);
             setIsOTPSent(true);
@@ -51,9 +54,9 @@ function LoginForm() {
             await verifyOtp(email, otp); // Verify OTP using the method from context
             setIsForgotPassword(false);
             setIsOTPConfirmed(true);
-            toast.success("OTP confirmed");
+            toast.success("OTP Confirm Success")
         } catch (error) {
-            toast.error("Failed to verify OTP");
+            toast.error(error.response ? error.response.data : error.message);
         }
     };
 
@@ -63,8 +66,8 @@ function LoginForm() {
             console.log("Email:", email, "New Password:", newPassword);
             try {
                 await changePassword(email, newPassword);
-                toast.success("Password reset successful");
-                navigate('/'); // Redirect to the dashboard or home page after password reset
+                handleBackToLoign()
+                toast.success("Password reset successful.");
             } catch (error) {
                 console.log(error)
                 toast.error("Failed to reset password");
@@ -96,9 +99,14 @@ function LoginForm() {
             await register(registerEmail, registerUserName, registerPassword);
             toast.success("Register Success");
 
-            setIsLogin(true)
-            setIsForgotPassword(false)
-            setIsOTPConfirmed(false)
+            try {
+                await login(registerEmail, registerPassword, true); // Pass "Remember Me" state
+                toast.success("Login Success");
+                navigate('/'); // Redirect after login
+            } catch (error) {
+                console.error('Login failed:', error);
+                toast.error('Login failed');
+            }
         } catch (error) {
             console.error('Registration failed:', error);
             toast.error('Registration failed');
