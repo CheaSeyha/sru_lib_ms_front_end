@@ -66,8 +66,15 @@ function LoginForm() {
             console.log("Email:", email, "New Password:", newPassword);
             try {
                 await changePassword(email, newPassword);
-                handleBackToLoign()
                 toast.success("Password reset successful.");
+                try {
+                    await login(email, newPassword, true); // Pass "Remember Me" state
+                    toast.success("Login Success");
+                    navigate('/'); // Redirect after login
+                } catch (error) {
+                    console.error('Login failed:', error);
+                    toast.error('Login failed');
+                }
             } catch (error) {
                 console.log(error)
                 toast.error("Failed to reset password");

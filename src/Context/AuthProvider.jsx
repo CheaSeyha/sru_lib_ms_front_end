@@ -4,15 +4,17 @@ import axios from "../api/axios"; // Your axios instance
 const AuthContext = createContext(null);
 
 const getTokenExpiration = (token) => {
+    if (!token) return 0; // Early exit if no token is provided
     try {
         const payload = token.split('.')[1];
         const decoded = JSON.parse(atob(payload));
         return decoded.exp * 1000; // Convert to milliseconds
     } catch (e) {
         console.error("Error decoding token: ", e);
-        return 0;
+        return 0; // Return 0 so it's treated as expired
     }
 };
+
 
 const isTokenExpired = (token) => {
     if (!token) return true;

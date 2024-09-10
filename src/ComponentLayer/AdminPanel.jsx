@@ -25,7 +25,7 @@ function AdminPanel() {
 
                 <section className="flex-1 p-5 overflow-y-auto scrollbar-hide">
                     <Routes>
-                        <Route path="/" element={<ProtectedRoute><Dashbaord /></ProtectedRoute>} />
+                        <Route path="/" element={<ProtectedRoute ><Dashbaord /></ProtectedRoute>} />
                         <Route path="/QRStudentEntry" element={<ProtectedRoute><QRStudentEntry /></ProtectedRoute>} />
                         <Route path="/BookManagement/*" element={<ProtectedRoute><Routes>
                             <Route path="AddBook" element={<BookManagement />} />
@@ -34,10 +34,14 @@ function AdminPanel() {
                             <Route path="Backup" element={<BookManagement />} />
                             <Route path="Donation" element={<BookManagement />} />
                         </Routes></ProtectedRoute>} />
-                        <Route path="/StaffManage" element={<ProtectedRoute><StaffManageForm /></ProtectedRoute>} />
+                        <Route path="/StaffManage" element={<ProtectedRoute roleRequired="ADMIN"><StaffManageForm /></ProtectedRoute>} />
                         <Route path="/StudentManage" element={<ProtectedRoute><StudentManage /></ProtectedRoute>} />
-                        <Route path="/Analytic" element={<ProtectedRoute><AnalyticForm /></ProtectedRoute>} />
-                        <Route path="/unauthorized" element={<h1>Unauthorized</h1>} />
+                        <Route path="/Analytic" element={<ProtectedRoute roleRequired="ADMIN"><AnalyticForm /></ProtectedRoute>} />
+                        <Route path="/unauthorized" element={
+                            <main className='flex text-accent justify-center items-center w-full h-full space-y-5'>
+                                <p>Unauthorized</p>
+                            </main>
+                        } />
                     </Routes>
                 </section>
             </main>
