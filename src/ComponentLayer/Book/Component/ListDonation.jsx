@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import BtnGredient from "../BtnGredient";
 import ModalAddDonation from "./ModalAddDonation";
 import axios from "../../../api/axios";
-import refresh from "../../../assets/logo/refresh.svg"
+import refresh from "../../../assets/logo/refresh.svg";
+import { RotateCcw,CircleFadingPlus } from "lucide-react";
 import CerAppreciation from "./CerAppreciation"
 export default function ListDonation() {
   // Data of All Book
@@ -95,14 +96,16 @@ useEffect(() => {
           </div>
           {/* block one */}
           <div className="flex w-full pb-5 sm:pb-5 xl:pb-0">
-          <div className="inline-block w-full">
+          <div className="inline-block w-3/5">
             <BtnGredient className="w-full h-full" onClick={resetSelection} color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
+            <RotateCcw />
             <p>ធ្វើឡើងវិញ</p>
             </BtnGredient>
           </div>
-          <div className="inline-block">
-          <BtnGredient onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
+          <div className="inline-block w-2/5 text-right">
+          <BtnGredient className="flex items-center justify-center" onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
             hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
+              <CircleFadingPlus />
             <p>បញ្ចូល</p>
           </BtnGredient>
         </div>

@@ -172,7 +172,7 @@ const ModalAddDonation = ({isModalVisible, handleCloseModal,fetchDonation }) => 
                 </div>
                 <div className="w-full ml-1">
                   <div className=" w-full font-semibold">កាលបរិច្ឆេទឧបត្ថម្ភ :</div>
-                  <input type="text" className="input input-bordered bg-secondary w-full" name="donateDate" value={formData.donateDate} onChange={handleChange} required />
+                  <input type="date" className="input input-bordered bg-secondary w-full" name="donateDate" value={formData.donateDate} onChange={handleChange} required />
                 </div>
               </div>
               <div className='flex'>

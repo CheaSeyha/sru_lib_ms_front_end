@@ -7,6 +7,7 @@ import ExcelImported from './ExcelImported';
 import toast, { Toaster } from 'react-hot-toast';
 const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
   const [collegeData, setCollegeData]=useState([]);
+  const dateToday=new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
     bookId: "",
     bookTitle: "",
@@ -15,7 +16,8 @@ const ModalAdd = ({ isModalVisible, handleCloseModal,fetchBooks }) => {
     collegeId: "",
     author: "",
     publicationYear: "",
-    genre: ""
+    genre: "",
+    receiveDate: dateToday
   });
   useEffect(() => {
     axios.get('/college')

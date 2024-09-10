@@ -103,6 +103,8 @@ const ListCertificate = () => {
                   <td>{certificate.studentId}</td>
                   <td>{certificate.studentName}</td>
                   <td>{certificate.major}</td>
+                  <td>{certificate.generation}</td>
+                  <td>{certificate.degree}</td>
                   <td className='text-center'>{convertMinutesToHoursAndMinutes(certificate.totalTimeSpent)}</td>
                   <td className='text-center'>  
                     <Certificate certificate={certificate} timespent={convertMinutesToHoursAndMinutes(certificate.totalTimeSpent)}/>

@@ -4,6 +4,7 @@ import ModalAdd from "./ModalAdd.jsx";
 import axios from "../../../api/axios";
 import ModalLst from "./ModalLst";
 import refresh from "../../../assets/logo/refresh.svg"
+import { RotateCcw, Trash2,Pencil, CircleFadingPlus} from "lucide-react";
 import toast, { Toaster } from 'react-hot-toast';
 import ModalUpdateBook from "./ModalUpdateBook.jsx";
 export default function ListOfAllBook() {
@@ -68,6 +69,7 @@ export default function ListOfAllBook() {
   const handleRowClick = (entry) => {
     setSelectedEntry(entry);
     setIsModalLstVisible(true);
+    resetSelection();
   };
 
   const closeModal = () => {
@@ -159,30 +161,34 @@ export default function ListOfAllBook() {
             </div>
           </div>
           <div className="flex w-full pb-5 sm:pb-5 xl:pb-0">
-            <div className="inline-block w-3/5">
+            <div className="inline-block w-2/5">
               <BtnGredient className="w-full h-full" onClick={resetSelection} color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
+                <RotateCcw />
                 <p className="font-noto">ធ្វើឡើងវិញ</p>
               </BtnGredient>
             </div>
-            <div className="inline-block pl-10 pr-5 w-2/5">
+            <div className="inline-block pl-5 w-2/5">
               {selectedRows.length > 0 && (
                 <div className="inline-block pr-2">
                   <BtnGredient className="w-full h-full" onClick={handledelete} color={'from-[#ff0000] to-[#E7FBFF]'} hover={'hover:from-[#E7FBFF] hover:to-[#ff0000]'}>
+                  <Trash2 />
                     <p className="font-noto">លុប</p>
                   </BtnGredient>
                 </div>
               )}
               {selectedRows.length == 1 && (
-                <div className="inline-block pl-2">
+                <div className="inline-block pl-2 ">
                   <BtnGredient className="w-full h-full pr-5" onClick={() => setIsModalUpdateVisible(true)} color={'from-[#1aff00] to-[#E7FBFF]'} hover={'hover:from-[#E7FBFF] hover:to-[#1aff00]'}>
+                  <Pencil />
                     <p className="font-noto">កែសម្រួល</p>
                   </BtnGredient>
                 </div>
               )}
             </div>
-            <div className="inline-block">
-              <BtnGredient onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
+            <div className="inline-block w-1/5 text-right">
+              <BtnGredient className="flex items-center justify-center" onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
                 hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
+                  <CircleFadingPlus />
                 <p className="font-noto">បញ្ចូល</p>
               </BtnGredient>
             </div>
@@ -198,6 +204,7 @@ export default function ListOfAllBook() {
                 <th className="sticky top-0 text-left text-sm bg-secondary">មហាវិទ្យាល័យ</th>
                 <th className="sticky top-0 text-left text-sm bg-secondary">អ្នកនិពន្ធ</th>
                 <th className="sticky top-0 text-left text-sm bg-secondary">ប្រភេទ</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">ភាសា</th>
                 <th className="sticky top-0 text-left text-sm bg-secondary">ឆ្នាំបោះពុម្ព</th>
                 <th className="sticky top-0 text-left text-sm bg-secondary">ចំនួន</th>
               </tr>
@@ -209,9 +216,14 @@ export default function ListOfAllBook() {
                   <th>{index + 1}</th>
                   <td>{entry.bookId}</td>
                   <td>{entry.bookTitle}</td>
-                  <td>{entry.collegeId}</td>
+                  <td>{entry.collegeId=== 'ST' ? 'វីទ្យាសាស្ត្រ និងបច្ចេកវិទ្យា' 
+                      : entry.collegeId === 'BA' ? 'គ្រប់គ្រងពាណិជ្ជកម្ម' 
+                      : entry.collegeId === 'AHFL' ?'សិល្បៈ មនុស្សសាស្ត្រនិងភាសា'
+                      : entry.collegeId === 'SS' ?'វិទ្យាសាស្ត្រសង្គម' :'កសិកម្ម'
+                    }</td>
                   <td>{entry.author ?? 'N/A'}</td>
                   <td>{entry.genre}</td>
+                  <td>{entry.languageId==='eng'? 'អង់គ្លេស':'ខ្មែរ'}</td>
                   <td>{entry.publicationYear ?? 'N/A'}</td>
                   <td>{entry.bookQuan}</td>
                 </tr>

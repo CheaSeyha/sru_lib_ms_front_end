@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import CardData from './CardData'
 import { BookA, BookX,BookMarked  } from 'lucide-react';
 import { BookDown } from "lucide-react";
@@ -7,19 +7,40 @@ import ChartBorrow from "./ChartBorrow";
 import LineChart from "../../Analytic/Component/Chart/LineChart"
 import CartBR from "./CartBR";
 import NavBarBook from "./NavBar";
+import axios from "../../../api/axios";
+import { use } from "i18next";
 export default function FormInput() {
+    const [bookData, setBookData]=useState(null);
+    useEffect(() => {
+        // Define an async function to fetch the data
+    const fetchBookData = async () => {
+        try {
+          const response = await axios.get('/book/about-book-data');
+          setBookData(response.data);
+        } catch (error) {
+          console.error('Error fetching book data:', error);
+        }
+      };
+      fetchBookData();
+      const intervalId = setInterval(fetchBookData, 5000); // Fetch every 5 seconds
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+      }, []);
+      // Set up an interval to fetch the data every X seconds (e.g., 5 seconds)
+      if (!bookData) return null;
     return (
         <>
             <div className="flex flex-col w-full h-fit xl:h-full space-y-5">
                 <div className="flex flex-col space-y-10 sm:flex-col lg:space-x-10 lg:flex-row md:flex-col md:space-x-0 lg:space-y-0 sm:space-y-10 overflow-auto scrollbar-hide">
                     <div className="flex-1">
-                        <CartBR Bdata={87} Rdata={7} Btype="សៀវភៅសរុប" Rtype="ឧបត្ថម្ភ" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookMarked className='w-full h-full text-white inline-block' />} iconB={<BookA className='w-full h-full text-white inline-block' />}  bgColor="from-[#35b21f] to-[#1F9EB2]"/>
+                        <CartBR Bdata={bookData.totalBook} Rdata={bookData.totalDonation} Btype="សៀវភៅសរុប" Rtype="ឧបត្ថម្ភ" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookMarked className='w-full h-full text-white inline-block' />} iconB={<BookA className='w-full h-full text-white inline-block' />}  bgColor="from-[#35b21f] to-[#1F9EB2]"/>
                     </div>
                     <div className="flex-1">
-                        <CartBR Bdata={44} Rdata={3} Btype="ខ្ចីសរុប" Rtype="ផុតកំណត់" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookX className='w-full h-full text-white inline-block' />} iconB={<BookUp className='w-full h-full text-white inline-block' />}  bgColor="from-[#1F9EB2] to-[#d310d6]" />
+                        <CartBR Bdata={bookData.totalBorrow} Rdata={bookData.totalExp} Btype="ខ្ចីសរុប" Rtype="ផុតកំណត់" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} cardType="Borrow"  iconR={<BookX className='w-full h-full text-white inline-block' />} iconB={<BookUp className='w-full h-full text-white inline-block' />}  bgColor="from-[#1F9EB2] to-[#d310d6]" />
                     </div>
                     <div className="flex-1">
-                        <CartBR Bdata={20} Rdata={18} Btype="ខ្ចីថ្ងៃនេះ" Rtype="សងថ្ងៃនេះ" bgColor="from-[#d310d6] to-[#e3d813]" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} iconR={<BookDown className='w-full h-full text-white inline-block' />} iconB={<BookUp className='w-full h-full text-white inline-block' />} />
+                        <CartBR Bdata={bookData.todayBorrowed} Rdata={bookData.todayReturned} Btype="ខ្ចីថ្ងៃនេះ" Rtype="សងថ្ងៃនេះ" bgColor="from-[#d310d6] to-[#e3d813]" bgB="bg-[#32e4ff]" bgR={"bg-[#00FF29]"} iconR={<BookDown className='w-full h-full text-white inline-block' />} iconB={<BookUp className='w-full h-full text-white inline-block' />} />
                     </div>
                 </div>
                 <div className="flex flex-1 scrollbar-hide flex-col lg:flex-row md:flex-col sm:flex-col md:space-x-0 sm:space-x-0 mt-4 h-full lg:space-x-4 overflow-auto">

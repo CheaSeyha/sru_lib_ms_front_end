@@ -97,14 +97,14 @@ const handleSubmit = async (e) => {
                   name="bookId" value={formData.bookId} onChange={handleInputChange} readOnly/>
                 </div>
                 <div className="w-full mt-5 ml-1">
-                  <div className=" w-full font-semibold">Title :</div>
+                  <div className=" w-full font-semibold">ចំណងជើង :</div>
                   <input type="text" className="input input-bordered  w-full bg-secondary" 
                   name="bookTitle" value={formData.bookTitle} onChange={handleInputChange}/>
                 </div>
               </div>
               <div className='flex'>
                 <div className="w-full mr-1">
-                  <div className=" w-full font-semibold">College :</div>
+                  <div className=" w-full font-semibold">មហាវិទ្យាល័យ :</div>
                   <select
         name="collegeId"
         value={formData.collegeId}
@@ -125,32 +125,32 @@ const handleSubmit = async (e) => {
 </select>
                 </div>
                 <div className="w-full ml-1">
-                  <div className=" w-full font-semibold">Author :</div>
+                  <div className=" w-full font-semibold">អ្នកនិពន្ធ :</div>
                   <input type="text" className="input input-bordered  w-full bg-secondary" 
                   name="author" value={formData.author || ''} onChange={handleInputChange} />
                 </div>
               </div>
               <div className='flex'>
                 <div className="w-full mr-1">
-                  <div className=" w-full font-semibold">Genre :</div>
+                  <div className=" w-full font-semibold">ប្រភេទ :</div>
                   <input type="text" className="input input-bordered  w-full bg-secondary" 
                   name="genre" value={formData.genre} onChange={handleInputChange}/>
                 </div>
                 <div className="w-full ml-1">
-                  <div className=" w-full font-semibold">Public Year :</div>
+                  <div className=" w-full font-semibold">ឆ្នាំបោះពុម្ព :</div>
                   <input type="text" className="input input-bordered  w-full bg-secondary" 
                   name="publicationYear" value={formData.publicationYear || ''} onChange={handleInputChange} />
                 </div>
               </div>
               <div className='flex'>
                 <div className="w-full mr-1">
-                  <div className=" w-full font-semibold">Quantity :</div>
+                  <div className=" w-full font-semibold">ចំនួន :</div>
                   <input type="text" className="input input-bordered  w-full bg-secondary" 
                   name="bookQuan" value={formData.bookQuan} onChange={handleInputChange} />
                 </div>
                 <div className="w-full">
                   <div className='ml-1'>
-                    <label className="w-full font-semibold">Choose Language</label>
+                    <label className="w-full font-semibold">ភាសា</label>
                     <div className="mt-3">
                       <label className="inline-flex items-center w-1/2">
                         <input
@@ -162,7 +162,7 @@ const handleSubmit = async (e) => {
                           required
                           className="form-radio h-7 text-blue-600 bg-secondary"
                         />
-                        <span className="ml-2 text-accent">English</span>
+                        <span className="ml-2 text-accent">អង់គ្លេស</span>
                       </label>
                       <label className="inline-flex items-center w-1/2">
                         <input
@@ -174,7 +174,7 @@ const handleSubmit = async (e) => {
                           required
                           className="form-radio h-7 text-blue-600"
                         />
-                        <span className="ml-2 text-accent">Khmer</span>
+                        <span className="ml-2 text-accent">ខ្មែរ</span>
                       </label>
                     </div></div>
                 </div>
