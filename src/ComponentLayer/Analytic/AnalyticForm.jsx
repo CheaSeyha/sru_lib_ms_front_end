@@ -15,6 +15,7 @@ import MostBorrowBookTable from './Component/TotalBook/MostBorrowBookTable';
 import TotalEntryCardForm from './Component/EntryPurpose/TotalEntryCardForm'
 import EntryTableBaseOnMajor from './Component/EntryPurpose/EntryTableBaseOnMajor'
 import LineChartEntry from './Component/Chart/LineChartEntry'
+import toast, { Toaster } from 'react-hot-toast'
 
 function AnalyticForm() {
     const [isShowModal, setIsShowModal] = useState(false);
@@ -66,8 +67,48 @@ function AnalyticForm() {
         ]
     });
     const [hideDropDownButton, setHideDropDownButton] = useState(true);
-    const [value, setValue] = useState({ startDate: null, endDate: null });
+    const [value, setValue] = useState({
+        startDate: null,
+        endDate: null
+    });
     const [isLoading, setIsLoading] = useState(true);
+
+    // Utility function to format Date to YYYY-MM-DD
+    const formatDate = (date) => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleDateChange = (newValue) => {
+        const today = new Date();
+        const formattedToday = formatDate(today);
+
+        const startDate = newValue.startDate ? new Date(newValue.startDate) : null;
+        const endDate = newValue.endDate ? new Date(newValue.endDate) : null;
+
+        if (startDate && endDate) {
+            // Check if the selected start date is after the end date
+            if (startDate > endDate) {
+                toast.error("កាលបរិច្ឆេទ​ហួសពី​កាលបរិច្ឆេទ​បច្ចុប្បន្ន")
+                return;
+            }
+
+            // Check if the end date is in the future
+            if (endDate > today) {
+                toast.error("កាលបរិច្ឆេទ​ហួស​ពី​កាលបរិច្ឆេទ​បច្ចុប្បន្ន")
+                return;
+            }
+        }
+
+        // Update state with valid dates
+        setValue({
+            startDate: startDate ? formatDate(startDate) : '',
+            endDate: endDate ? formatDate(endDate) : ''
+        });
+    };
 
     // Set startDate to January 1st of the current year and endDate to the current date
     useEffect(() => {
@@ -82,27 +123,30 @@ function AnalyticForm() {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const { startDate, endDate } = value;
-            const formattedStartDate = startDate ? startDate.toISOString().split('T')[0] : '';
-            const formattedEndDate = endDate ? endDate.toISOString().split('T')[0] : '';
+            let response;
+            const defaultStartDate = "2024-01-01";  // Default start date
+            const startDate = value.startDate ? value.startDate : defaultStartDate;
+            const endDate = value.endDate;
 
-            const response = await axios.get('/analytic', {
-                params: { startDate: formattedStartDate, endDate: formattedEndDate }
-            });
+            // Fetch data using the appropriate startDate
+            response = await axios.get(`/analytic?startDate=${startDate}&endDate=${endDate}`);
 
+            // Set the analytic data from the response
             setAnalyticData(response.data);
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching data:", error.message);
         } finally {
             setIsLoading(false);
         }
     };
+
 
     // Fetch data whenever the startDate or endDate changes
     useEffect(() => {
         if (value.startDate && value.endDate) {
             fetchData();
         }
+        console.log(value.startDate, value.endDate)
     }, [value]);
 
     // This effect can be used to perform actions based on the fetched data
@@ -113,31 +157,6 @@ function AnalyticForm() {
     const handleHideDropDownButton = () => {
         setHideDropDownButton(prevState => !prevState);
     };
-
-    //Table Student Time Spent Feauture--------------
-    // State to track the sorting order and current page
-    const [isAscending, setIsAscending] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Number of items per page
-
-    // Function to handle sorting logic
-    const handleSort = () => {
-        setIsAscending(!isAscending); // Toggle the sorting order
-    };
-
-    // Calculate sorted data based on totalTimeSpent
-    const sortedData = [...analyticData.timeSpent].sort((a, b) => {
-        return isAscending ? a.totalTimeSpent - b.totalTimeSpent : b.totalTimeSpent - a.totalTimeSpent;
-    });
-
-    // Calculate the indices for slicing the data
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedData = sortedData.slice(startIndex, endIndex);
-
-    // Total number of pages
-    const totalPages = Math.ceil(sortedData.length / itemsPerPage);
-
     return (
         <>
             {isLoading ?
@@ -168,8 +187,9 @@ function AnalyticForm() {
                                                 key={"datePicker"}
                                                 showShortcuts={true}
                                                 showFooter={true}
+                                                separator="to"
                                                 value={value}
-                                                onChange={newValue => setValue(newValue)}
+                                                onChange={handleDateChange}
                                                 inputClassName="bg-secondary h-[48px] px-5 rounded-[10px] w-[290px] text-accent"
                                             />
                                         </div>
@@ -237,6 +257,7 @@ function AnalyticForm() {
                                 </div>
                             </div>
                         </div>
+                        <Toaster position='top-center' />
                     </main>
                 )
             }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import imageProfile from '../assets/logo/sru_logo.png'
 import SidebarMenuButton from '../layout/Component/SidebarMenuButton'
 import { useHideSideBar } from '../Context/HideSidebarContext';
@@ -8,12 +8,30 @@ import medal from '../../src/assets/image/medal.svg'
 import backup from '../../src/assets/image/backup.svg'
 import { ChevronUp, BookPlus, NotebookPen, ShieldCheck, DatabaseBackup, BookUser } from 'lucide-react';
 import { useAuth } from '../Context/AuthProvider';
-function Sidebar() {
+import Modal from '../layout/Component/Modal'
+import { X } from 'lucide-react';
+import BtnGredient from '../layout/Component/BtnGredient'
+import SRULogo from '../assets/logo/sru_logo.png'
+import toast, { Toaster } from 'react-hot-toast';
+import { getSoundState, setSoundState } from '../utils/soundUtils';
 
-    const { username, role } = useAuth()
-    // State to track the current theme
-    // const [theme, setTheme] = useState('dark');
+function Sidebar() {
+    // Initialize sound state from local storage
+    const [soundEnabled, setSoundEnabled] = useState(getSoundState());
+
+    // Effect to update sound state in local storage when it changes
+    useEffect(() => {
+        setSoundState(soundEnabled);
+    }, [soundEnabled]);
+
+    // Handle sound toggle
+    const handleSoundToggle = () => {
+        setSoundEnabled(prevState => !prevState);
+    };
     const { theme, toggleTheme } = useThemeSwitch()
+    const [isShowModal, setIsShowModal] = useState(false);
+    const { username, role, logout } = useAuth()
+    // State to track the current theme
     // For disble and enable side bar on mobile screen 
     const { isHideSideBar } = useHideSideBar()
     //Get The Link Path To Know Is In /QRStudentEntry if true then hide the sidebar 
@@ -125,6 +143,10 @@ function Sidebar() {
         });
     };
 
+    const handleLogout = () => {
+        logout()
+    }
+
     const BtnMenu = getFilteredMenuItems(role)
     return (
         <>
@@ -166,33 +188,117 @@ function Sidebar() {
                             />
                         ))}
                         <div className="m-auto line w-[80%] h-[1px] bg-gray-400 my-5"></div>
-                        {BtnMenuUnderLine.map((e, index) => (
-                            <SidebarMenuButton
-                                key={index}
-                                btnMenuType={e.btnType}
-                                path={e.path}
-                                icon={e.icon}
-                                dropDownButton={e.dropDownButton}
-                                dropDownButtonData={e.dropDownButtonData || []} // Ensure it's an empty array if undefined
-                            />
-                        ))}
+                        <button
+                            className="sidebar-button hover:bg-base-100 ps-5 sm:ps-0 lg:ps-3 space-x-3 cursor-pointer 
+                                        w-full h-[45px] flex sm:justify-center lg:justify-start items-center 
+                                        rounded-[10px] ease-in-out duration-300 active:bg-base-100 relative">
+                            <div className="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" id="Help-Chat-2--Streamline-Core" height={17} width={17} ><desc>{"Help Chat 2 Streamline Icon: https://streamlinehq.com"}</desc><g id="help-chat-2--bubble-help-mark-message-query-question-speech-circle"><path id="Union" fill="#d3fa8f" fillRule="evenodd" d="M7 0C3.13401 0 0 3.13401 0 7c0 1.36787 0.392824 2.6453 1.07184 3.7241L0.0357617 13.3143c-0.0681472 0.1704 -0.0375012 0.3644 0.0798413 0.5054 0.117342 0.1411 0.302526 0.2066 0.482455 0.1706l3.377822 -0.6756C4.89179 13.7541 5.91783 14 7 14c3.866 0 7 -3.134 7 -7 0 -3.86599 -3.134 -7 -7 -7Z" clipRule="evenodd" strokeWidth={1} /><path id="Union_2" fill="#69c528" fillRule="evenodd" d="M6 5.125c0 -0.55228 0.44772 -1 1 -1s1 0.44772 1 1 -0.44772 1 -1 1c-0.41421 0 -0.75 0.33579 -0.75 0.75v0.75c0 0.41421 0.33579 0.75 0.75 0.75s0.75 -0.33579 0.75 -0.75v-0.11445C8.76428 7.19198 9.5 6.24441 9.5 5.125c0 -1.38071 -1.11929 -2.5 -2.5 -2.5s-2.5 1.11929 -2.5 2.5c0 0.41421 0.33579 0.75 0.75 0.75s0.75 -0.33579 0.75 -0.75Zm2 5.25c0 -0.55228 -0.44772 -1 -1 -1s-1 0.44772 -1 1c0 0.5523 0.44772 1 1 1s1 -0.4477 1 -1Z" clipRule="evenodd" strokeWidth={1} /></g></svg>
+                            </div>
+                            <p className='block sm:hidden lg:block text-[13px]'>Help</p>
+
+                        </button>
+                        <button
+                            onClick={() => setIsShowModal(true)}
+                            className="sidebar-button hover:bg-base-100 ps-5 sm:ps-0 lg:ps-3 space-x-3 cursor-pointer 
+                                        w-full h-[45px] flex sm:justify-center lg:justify-start items-center 
+                                        rounded-[10px] ease-in-out duration-300 active:bg-base-100 relative">
+                            <div className="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" id="Cog-1--Streamline-Core" height={17} width={17} ><desc>{"Cog 1 Streamline Icon: https://streamlinehq.com"}</desc><g id="cog-1--work-loading-cog-gear-settings-machine"><path id="Subtract" fill="#95ed22" fillRule="evenodd" d="M5.55692 0.689231 5.09384 1.88462l-1.59385 0.90461 -1.27077 -0.19385c-0.21159 -0.02872 -0.42695 0.00612 -0.61871 0.10008 -0.19175 0.09396 -0.35125 0.2428 -0.45821 0.42762l-0.430769 0.75384c-0.110383 0.18776 -0.16124 0.40458 -0.145859 0.62184 0.015381 0.21726 0.096278 0.42475 0.232013 0.59509l0.807695 1.00153v1.80924L0.829223 8.90615c-0.135735 0.17034 -0.216631 0.37783 -0.232012 0.59509 -0.015382 0.21726 0.035475 0.43408 0.145858 0.62186l0.430771 0.7538c0.10696 0.1848 0.26646 0.3337 0.45821 0.4276 0.19175 0.094 0.40711 0.1288 0.61871 0.1001l1.27077 -0.1938 1.57231 0.9046 0.46308 1.1954c0.07809 0.2024 0.21549 0.3765 0.3942 0.4994 0.17871 0.123 0.3904 0.1892 0.60733 0.1898h0.90462c0.21694 -0.0006 0.42862 -0.0668 0.60733 -0.1898 0.17871 -0.1229 0.31611 -0.297 0.39421 -0.4994l0.46307 -1.1954L10.5 11.2108l1.2708 0.1938c0.2116 0.0287 0.4269 -0.0061 0.6187 -0.1001 0.1917 -0.0939 0.3512 -0.2428 0.4582 -0.4276l0.4308 -0.7538c0.1103 -0.18778 0.1612 -0.4046 0.1458 -0.62186 -0.0154 -0.21726 -0.0963 -0.42475 -0.232 -0.59509l-0.8077 -1.00153V6.09538l0.7862 -1.00153c0.1357 -0.17034 0.2166 -0.37783 0.232 -0.59509 0.0154 -0.21726 -0.0355 -0.43408 -0.1459 -0.62184l-0.4308 -0.75384c-0.1069 -0.18482 -0.2664 -0.33366 -0.4582 -0.42762 -0.1917 -0.09396 -0.4071 -0.1288 -0.6187 -0.10008l-1.2707 0.19385 -1.57235 -0.90461L8.44307 0.689231c-0.0781 -0.202393 -0.2155 -0.376481 -0.39421 -0.499464C7.87015 0.0667842 7.65847 0.00064083 7.44153 0h-0.88308c-0.21693 0.00064083 -0.42862 0.0667842 -0.60733 0.189767 -0.17871 0.122983 -0.31611 0.297071 -0.3942 0.499464ZM7 9.25c1.24264 0 2.25 -1.00736 2.25 -2.25S8.24264 4.75 7 4.75 4.75 5.75736 4.75 7 5.75736 9.25 7 9.25Z" clipRule="evenodd" strokeWidth={1} /></g></svg>
+                            </div>
+                            <p className='block sm:hidden lg:block text-[13px]'>Setting</p>
+
+                        </button>
                     </div>
                     {/* Show Summary data  */}
-                    {/* Change Theme Dark-light  */}
-                    <div className="themeSwitch w-full flex justify-center">
-                        <label className="swap swap-rotate">
-                            {/* this hidden checkbox controls the state */}
-                            <input id='themeSwitch' type="checkbox" onClick={toggleTheme} />
-                            {/* sun icon */}
-                            <svg className="swap-on fill-current w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" /></svg>
-                            {/* moon icon */}
-                            <svg className="swap-off fill-current w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" /></svg>
-                        </label>
-                    </div>
-                    {/* Change Theme Dark-light  */}
+
                 </section>
                 {/* Sidebar menu  */}
             </section>
+
+            <Modal isVisible={isShowModal} key={"getReport"}>
+                <div className="header-modal flex items-center justify-between font-noto text-accent">
+                    <p>Setting</p>
+                    <button
+                        onClick={() => setIsShowModal(false)}
+                        className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
+                    >
+                        <X />
+                    </button>
+                </div>
+                <div className="modal-body font-noto mt-5 text-accent w-full flex flex-col gap-5">
+                    <div className="card-user-infor w-full h-[100px] bg-secondary p-5 rounded-5 rounded-[20px] flex items-center justify-between">
+                        <div className="user-profile h-full text-accent flex gap-5">
+                            <img src={SRULogo} alt="sru-logo" className='w-full h-full' />
+                            <div className="user h-full flex flex-col justify-between">
+                                <div className="user-name text-xl font-bold">
+                                    <p>{username}</p>
+                                </div>
+                                <div className="user-role">
+                                    <p>{role}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
+                    </div>
+                    <div className="theme-switch w-full flex flex-row bg-secondary p-5 rounded-[20px] text-accent">
+                        <div className="text w-full">
+                            <p>មុខងារងងឹត</p>
+                        </div>
+                        <div className="themeSwitch w-fit flex justify-center">
+                            <label className="swap swap-rotate">
+                                {/* this hidden checkbox controls the state */}
+                                <input id='themeSwitch' type="checkbox" onClick={toggleTheme} />
+                                {/* sun icon */}
+                                <svg className="swap-on fill-current w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" /></svg>
+                                {/* moon icon */}
+                                <svg className="swap-off fill-current w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" /></svg>
+                            </label>
+                        </div>
+                    </div>
+                    <div className="tunr-on-camera-sound w-full flex flex-row bg-secondary p-5 rounded-[20px] text-accent">
+                        <div className="text w-full">
+                            <p>បើកសម្លេង Camera ពេលស្កេនកាត</p>
+                        </div>
+                        <label className="swap">
+                            {/* hidden checkbox to control the state */}
+                            <input
+                                type="checkbox"
+                                checked={soundEnabled}
+                                onChange={handleSoundToggle}
+                            />
+
+                            {/* volume on icon */}
+                            <svg
+                                className={`swap-on fill-current w-7 h-7 ${soundEnabled ? 'block' : 'hidden'}`}
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="48"
+                                height="48"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+                            </svg>
+
+                            {/* volume off icon */}
+                            <svg
+                                className={`swap-off fill-current w-7 h-7 ${soundEnabled ? 'hidden' : 'block'}`}
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="48"
+                                height="48"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M3,9H7L12,4V20L7,15H3V9M16.59,12L14,9.41L15.41,8L18,10.59L20.59,8L22,9.41L19.41,12L22,14.59L20.59,16L18,13.41L15.41,16L14,14.59L16.59,12Z" />
+                            </svg>
+                        </label>
+                    </div>
+                    {role === "ADMIN" &&
+                        <BtnGredient>
+                            View User
+                        </BtnGredient>
+                    }
+
+                </div>
+            </Modal>
         </>
     )
 }

@@ -63,7 +63,6 @@ function LoginForm() {
     const handleResetPassword = async (e) => {
         e.preventDefault();
         if (newPassword === confirmPassword) {
-            console.log("Email:", email, "New Password:", newPassword);
             try {
                 await changePassword(email, newPassword);
                 toast.success("Password reset successful.");
