@@ -15,6 +15,29 @@ import MostBorrowBookTable from './Component/TotalBook/MostBorrowBookTable';
 import TotalEntryCardForm from './Component/EntryPurpose/TotalEntryCardForm'
 import EntryTableBaseOnMajor from './Component/EntryPurpose/EntryTableBaseOnMajor'
 import LineChartEntry from './Component/Chart/LineChartEntry'
+import toast, { Toaster } from 'react-hot-toast'
+import ReportGen from './Component/ReportGen'
+
+
+// Utility function to format Date to YYYY-MM-DD
+const formatDate = (date) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+// Utility function to get the first day of the current month
+const getFirstDayOfMonth = (date) => {
+    return formatDate(new Date(date.getFullYear(), date.getMonth(), 1));
+};
+
+// Utility function to get the last day of the current month
+const getLastDayOfMonth = (date) => {
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    return formatDate(lastDay);
+};
 
 function AnalyticForm() {
     const [isShowModal, setIsShowModal] = useState(false);
@@ -66,33 +89,39 @@ function AnalyticForm() {
         ]
     });
     const [hideDropDownButton, setHideDropDownButton] = useState(true);
-    const [value, setValue] = useState({ startDate: null, endDate: null });
+    const [value, setValue] = useState({
+        startDate: null,
+        endDate: null
+    });
     const [isLoading, setIsLoading] = useState(true);
-
-    // Set startDate to January 1st of the current year and endDate to the current date
+    // Set default dates for start and end
     useEffect(() => {
-        const currentDate = new Date();
-        const startDate = new Date(currentDate.getFullYear(), 0, 1);
-        const endDate = currentDate;
+        const today = new Date();
+        const startDate = new Date(today.getFullYear(), 0, 1); // First day of the current year
+        const endDate = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
 
-        setValue({ startDate, endDate });
+        setValue({
+            startDate: formatDate(startDate),
+            endDate: formatDate(endDate)
+        });
     }, []);
 
     // Fetch data from the API
     const fetchData = async () => {
         setIsLoading(true);
         try {
+            const defaultStartDate = "2024-01-01";  // Default start date
             const { startDate, endDate } = value;
-            const formattedStartDate = startDate ? startDate.toISOString().split('T')[0] : '';
-            const formattedEndDate = endDate ? endDate.toISOString().split('T')[0] : '';
+            const start = startDate || defaultStartDate; // Use default if not provided
+            const end = endDate || getFirstDayOfMonth(new Date()); // Use first day of current month if not provided
+            // Fetch data using the startDate and endDate
+            const response = await axios.get(`/analytic?startDate=${start}&endDate=${end}`);
 
-            const response = await axios.get('/analytic', {
-                params: { startDate: formattedStartDate, endDate: formattedEndDate }
-            });
-
+            // Set the analytic data from the response
             setAnalyticData(response.data);
         } catch (error) {
-            console.error(error);
+            // Log the entire error response for debugging
+            console.error("Error fetching data:", error.response ? error.response.data : error.message);
         } finally {
             setIsLoading(false);
         }
@@ -105,39 +134,38 @@ function AnalyticForm() {
         }
     }, [value]);
 
-    // This effect can be used to perform actions based on the fetched data
-    useEffect(() => {
-        // Add any side effects related to analyticData here
-    }, [analyticData]);
+    // Handle date change
+    const handleDateChange = (newValue) => {
+        const today = new Date();
+        const formattedToday = formatDate(today);
+
+        const startDate = newValue.startDate ? new Date(newValue.startDate) : null;
+        const endDate = newValue.endDate ? new Date(newValue.endDate) : null;
+
+        if (startDate && endDate) {
+            // Check if the selected start date is after the end date
+            if (startDate > endDate) {
+                toast.error("កាលបរិច្ឆេទ​ហួសពី​កាលបរិច្ឆេទ​បច្ចុប្បន្ន");
+                return;
+            }
+
+            // Check if the end date is in the future
+            if (endDate > today) {
+                toast.error("កាលបរិច្ឆេទ​ហួស​ពី​កាលបរិច្ឆេទ​បច្ចុប្បន្ន");
+                return;
+            }
+        }
+
+        // Update state with valid dates
+        setValue({
+            startDate: startDate ? formatDate(startDate) : formattedToday,
+            endDate: endDate ? formatDate(endDate) : getFirstDayOfMonth(today)
+        });
+    };
 
     const handleHideDropDownButton = () => {
         setHideDropDownButton(prevState => !prevState);
     };
-
-    //Table Student Time Spent Feauture--------------
-    // State to track the sorting order and current page
-    const [isAscending, setIsAscending] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Number of items per page
-
-    // Function to handle sorting logic
-    const handleSort = () => {
-        setIsAscending(!isAscending); // Toggle the sorting order
-    };
-
-    // Calculate sorted data based on totalTimeSpent
-    const sortedData = [...analyticData.timeSpent].sort((a, b) => {
-        return isAscending ? a.totalTimeSpent - b.totalTimeSpent : b.totalTimeSpent - a.totalTimeSpent;
-    });
-
-    // Calculate the indices for slicing the data
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedData = sortedData.slice(startIndex, endIndex);
-
-    // Total number of pages
-    const totalPages = Math.ceil(sortedData.length / itemsPerPage);
-
     return (
         <>
             {isLoading ?
@@ -168,8 +196,9 @@ function AnalyticForm() {
                                                 key={"datePicker"}
                                                 showShortcuts={true}
                                                 showFooter={true}
+                                                separator="to"
                                                 value={value}
-                                                onChange={newValue => setValue(newValue)}
+                                                onChange={handleDateChange}
                                                 inputClassName="bg-secondary h-[48px] px-5 rounded-[10px] w-[290px] text-accent"
                                             />
                                         </div>
@@ -237,6 +266,7 @@ function AnalyticForm() {
                                 </div>
                             </div>
                         </div>
+                        <Toaster position='top-center' />
                     </main>
                 )
             }
@@ -251,18 +281,7 @@ function AnalyticForm() {
                         <X />
                     </button>
                 </div>
-                <div className="modal-body font-noto mt-5 text-accent w-full flex flex-col gap-5">
-                    <p>ជ្រើសប្រភេទរបាយការណ៏</p>
-                    <select className="select select-bordered bg-secondary w-full">
-                        <option>របាយការណ៏ប្រចាំត្រីមាសទី១</option>
-                        <option>របាយការណ៏ប្រចាំត្រីមាសទី២</option>
-                        <option>របាយការណ៏ប្រចាំត្រីមាសទី៣</option>
-                        <option>របាយការណ៏ប្រចាំឆ្នាំ</option>
-                    </select>
-                    <BtnGredient>
-                        ទាញរបាយការណ៍
-                    </BtnGredient>
-                </div>
+                <ReportGen />
             </Modal>
         </>
     )

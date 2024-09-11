@@ -6,14 +6,26 @@ import { useNavigate } from 'react-router-dom';
 import { Undo2, Settings, X } from 'lucide-react';
 import Modal from '../../../layout/Component/Modal';
 import toast from 'react-hot-toast';
-
+import { getSoundState, setSoundState } from '../../../utils/soundUtils';
 function CameraScanQR({ stopScan }) {
     const devices = useDevices();
     const [deviceId, setDeviceId] = useState("");
     const [muteAudio, setMuteAudio] = useState(true);
     const [showModal, setShowModal] = useState(false)
     const { scanResultID, setScanResultID } = useScanResultID();
+    // Initialize sound state from local storage
+    // Initialize sound state from local storage
+    const [soundEnabled, setSoundEnabled] = useState(getSoundState());
 
+    // Effect to update sound state in local storage when it changes
+    useEffect(() => {
+        setSoundState(soundEnabled);
+    }, [soundEnabled]);
+
+    // Handle sound toggle
+    const handleSoundToggle = () => {
+        setSoundEnabled(prevState => !prevState);
+    };
     const handleScanResult = (result) => {
         // Check if the scan is of type QR code
         if (result[0].format === "qr_code") {
@@ -79,7 +91,7 @@ function CameraScanQR({ stopScan }) {
                             paused={stopScan}
                             scanDelay={1000}
                             allowMultiple={true}
-                            components={{ audio: false, torch: true }}
+                            components={{ audio: soundEnabled, torch: true }}
                         />
                     )}
                 </div>
