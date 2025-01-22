@@ -220,7 +220,7 @@ function LoginForm() {
                                             onChange={(e) => setLoginEmail(e.target.value)}
                                             required
                                         />
-                                        <label htmlFor="loginPassword">Password</label>
+                                        <label htmlFor=" ">Password</label>
                                         <div className="relative w-full h-[46px] flex items-center">
                                             <input
                                                 type={hidePW ? "password" : "text"}
@@ -303,8 +303,8 @@ function LoginForm() {
                                             />
                                             <label className="swap absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
                                                 <input id='hidePW' type="checkbox" onChange={handleHidePW} className="hidden" />
-                                                <span className="swap-on">👁</span>
-                                                <span className="swap-off">👁‍🗨</span>
+                                                <Eye className="swap-on h-5 w-5 text-gray-500" />
+                                                <EyeOff className="swap-off h-5 w-5 text-gray-500" />
                                             </label>
                                         </div>
                                         <div className=" w-full flex justify-end">
