@@ -296,7 +296,7 @@ function LoginForm() {
                   <div className="w-full mt-10">
                     <button
                       type="submit"
-                      disabled=
+                      disabled={isLoading} // Disable button when isLoading is true
                       className="w-full h-[46px] active:scale-95 rounded-[50px] border-none bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] transition-all ease-in-out duration-100"
                     >
                       {isLoading ? (
