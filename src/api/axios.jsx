@@ -20,9 +20,14 @@ const processQueue = (error, token = null) => {
   failedRequestsQueue = [];
 };
 
+// Helper to get the token from localStorage or sessionStorage
+const getStoredToken = (key) => {
+  return localStorage.getItem(key) || sessionStorage.getItem(key);
+};
+
 // Refresh token logic
 const refreshToken = async () => {
-  const storedRefreshToken = localStorage.getItem("refreshToken");
+  const storedRefreshToken = getStoredToken("refreshToken");
   if (!storedRefreshToken) {
     throw new Error("No refresh token available.");
   }
@@ -42,9 +47,14 @@ const refreshToken = async () => {
 
     const { accessToken, refreshToken } = response.data;
 
-    // Save the new tokens
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
+    // Save the new tokens in both storages for consistency
+    if (localStorage.getItem("refreshToken")) {
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+    } else {
+      sessionStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
+    }
 
     // Update the global Axios Authorization header
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;

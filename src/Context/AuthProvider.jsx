@@ -1,46 +1,14 @@
 import React, { createContext, useState, useEffect } from "react";
-import axios from "../api/axios"; // Your axios instance
+import axios from "../api/apiClient"; // Your axios instance
 
 const AuthContext = createContext(null);
-
-const getTokenExpiration = (token) => {
-    if (!token) return 0; // Early exit if no token is provided
-    try {
-        const payload = token.split('.')[1];
-        const decoded = JSON.parse(atob(payload));
-        return decoded.exp * 1000; // Convert to milliseconds
-    } catch (e) {
-        console.error("Error decoding token: ", e);
-        return 0; // Return 0 so it's treated as expired
-    }
-};
-
-
-const isTokenExpired = (token) => {
-    if (!token) return true;
-    const expirationTime = getTokenExpiration(token);
-    const currentTime = Date.now();
-    return expirationTime < currentTime;
-};
 
 export const AuthProvider = ({ children }) => {
     const [accessToken, setAccessToken] = useState(() => sessionStorage.getItem("accessToken") || localStorage.getItem("accessToken"));
     const [refreshToken, setRefreshToken] = useState(() => sessionStorage.getItem("refreshToken") || localStorage.getItem("refreshToken"));
     const [role, setRole] = useState(() => sessionStorage.getItem("role") || localStorage.getItem("role"));
     const [username, setUsername] = useState(() => sessionStorage.getItem("username") || localStorage.getItem("username"));
-    const [authLoading, setAuthLoading] = useState(true);
-
-
-    useEffect(() => {
-        const refresh = async () => {
-            if (isTokenExpired(accessToken) && refreshToken) {
-                await refreshTokens();
-            }
-            setAuthLoading(false);
-        };
-
-        refresh();
-    }, [accessToken, refreshToken]);
+    const [authLoading, setAuthLoading] = useState(false);
 
     const login = async (email, password, rememberMe) => {
         try {
@@ -67,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
         } catch (error) {
             // Log error details to the console and rethrow it
-            console.error("Login error: ", error.response ? error.response.data : error.message);
+            // console.error("Login error: ", error.response ? error.response.data : error.message);
             throw error;
         }
     };
