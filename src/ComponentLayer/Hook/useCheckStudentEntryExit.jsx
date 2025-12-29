@@ -42,7 +42,7 @@ function useScanEntry() {
 
     const handleSaveEntry = async (studentID, checkPurpose) => {
         try {
-            const saveEntry = await axios.post('/entry', null, {
+            const saveEntry = await axios.post('/entry', {
                 params: {
                     entryId: Number(studentID),
                     purpose: checkPurpose
@@ -52,7 +52,7 @@ function useScanEntry() {
             if (!saveEntry.data) {
                 return { status: "error", message: "Cannot save entry." };
             } else {
-                return { status: "success", message: "Entry success." };
+                return { status: "Created", message: "Entry success." };
             }
         } catch (error) {
             console.error("Error occurred while saving entry:", error);

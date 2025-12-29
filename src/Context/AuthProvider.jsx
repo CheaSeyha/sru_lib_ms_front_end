@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }) => {
             requestOtp, verifyOtp, changePassword
         }}>
             {!authLoading ? children :
-                <main className='flex justify-center items-center w-full h-full space-y-5'>
+                <main className='flex justify-center items-center w-full h-screen space-y-5 bg-base-300'>
                     <span className="loading loading-dots text-accent loading-lg"></span>
                 </main>}
         </AuthContext.Provider>

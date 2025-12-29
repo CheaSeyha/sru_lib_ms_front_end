@@ -39,8 +39,8 @@ function useScanEntry() {
                 const result = await axios.get(`entry/check`, {
                     params: { entryId: scanResultID }
                 });
-
-                if (result.data === "exited" || result.data === "new attend!") {
+                console.log(result.data);
+                if (result.data.status === "exited" || result.data.status === "new attend!") {
                     const studentResult = await axios.get(`student/${scanResultID}`);
 
                     if (!studentResult.data) {

@@ -48,6 +48,11 @@ function App() {
                     <p>Unauthorized</p>
                   </main>
                 } />
+                <Route path="*" element={
+                  <main className='flex text-accent justify-center items-center w-full h-full space-y-5'>
+                    <p>404 Not Found</p>
+                  </main>
+                } />
               </Route>
             </Routes>
           </div>
