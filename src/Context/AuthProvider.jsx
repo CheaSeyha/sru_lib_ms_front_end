@@ -141,7 +141,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{
-            accessToken, refreshToken, role, login,username, register, logout, authAxios, authLoading,
+            accessToken, refreshToken, role, login, username, register, logout, authAxios, authLoading,
             requestOtp, verifyOtp, changePassword
         }}>
             {!authLoading ? children :
