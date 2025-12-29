@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children, roleRequired }) => {
   if (authLoading) {
     return (
       <main className='flex justify-center items-center w-full h-full space-y-5'>
-        <span className="loading loading-dots text-accent loading-lg"></span>
+        <span className="loading loading-dots text-accent loading-lg">Tesing</span>
       </main>
     );
   }
