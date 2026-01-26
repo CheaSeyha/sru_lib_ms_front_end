@@ -13,7 +13,7 @@ const useCRUDStaff = () => {
     setError(null);
 
     try {
-      const response = await axios.get("/staff"); // Fetch all staff data
+      const response = await axios.get("/library-staff"); // Fetch all staff data
       setStaffList(response.data); // Update the staffList state with the fetched data
       return response.data; // Optionally return the response data if needed
     } catch (err) {
@@ -29,7 +29,7 @@ const useCRUDStaff = () => {
     setError(null);
 
     try {
-      const response = await axios.get("/staff"); // Fetch all staff data
+      const response = await axios.get("/library-staff"); // Fetch all staff data
       setStaffList(response.data); // Update the staffList state with the fetched data
       return response.data; // Optionally return the response data if needed
     } catch (err) {
@@ -78,7 +78,7 @@ const useCRUDStaff = () => {
       setSuccess(false);
 
       try {
-        await axios.delete(`/staff/${staffID}`); // Send DELETE request to API
+        await axios.delete(`/library-staff/${staffID}`); // Send DELETE request to API
         setSuccess(true); // Set success to true on successful deletion
         await getAllStaff(); // Fetch the updated staff list after deletion
       } catch (err) {
@@ -98,7 +98,7 @@ const useCRUDStaff = () => {
       setSuccess(false);
 
       try {
-        await axios.put(`/staff/${staffID}`, {
+        await axios.put(`/library-staff/${staffID}`, {
           staffName: updatedData.staffName,
           gender: updatedData.gender,
           position: updatedData.position,

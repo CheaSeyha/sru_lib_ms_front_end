@@ -73,7 +73,7 @@ function TableStaff() {
     if (majorData.length > 0) {
       // Filter out majorSelects that are in staffInfor.major
       const filteredmajorSelect = majorData.filter(
-        (data) => !staffInfor.major.includes(data.majorId)
+        (data) => !staffInfor.major.includes(data.majorId),
       );
       setmajorSelect(filteredmajorSelect);
     }
@@ -193,7 +193,7 @@ function TableStaff() {
       // Log the updated staff list
       console.log(
         "After deletion and fetching new staff list:",
-        updatedStaffList
+        updatedStaffList,
       );
 
       // Close the delete modal
@@ -211,7 +211,7 @@ function TableStaff() {
   const handleEditModalOpen = (updatestaffId) => {
     // Find the staff data by staffId
     const staffToUpdate = filteredStaff.find(
-      (staff) => staff.staffId === updatestaffId
+      (staff) => staff.staffId === updatestaffId,
     );
     //Convert Major Name To Major ID
     const majorName = staffToUpdate.majorId;
@@ -257,7 +257,7 @@ function TableStaff() {
     if (form.checkValidity()) {
       if (clickEvenModal === "កែប្រែព័ត៌មានបុគ្គលិក") {
         try {
-          const updateStaff = await axios.put("/staff", {
+          const updateStaff = await axios.put("/library-staff", {
             staffId: staffInfor.staffId,
             staffName: staffInfor.staffName,
             gender: staffInfor.gender,
@@ -274,7 +274,7 @@ function TableStaff() {
             getAllStaffNoLoading();
           } else {
             toast.error(
-              "បរាជ័យក្នុងការកែប្រែព័ត៍មានបុគ្គលិក  ។សូមព្យាយាមម្តងទៀត"
+              "បរាជ័យក្នុងការកែប្រែព័ត៍មានបុគ្គលិក  ។សូមព្យាយាមម្តងទៀត",
             );
           }
         } catch (error) {
@@ -331,7 +331,7 @@ function TableStaff() {
     } else {
       // Remove the staff ID from the selected list
       setSelectedstaffIds((prevSelected) =>
-        prevSelected.filter((id) => id !== staffId)
+        prevSelected.filter((id) => id !== staffId),
       );
     }
   };
@@ -344,7 +344,7 @@ function TableStaff() {
     const filteredData = staffList.filter(
       (staff) =>
         staff.staffName.toLowerCase().includes(query) || // Search by name
-        staff.staffId.toString().includes(query) // Search by ID
+        staff.staffId.toString().includes(query), // Search by ID
     );
     setFilteredStaff(filteredData);
   };
@@ -646,7 +646,7 @@ function TableStaff() {
                       onClick={() => handleRemoveMajor(data)} // Remove major on click
                     >
                       {majorData.find(
-                        (majorSelect) => majorSelect.majorId === data
+                        (majorSelect) => majorSelect.majorId === data,
                       )?.majorName || data}
                     </button>
                   ))
@@ -686,7 +686,7 @@ function TableStaff() {
                         {shift}
                       </label>
                     </div>
-                  )
+                  ),
                 )}
               </div>
             </div>
