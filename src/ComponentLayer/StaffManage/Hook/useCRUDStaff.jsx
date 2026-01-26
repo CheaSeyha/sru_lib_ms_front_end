@@ -48,7 +48,7 @@ const useCRUDStaff = () => {
       setSuccess(false);
 
       try {
-        await axios.post("/staff", {
+        await axios.post("/library-staff", {
           staffName: staffData.staffName,
           gender: staffData.gender,
           position: staffData.position,
@@ -68,7 +68,7 @@ const useCRUDStaff = () => {
         setLoading(false);
       }
     },
-    [getAllStaff]
+    [getAllStaff],
   ); // Dependency on getAllStaff to ensure the staff list is updated after save
 
   // Function to delete staff data
@@ -88,7 +88,7 @@ const useCRUDStaff = () => {
         setLoading(false);
       }
     },
-    [getAllStaff]
+    [getAllStaff],
   ); // Dependency on getAllStaff to ensure the staff list is updated after deletion
 
   // Function to update staff data
@@ -117,7 +117,7 @@ const useCRUDStaff = () => {
         setLoading(false);
       }
     },
-    [getAllStaff]
+    [getAllStaff],
   ); // Dependency on getAllStaff to ensure the staff list is updated after update
 
   // Automatically fetch staff data when the hook is first used

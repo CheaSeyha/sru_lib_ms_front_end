@@ -42,7 +42,7 @@ const refreshToken = async () => {
           "Content-Type": "application/json", // Explicitly set headers without Authorization
           Authorization: "", // Ensure no Bearer token is included
         },
-      }
+      },
     );
 
     const { accessToken, refreshToken } = response.data;
@@ -62,6 +62,10 @@ const refreshToken = async () => {
     return accessToken;
   } catch (error) {
     console.error("Failed to refresh token:", error);
+    localStorage.clear("accessToken");
+    sessionStorage.clear("accessToken");
+    localStorage.clear("refreshToken");
+    sessionStorage.clear("refreshToken");
     throw error;
   }
 };
@@ -107,7 +111,7 @@ axios.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axios;
