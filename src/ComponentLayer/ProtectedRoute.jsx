@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children, roleRequired }) => {
   }
 
   // ✅ role check only after userInfor loaded (role exists)
-  if (roleRequired && role && role !== roleRequired) {
+  if (roleRequired && role && userInfor?.role !== roleRequired) {
     return <Navigate to="/unauthorized" replace />;
   }
 

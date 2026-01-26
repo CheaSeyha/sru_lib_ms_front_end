@@ -25,47 +25,57 @@ const getStoredToken = (key) => {
   return localStorage.getItem(key) || sessionStorage.getItem(key);
 };
 
-// Refresh token logic
+const clearAuthAndRedirect = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("userID");
+
+  sessionStorage.removeItem("accessToken");
+  sessionStorage.removeItem("refreshToken");
+  sessionStorage.removeItem("userID");
+
+  // also clear axios default header
+  delete axios.defaults.headers.common["Authorization"];
+
+  // ✅ hard redirect (works outside React)
+  window.location.href = "/login";
+};
+
 const refreshToken = async () => {
-  const storedRefreshToken = getStoredToken("refreshToken");
+  const storedRefreshToken =
+    sessionStorage.getItem("refreshToken") ||
+    localStorage.getItem("refreshToken");
+
   if (!storedRefreshToken) {
+    clearAuthAndRedirect();
     throw new Error("No refresh token available.");
   }
 
   try {
-    // Use a custom Axios config to prevent including the Authorization header
     const response = await axios.post(
       "/auth/refresh-token",
       { refreshToken: storedRefreshToken },
       {
-        headers: {
-          "Content-Type": "application/json", // Explicitly set headers without Authorization
-          Authorization: "", // Ensure no Bearer token is included
-        },
+        headers: { "Content-Type": "application/json" },
       },
     );
 
-    const { accessToken, refreshToken } = response.data;
+    const { accessToken, refreshToken: newRefreshToken } = response.data;
 
-    // Save the new tokens in both storages for consistency
+    // save back to same storage where refreshToken existed
     if (localStorage.getItem("refreshToken")) {
       localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("refreshToken", newRefreshToken);
     } else {
       sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("refreshToken", newRefreshToken);
     }
 
-    // Update the global Axios Authorization header
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
     return accessToken;
   } catch (error) {
-    console.error("Failed to refresh token:", error);
-    localStorage.clear("accessToken");
-    sessionStorage.clear("accessToken");
-    localStorage.clear("refreshToken");
-    sessionStorage.clear("refreshToken");
+    // if server says invalid refresh token (often 401/403)
+    clearAuthAndRedirect();
     throw error;
   }
 };
