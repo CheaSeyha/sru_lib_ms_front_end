@@ -9,9 +9,11 @@ import { useTranslation } from "react-i18next";
 import axios from "../../api/axios";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../Context/AuthProvider";
+import useWSDashboard from "./Hook/useWSDashbaord"; // <- your hook
 
 function Dashbaord() {
   const { username, role } = useAuth();
+  const { t } = useTranslation();
 
   const defaultCardData = [
     { cardType: "Entry", amount: 0, analytic: 0.0 },
@@ -31,44 +33,84 @@ function Dashbaord() {
   const [dataMejorVisitor, setDataMejorVisitor] = useState([]);
   const [bookAviable, setBookAviable] = useState(defaultBookAvailability);
   const [weelyVisitorData, setWeelyVisitorData] = useState(
-    defaultWeeklyVisitorData
+    defaultWeeklyVisitorData,
   );
-  const [loading, setLoading] = useState(true); // Loading state
+  const [recentEntries, setRecentEntries] = useState(null);
+  const [wsRefreshTrigger, setWsRefreshTrigger] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const getDataApi = async () => {
-    setLoading(true); // Set loading to true before API call
+  // ✅ WebSocket hook
+  const {
+    data: wsData,
+    connected: wsConnected,
+    error: wsError,
+  } = useWSDashboard();
+
+  // Function to update all dashboard states from a data object
+  const updateDashboardData = (data) => {
+    if (!data) return;
+
+    // Update weekly visitor data
+    if (data.weeklyVisitor?.days) {
+      setWeelyVisitorData(data.weeklyVisitor.days.map((d) => d.count));
+    } else if (Array.isArray(data.weeklyVisitor)) {
+      setWeelyVisitorData(data.weeklyVisitor);
+    }
+
+    // Update card statistics
+    if (data.cardData) {
+      setCardDataShow(data.cardData);
+    }
+
+    // Update book availability
+    if (data.bookAvailable) {
+      setBookAviable(data.bookAvailable);
+    }
+
+    // Update major-wise visitor data
+    if (data.totalMajorVisitor) {
+      setDataMejorVisitor(data.totalMajorVisitor);
+    }
+
+    // Update recent entries table if provided
+    if (data.attendDetail) {
+      setRecentEntries(data.attendDetail);
+    } else {
+      setRecentEntries(null);
+    }
+  };
+
+  const getDataApi = async (isInitial = false) => {
+    if (isInitial) setLoading(true);
     try {
       const response = await axios.get("/dashboard");
-      // Get data from API and set to state
-      setWeelyVisitorData(
-        response.data.weeklyVisitor.days.map((dayval) => dayval.count)
-      );
-      setCardDataShow(response.data.cardData);
-      setBookAviable(response.data.bookAvailable);
-      setDataMejorVisitor(response.data.totalMajorVisitor);
+      updateDashboardData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching dashboard data:", error);
     } finally {
-      setLoading(false); // Set loading to false after data is fetched
+      if (isInitial) setLoading(false);
     }
   };
 
-  const getCardDataApi = async () => {
-    try {
-      const response = await axios.get("/dashboard");
-      const limit = 10; // Set your desired limit here
-      const limitedCardData = response.data.cardData.slice(0, limit);
-      setCardDataShow(limitedCardData);
-    } catch (error) {
-      console.error("Error fetching card data:", error);
-    }
-  };
+  // Compatibility alias for TableStuEntry
+  const getCardDataApi = () => getDataApi(false);
 
+  // ✅ initial load via API
   useEffect(() => {
-    getDataApi();
+    getDataApi(true);
   }, []);
 
-  const { t } = useTranslation();
+  // ✅ handle WebSocket updates
+  useEffect(() => {
+    if (wsData) {
+      console.log("📥 Received WebSocket update:", wsData);
+      updateDashboardData(wsData);
+      // Trigger a refresh of any child components that might need fresh data from their own APIs
+      setWsRefreshTrigger((prev) => prev + 1);
+      // Once we get any real-time data, we're definitely not "loading"
+      setLoading(false);
+    }
+  }, [wsData]);
 
   return (
     <>
@@ -92,10 +134,35 @@ function Dashbaord() {
                 <p className="sm:text-[30px] xl:text-[30px] font-moul">
                   {t("sruText")}
                 </p>
-                <p className="text-[10px] xl:text-[15px] font-bold font-noto">
-                  WELCOME BACK {username}
-                </p>
+
+                <div className="flex items-center gap-3">
+                  <p className="text-[10px] xl:text-[15px] font-bold font-noto tracking-wide">
+                    WELCOME BACK,{" "}
+                    <span className="text-accent uppercase">{username}</span>
+                  </p>
+
+                  <div
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all duration-300 ${
+                      wsConnected
+                        ? "bg-green-500/10 border-green-500/30 text-green-400 shadow-[0_0_10px_rgba(74,222,128,0.2)]"
+                        : "bg-red-500/10 border-red-500/30 text-red-400"
+                    }`}
+                    title={wsError ?? "WebSocket Status"}
+                  >
+                    <div
+                      className={`w-1.5 h-1.5 rounded-full ${wsConnected ? "bg-green-400 animate-pulse" : "bg-red-400"}`}
+                    />
+                    <span className="text-[9px] font-black uppercase tracking-widest">
+                      {wsConnected ? "Live" : "Offline"}
+                    </span>
+                  </div>
+                </div>
+
+                {wsError && (
+                  <p className="text-[10px] mt-1 text-red-200">{wsError}</p>
+                )}
               </div>
+
               {role === "admin" && (
                 <NavLink
                   className="btn text-accent hidden sm:flex items-center justify-center rounded-[50px]"
@@ -105,6 +172,7 @@ function Dashbaord() {
                 </NavLink>
               )}
             </div>
+
             <div className="showCard flex-1 grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-[20px] place-items-end">
               {cardDataShow.map((e, index) => (
                 <CardData
@@ -116,22 +184,21 @@ function Dashbaord() {
               ))}
             </div>
           </div>
-          {/* Header content */}
+
           {/* Main Content */}
           <div className="flex-1 flex flex-col md:flex-col xl:flex-row container-main-content text-accent gap-5 overflow-y-auto scrollbar-hide">
             <div className="table-chart flex gap-5">
-              {/* table List Of Student name */}
               <div className="table-container table-stu-entry w-full md:w-full h-[500px] xl:h-full xl:w-[450px] 2xl:w-[885px] bg-secondary rounded-[20px] p-5">
                 <TableStuEntry
                   getCardDataApi={getCardDataApi}
                   refreshCardData={getCardDataApi}
+                  wsEntries={recentEntries}
+                  wsRefreshTrigger={wsRefreshTrigger}
                 />
               </div>
-              {/* table List Of Student name */}
             </div>
-            {/* Card Piechart And Weekly visitor */}
+
             <div className="w-full flex flex-col sm:flex-row h-[1000px] sm:h-[500px] xl:h-full gap-5">
-              {/* Chart Data Mejor Visitor */}
               <div className="chart-data flex flex-col w-full sm:w-[250px] xl:w-[304px] h-[405px] sm:h-full bg-secondary rounded-[20px] md:bg-none p-5">
                 <div className="cardTitle h-[46px] w-full flex">
                   <p>សរុបចំនួនចូលតាមមហាវិទ្យាល័យ</p>
@@ -140,11 +207,12 @@ function Dashbaord() {
                   <MejorPieChart DataMejorVisitor={dataMejorVisitor} />
                 </div>
               </div>
-              {/* Chart Data Mejor Visitor */}
+
               <div className="flex-1 flex flex-col w-full h-full gap-5">
                 <div className="flex-1 weekly-visitor-container bg-secondary w-full h-full flex flex-col rounded-[20px] p-5">
                   <WeeklyVisitorChart WeelyVisitorData={weelyVisitorData} />
                 </div>
+
                 <div className="flex flex-col book-available w-full h-[190px] p-5 bg-secondary rounded-[20px]">
                   <p className="p-0 ">សរុបចំនួនសៀវភៅ</p>
                   <div className="flex-1 container-radial grid grid-cols-2 h-full items-center">
@@ -160,9 +228,7 @@ function Dashbaord() {
                 </div>
               </div>
             </div>
-            {/* Card Piechart And Weekly visitor */}
           </div>
-          {/* Main Content */}
         </main>
       )}
     </>
