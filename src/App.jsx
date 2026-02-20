@@ -6,7 +6,7 @@ import { ThemeSwitchProvider } from "./Context/ThemeSwitchContext";
 import { AuthProvider } from "./Context/AuthProvider";
 import LoginForm from "./pages/LoginRegiter/LoginForm";
 import ProtectedRoute from "./pages/ProtectedRoute"; // Ensure this path is correct
-import Dashbaord from "./pages/AdminPanel/Dashbaord";
+import Dashbaord from "./pages/Dashboard/Dashboard";
 import QRStudentEntry from "./pages/QrEntry/QRStudentEntry";
 import BookManagement from "./pages/Book/BookManagement";
 import AnalyticForm from "./pages/Analytic/AnalyticForm";

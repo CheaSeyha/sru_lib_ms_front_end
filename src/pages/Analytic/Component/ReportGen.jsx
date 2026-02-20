@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip'; // Import PizZip from 'pizzip'
-import BtnGredient from '../../AdminPanel/Component/BtnGredient';
+import BtnGredient from '../../Dashboard/Component/BtnGredient';
 import axios from '../../../api/axios';
 
 // Define Khmer months mapping

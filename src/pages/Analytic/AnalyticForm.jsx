@@ -6,7 +6,7 @@ import BookAnalyticForm from './Component/TotalBook/BookAnalyticForm'
 import { FileBarChartIcon, FileDown, SquareMenu } from 'lucide-react';
 import Modal from '../../layout/Component/Modal'
 import { X } from 'lucide-react';
-import BtnGredient from '../AdminPanel/Component/BtnGredient'
+import BtnGredient from '../Dashboard/Component/BtnGredient'
 import axios from '../../api/axios'
 import BarChart from './Component/Chart/BarChart';
 import LineChart from './Component/Chart/LineChart';

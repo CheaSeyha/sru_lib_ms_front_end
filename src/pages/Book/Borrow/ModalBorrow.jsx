@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import Modal from '../../../layout/Component/Modal';
-import BtnGredient from "../../AdminPanel/Component/BtnGredient";
+import BtnGredient from "../../Dashboard/Component/BtnGredient";
 import { X } from 'lucide-react';
 import axios from '../../../api/axios';
 import toast, { Toaster } from 'react-hot-toast';
