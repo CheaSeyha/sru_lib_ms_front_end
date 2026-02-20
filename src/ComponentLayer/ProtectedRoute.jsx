@@ -3,26 +3,26 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthProvider";
 
-const ProtectedRoute = ({ children, roleRequired }) => {
+const ProtectedRoute = ({ children, userRole }) => {
   const { accessToken, refreshToken, authLoading, userInfor } = useAuth();
 
-  const role = userInfor?.role; // role comes from userInfor
+  const role = userInfor?.role;
 
   if (authLoading) {
     return (
-      <main className="flex justify-center items-center w-full h-full space-y-5">
+      <main className="flex justify-center items-center w-full h-full">
         <span className="loading loading-dots text-accent loading-lg"></span>
       </main>
     );
   }
 
-  // ✅ if no access token AND no refresh token → go login
+  // Not got to logged in
   if (!accessToken && !refreshToken) {
     return <Navigate to="/login" replace />;
   }
 
-  // ✅ role check only after userInfor loaded (role exists)
-  if (roleRequired && role && userInfor?.role !== roleRequired) {
+  // If userRole is array → check includes
+  if (userRole && role && !userRole.includes(role)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

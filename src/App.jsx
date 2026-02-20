@@ -43,7 +43,7 @@ function App() {
                 <Route
                   path="/StaffManage"
                   element={
-                    <ProtectedRoute roleRequired="SUPER_ADMIN">
+                    <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
                       <StaffManageForm />
                     </ProtectedRoute>
                   }
@@ -52,7 +52,7 @@ function App() {
                 <Route
                   path="/Analytic"
                   element={
-                    <ProtectedRoute roleRequired="ADMIN">
+                    <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
                       <AnalyticForm />
                     </ProtectedRoute>
                   }
