@@ -1,17 +1,17 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import AdminPanel from "./ComponentLayer/AdminPanel";
+import AdminPanel from "./pages/AdminPanel";
 import { HideSideBarProvidor } from "./Context/HideSidebarContext";
 import { ThemeSwitchProvider } from "./Context/ThemeSwitchContext";
 import { AuthProvider } from "./Context/AuthProvider";
-import LoginForm from "./ComponentLayer/LoginRegiter/LoginForm";
-import ProtectedRoute from "./ComponentLayer/ProtectedRoute"; // Ensure this path is correct
-import Dashbaord from "./ComponentLayer/AdminPanel/Dashbaord";
-import QRStudentEntry from "./ComponentLayer/QrEntry/QRStudentEntry";
-import BookManagement from "./ComponentLayer/Book/BookManagement";
-import AnalyticForm from "./ComponentLayer/Analytic/AnalyticForm";
-import StaffManageForm from "./ComponentLayer/StaffManage/StaffManageForm";
-import StudentManage from "./ComponentLayer/StudentManage/StudentManage";
+import LoginForm from "./pages/LoginRegiter/LoginForm";
+import ProtectedRoute from "./pages/ProtectedRoute"; // Ensure this path is correct
+import Dashbaord from "./pages/AdminPanel/Dashbaord";
+import QRStudentEntry from "./pages/QrEntry/QRStudentEntry";
+import BookManagement from "./pages/Book/BookManagement";
+import AnalyticForm from "./pages/Analytic/AnalyticForm";
+import StaffManageForm from "./pages/StaffManage/StaffManageForm";
+import StudentManage from "./pages/StudentManage/StudentManage";
 
 function App() {
   return (

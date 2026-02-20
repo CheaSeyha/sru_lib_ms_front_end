@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import { ListFilter } from 'lucide-react';
-import CardPurposeData from '../EntryPurpose/CardPurposeData';
+import CardPurposeData from './CardPurposeData';
 import Datepicker from "react-tailwindcss-datepicker";
 
 function EntryPurposeCard({ purposeData }) {

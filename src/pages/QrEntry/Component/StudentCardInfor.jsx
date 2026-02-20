@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import sruLogo from '../../../assets/logo/sru_logo.png'
 import { User, UserCheck } from 'lucide-react';
-import BtnGredien from '../../../ComponentLayer/AdminPanel/Component/BtnGredient'
+import BtnGredien from '../../AdminPanel/Component/BtnGredient'
 import toast, { Toaster } from 'react-hot-toast';
 function StudentCardInfor({ checkPurpose, setCheckPurpose, disCheckPur, stuEntryInfor, handleClearFormData, handleSaveEntry }) {
     const checkboxesRef = useRef([]);
