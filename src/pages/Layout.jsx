@@ -4,7 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import SideBarToggle from '../layout/Component/SideBarToggle';
 import { ScanResultIDProvider } from './Context/ScanResultIDContext';
 
-function AdminPanel() {
+function Layout() {
     const { pathname } = useLocation();
     return (
         <ScanResultIDProvider>
@@ -23,4 +23,4 @@ function AdminPanel() {
     );
 }
 
-export default AdminPanel;
+export default Layout;

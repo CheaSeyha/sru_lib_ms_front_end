@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import AdminPanel from "./pages/AdminPanel";
+import Layout from "./pages/Layout";
 import { HideSideBarProvidor } from "./Context/HideSidebarContext";
 import { ThemeSwitchProvider } from "./Context/ThemeSwitchContext";
 import { AuthProvider } from "./Context/AuthProvider";
@@ -27,7 +27,7 @@ function App() {
               <Route
                 element={
                   <ProtectedRoute>
-                    <AdminPanel />
+                    <Layout />
                   </ProtectedRoute>
                 }
               >
