@@ -34,6 +34,16 @@ const ModalAddDonation = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === "bookId") {
+      const limitedValue = value.slice(0, 10);
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: limitedValue,
+      }));
+      return;
+    }
+
     // For author and publicationYear, set to null if empty
     if (name === "author" || name === "publicationYear") {
       setFormData({
@@ -109,6 +119,7 @@ const ModalAddDonation = ({
           toast.error("There was an error submitting the form.");
         }
       });
+    handleCloseModal();
   };
   return (
     <Modal isVisible={isModalVisible} onClose={handleCloseModal}>

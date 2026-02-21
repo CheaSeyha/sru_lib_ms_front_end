@@ -6,6 +6,7 @@ import axios from "../../../api/axios";
 import ExcelImported from "./ExcelImported";
 import toast, { Toaster } from "react-hot-toast";
 const ModalUpdateBook = ({
+  bookLangueId,
   isModalVisible,
   handleCloseModal,
   fetchBooks,
@@ -187,30 +188,27 @@ const ModalUpdateBook = ({
                   <div className="ml-1">
                     <label className="w-full font-semibold">ភាសា</label>
                     <div className="mt-3">
-                      <label className="inline-flex items-center w-1/2">
-                        <input
-                          type="radio"
-                          name="languageId"
-                          value="eng"
-                          checked={formData.languageId === "eng"}
-                          onChange={handleInputChange}
-                          required
-                          className="form-radio h-7 text-blue-600 bg-secondary"
-                        />
-                        <span className="ml-2 text-accent">អង់គ្លេស</span>
-                      </label>
-                      <label className="inline-flex items-center w-1/2">
-                        <input
-                          type="radio"
-                          name="languageId"
-                          value="kh"
-                          checked={formData.languageId === "kh"}
-                          onChange={handleInputChange}
-                          required
-                          className="form-radio h-7 text-blue-600"
-                        />
-                        <span className="ml-2 text-accent">ខ្មែរ</span>
-                      </label>
+                      {bookLangueId.map((language) => (
+                        <label
+                          key={language.languageId}
+                          className="inline-flex items-center w-1/2"
+                        >
+                          <input
+                            type="radio"
+                            name="languageId"
+                            value={language.languageId}
+                            checked={
+                              formData.languageId === language.languageId
+                            }
+                            onChange={handleInputChange}
+                            required
+                            className="form-radio h-7 text-blue-600 bg-secondary"
+                          />
+                          <span className="ml-2 text-accent">
+                            {language.languageName}
+                          </span>
+                        </label>
+                      ))}
                     </div>
                   </div>
                 </div>

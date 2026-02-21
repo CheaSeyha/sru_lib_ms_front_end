@@ -5,10 +5,16 @@ import { X } from "lucide-react";
 import axios from "../../../api/axios";
 import ExcelImported from "./ExcelImported";
 import toast, { Toaster } from "react-hot-toast";
-const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
+const ModalAdd = ({
+  isModalVisible,
+  handleCloseModal,
+  fetchBooks,
+  bookLangueId,
+}) => {
   const [collegeData, setCollegeData] = useState([]);
   const dateToday = new Date().toISOString().split("T")[0];
   const [formData, setFormData] = useState({
+    bookLangueId: "",
     bookId: "",
     bookTitle: "",
     bookQuan: "",
@@ -30,12 +36,11 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
     const { name, value } = e.target;
 
     if (name === "bookId") {
-      // Allow only numbers + limit to 5 characters
-      const numericValue = value.replace(/\D/g, "").slice(0, 10);
+      const limitedValue = value.slice(0, 10);
 
       setFormData((prev) => ({
         ...prev,
-        [name]: numericValue,
+        [name]: limitedValue,
       }));
       return;
     }
@@ -52,18 +57,6 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
       }));
     }
   };
-
-  const [languageData, setLanguageData] = useState([]);
-
-  const getLanguage = () => {
-    axios.get("/language").then((response) => {
-      setLanguageData(response.data);
-    });
-  };
-
-  useEffect(() => {
-    getLanguage();
-  }, []);
 
   // Function to handle radio button changes for languageId
   const handleSubmit = async (e) => {
@@ -120,6 +113,8 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
           toast.error("There was an error submitting the form.");
         }
       });
+
+    handleCloseModal();
   };
   return (
     <>
@@ -151,7 +146,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
                     លេខសម្គាល់ :
                   </div>
                   <input
-                    type="number"
+                    type="text"
                     className="input input-bordered  w-full bg-secondary font-noto"
                     name="bookId"
                     value={formData.bookId}
@@ -256,10 +251,12 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
                       ជ្រើសរើសភាសា
                     </label>
                     <div className="mt-3">
-                      {languageData.map((language) => (
-                        <label className="inline-flex items-center w-1/2">
+                      {bookLangueId.map((language) => (
+                        <label
+                          key={language.languageId}
+                          className="inline-flex items-center w-1/2"
+                        >
                           <input
-                            key={language.languageId}
                             type="radio"
                             name="languageId"
                             value={language.languageId}

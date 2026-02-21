@@ -3,33 +3,49 @@ import BtnGredient from "../BtnGredient";
 import ModalAdd from "./ModalAdd.jsx";
 import axios from "../../../api/axios";
 import ModalLst from "./ModalLst";
-import refresh from "../../../assets/logo/refresh.svg"
-import { RotateCcw, Trash2,Pencil, CircleFadingPlus} from "lucide-react";
-import toast, { Toaster } from 'react-hot-toast';
+import refresh from "../../../assets/logo/refresh.svg";
+import { RotateCcw, Trash2, Pencil, CircleFadingPlus } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 import ModalUpdateBook from "./ModalUpdateBook.jsx";
 export default function ListOfAllBook() {
   // Data of All Book
+
+  const [bookLangueId, setBookLangueId] = useState([]);
   const [books, setBooks] = useState([]);
   const [genre, setgenre] = useState([]);
+
+  const getBookLangueId = () => {
+    axios.get("/language").then((response) => {
+      setBookLangueId(response.data);
+      console.log(response.data);
+    });
+  };
+
   const fetchBooks = () => {
-    axios.get('/book/current-book')
-      .then(response => {
+    axios
+      .get("/book/current-book")
+      .then((response) => {
         // Filter books where isActive is true
-        const filteredBooks = response.data.filter(book => book.isActive === true);
+        const filteredBooks = response.data.filter(
+          (book) => book.isActive === true,
+        );
         setBooks(filteredBooks);
-        const uniqueBookTypes = [...new Set(response.data.map(book => book.genre))];
+        const uniqueBookTypes = [
+          ...new Set(response.data.map((book) => book.genre)),
+        ];
         setgenre(uniqueBookTypes);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("There was an error fetching the books!", error);
       });
   };
   useEffect(() => {
     fetchBooks();
+    getBookLangueId();
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedGenre, setSelectType] = useState('');
+  const [selectedGenre, setSelectType] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalLstVisible, setIsModalLstVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
@@ -39,7 +55,8 @@ export default function ListOfAllBook() {
   const [isModalUpdateVisible, setIsModalUpdateVisible] = useState(false);
 
   const handleMouseDown = (entry, event) => {
-    if (event.button === 2) { // Right mouse button
+    if (event.button === 2) {
+      // Right mouse button
       setIsRightMousePressed(true);
       toggleRowSelection(entry);
     }
@@ -56,10 +73,12 @@ export default function ListOfAllBook() {
   };
 
   const toggleRowSelection = (entry) => {
-    setSelectedRows(prevSelectedRows => {
-      const isSelected = prevSelectedRows.some(row => row.bookId === entry.bookId);
+    setSelectedRows((prevSelectedRows) => {
+      const isSelected = prevSelectedRows.some(
+        (row) => row.bookId === entry.bookId,
+      );
       if (isSelected) {
-        return prevSelectedRows.filter(row => row.bookId !== entry.bookId);
+        return prevSelectedRows.filter((row) => row.bookId !== entry.bookId);
       } else {
         return [...prevSelectedRows, entry];
       }
@@ -83,7 +102,7 @@ export default function ListOfAllBook() {
   };
 
   const resetSelection = () => {
-    setSelectType('');
+    setSelectType("");
     setSearchTerm("");
     setSelectedRows([]);
     fetchBooks();
@@ -92,28 +111,35 @@ export default function ListOfAllBook() {
     setSelectType(e.target.value);
   };
 
-  const filteredBooks = books.filter(book =>
-    (book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.bookId.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (selectedGenre === '' || book.genre === selectedGenre)
+  const filteredBooks = books.filter(
+    (book) =>
+      (book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.bookId
+          .toString()
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())) &&
+      (selectedGenre === "" || book.genre === selectedGenre),
   );
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
   const handledelete = () => {
-    axios.put('/book/trash', null, {
-      params: {
-        bookId: selectedRows.map(row => row.bookId)
-      }
-    })
-      .then(response => {
-        toast.success('បានផ្លាស់ទីទៅក្នុង Trash ដោយជោគជ័យ!!!',{style:{fontFamily:' NotoSansKhmer-Regular, sans-serif'}}); // Show success toast
+    axios
+      .put("/book/trash", null, {
+        params: {
+          bookId: selectedRows.map((row) => row.bookId),
+        },
+      })
+      .then((response) => {
+        toast.success("បានផ្លាស់ទីទៅក្នុង Trash ដោយជោគជ័យ!!!", {
+          style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
+        }); // Show success toast
         setSelectedRows([]);
         fetchBooks();
       })
-      .catch(error => {
-        toast.error('There was an error with the return request.');
+      .catch((error) => {
+        toast.error("There was an error with the return request.");
         console.error(error);
       });
   };
@@ -123,7 +149,10 @@ export default function ListOfAllBook() {
         <div className="w-full flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
           <div className="flex w-full">
             <div className="inline-block w-full h-full">
-              <label htmlFor="" className="input input-bordered font-noto rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2">
+              <label
+                htmlFor=""
+                className="input input-bordered font-noto rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2"
+              >
                 <input
                   type="text"
                   placeholder="ស្វែងរកតាមលេខសម្គាល់​ ឬចំណងជើង"
@@ -135,11 +164,13 @@ export default function ListOfAllBook() {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"
                   fill="currentColor"
-                  className="h-8 w-8 opacity-70">
+                  className="h-8 w-8 opacity-70"
+                >
                   <path
                     fillRule="evenodd"
                     d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                    clipRule="evenodd" />
+                    clipRule="evenodd"
+                  />
                 </svg>
               </label>
             </div>
@@ -162,7 +193,12 @@ export default function ListOfAllBook() {
           </div>
           <div className="flex w-full pb-5 sm:pb-5 xl:pb-0">
             <div className="inline-block w-2/5">
-              <BtnGredient className="w-full h-full" onClick={resetSelection} color={'from-[#00D1FF] to-[#E7FBFF]'} hover={'hover:from-[#00D9FF] hover:to-[#E7FBFF]'}>
+              <BtnGredient
+                className="w-full h-full"
+                onClick={resetSelection}
+                color={"from-[#00D1FF] to-[#E7FBFF]"}
+                hover={"hover:from-[#00D9FF] hover:to-[#E7FBFF]"}
+              >
                 <RotateCcw />
                 <p className="font-noto">ធ្វើឡើងវិញ</p>
               </BtnGredient>
@@ -170,61 +206,108 @@ export default function ListOfAllBook() {
             <div className="inline-block pl-5 w-2/5">
               {selectedRows.length > 0 && (
                 <div className="inline-block pr-2">
-                  <BtnGredient className="w-full h-full" onClick={handledelete} color={'from-[#ff0000] to-[#E7FBFF]'} hover={'hover:from-[#E7FBFF] hover:to-[#ff0000]'}>
-                  <Trash2 />
+                  <BtnGredient
+                    className="w-full h-full"
+                    onClick={handledelete}
+                    color={"from-[#ff0000] to-[#E7FBFF]"}
+                    hover={"hover:from-[#E7FBFF] hover:to-[#ff0000]"}
+                  >
+                    <Trash2 />
                     <p className="font-noto">លុប</p>
                   </BtnGredient>
                 </div>
               )}
               {selectedRows.length == 1 && (
                 <div className="inline-block pl-2 ">
-                  <BtnGredient className="w-full h-full pr-5" onClick={() => setIsModalUpdateVisible(true)} color={'from-[#1aff00] to-[#E7FBFF]'} hover={'hover:from-[#E7FBFF] hover:to-[#1aff00]'}>
-                  <Pencil />
+                  <BtnGredient
+                    className="w-full h-full pr-5"
+                    onClick={() => setIsModalUpdateVisible(true)}
+                    color={"from-[#1aff00] to-[#E7FBFF]"}
+                    hover={"hover:from-[#E7FBFF] hover:to-[#1aff00]"}
+                  >
+                    <Pencil />
                     <p className="font-noto">កែសម្រួល</p>
                   </BtnGredient>
                 </div>
               )}
             </div>
             <div className="inline-block w-1/5 text-right">
-              <BtnGredient className="flex items-center justify-center" onClick={() => setIsModalVisible(true)} color={'from-[#00D1FF] to-[#E7FBFF]'}
-                hover={'hover:from-[#00D9FF] hover:to-[#a5cef3]'}>
-                  <CircleFadingPlus />
+              <BtnGredient
+                className="flex items-center justify-center"
+                onClick={() => setIsModalVisible(true)}
+                color={"from-[#00D1FF] to-[#E7FBFF]"}
+                hover={"hover:from-[#00D9FF] hover:to-[#a5cef3]"}
+              >
+                <CircleFadingPlus />
                 <p className="font-noto">បញ្ចូល</p>
               </BtnGredient>
             </div>
           </div>
         </div>
-        <div className="variable-book overflow-y-auto flex-1 w-full grid items-start scrollbar-hide" >
-          <table className="table tectav min-w-full divide-y divide-gray-200" onContextMenu={e => e.preventDefault()} onMouseUp={handleMouseUp}>
-            <thead className='text-accent font-noto '>
+        <div className="variable-book overflow-y-auto flex-1 w-full grid items-start scrollbar-hide">
+          <table
+            className="table tectav min-w-full divide-y divide-gray-200"
+            onContextMenu={(e) => e.preventDefault()}
+            onMouseUp={handleMouseUp}
+          >
+            <thead className="text-accent font-noto ">
               <tr>
-                <th className="sticky top-0 text-left text-sm bg-secondary">ល.រ</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">លេខសម្គាល់</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">ចំណងជើង</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">មហាវិទ្យាល័យ</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">អ្នកនិពន្ធ</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">ប្រភេទ</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">ភាសា</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">ឆ្នាំបោះពុម្ព</th>
-                <th className="sticky top-0 text-left text-sm bg-secondary">ចំនួន</th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  ល.រ
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  លេខសម្គាល់
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  ចំណងជើង
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  មហាវិទ្យាល័យ
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  អ្នកនិពន្ធ
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  ប្រភេទ
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  ភាសា
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  ឆ្នាំបោះពុម្ព
+                </th>
+                <th className="sticky top-0 text-left text-sm bg-secondary">
+                  ចំនួន
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredBooks.map((entry, index) => (
-                <tr key={index} onClick={() => handleRowClick(entry)} onMouseDown={(e) => handleMouseDown(entry, e)}
-                  onMouseOver={() => handleMouseOver(entry)} className={`hover:bg-primary cursor-pointer font-noto active:bg-primary ${selectedRows.some(row => row.bookId === entry.bookId) ? 'bg-primary' : ''}`}>
+                <tr
+                  key={index}
+                  onClick={() => handleRowClick(entry)}
+                  onMouseDown={(e) => handleMouseDown(entry, e)}
+                  onMouseOver={() => handleMouseOver(entry)}
+                  className={`hover:bg-primary cursor-pointer font-noto active:bg-primary ${selectedRows.some((row) => row.bookId === entry.bookId) ? "bg-primary" : ""}`}
+                >
                   <th>{index + 1}</th>
                   <td>{entry.bookId}</td>
                   <td>{entry.bookTitle}</td>
-                  <td>{entry.collegeId=== 'ST' ? 'វីទ្យាសាស្ត្រ និងបច្ចេកវិទ្យា' 
-                      : entry.collegeId === 'BA' ? 'គ្រប់គ្រងពាណិជ្ជកម្ម' 
-                      : entry.collegeId === 'AHFL' ?'សិល្បៈ មនុស្សសាស្ត្រនិងភាសា'
-                      : entry.collegeId === 'SS' ?'វិទ្យាសាស្ត្រសង្គម' :'កសិកម្ម'
-                    }</td>
-                  <td>{entry.author ?? 'N/A'}</td>
+                  <td>
+                    {entry.collegeId === "ST"
+                      ? "វីទ្យាសាស្ត្រ និងបច្ចេកវិទ្យា"
+                      : entry.collegeId === "BA"
+                        ? "គ្រប់គ្រងពាណិជ្ជកម្ម"
+                        : entry.collegeId === "AHFL"
+                          ? "សិល្បៈ មនុស្សសាស្ត្រនិងភាសា"
+                          : entry.collegeId === "SS"
+                            ? "វិទ្យាសាស្ត្រសង្គម"
+                            : "កសិកម្ម"}
+                  </td>
+                  <td>{entry.author ?? "N/A"}</td>
                   <td>{entry.genre}</td>
-                  <td>{entry.languageId==='eng'? 'អង់គ្លេស':'ខ្មែរ'}</td>
-                  <td>{entry.publicationYear ?? 'N/A'}</td>
+                  <td>{entry.languageId === "eng" ? "អង់គ្លេស" : "ខ្មែរ"}</td>
+                  <td>{entry.publicationYear ?? "N/A"}</td>
                   <td>{entry.bookQuan}</td>
                 </tr>
               ))}
@@ -233,9 +316,26 @@ export default function ListOfAllBook() {
         </div>
         <Toaster />
       </div>
-      <ModalLst entry={selectedEntry} closeModal={closeModal} isModalVisible={isModalLstVisible} fetchBooks={fetchBooks} />
-      <ModalAdd isModalVisible={isModalVisible} handleCloseModal={handleCloseModal} fetchBooks={fetchBooks} />
-      <ModalUpdateBook isModalVisible={isModalUpdateVisible} handleCloseModal={handleCloseModal} fetchBooks={fetchBooks} rowSelected={selectedRows} setRowSelected={setSelectedRows} />
+      <ModalLst
+        entry={selectedEntry}
+        closeModal={closeModal}
+        isModalVisible={isModalLstVisible}
+        fetchBooks={fetchBooks}
+      />
+      <ModalAdd
+        bookLangueId={bookLangueId}
+        isModalVisible={isModalVisible}
+        handleCloseModal={handleCloseModal}
+        fetchBooks={fetchBooks}
+      />
+      <ModalUpdateBook
+        bookLangueId={bookLangueId}
+        isModalVisible={isModalUpdateVisible}
+        handleCloseModal={handleCloseModal}
+        fetchBooks={fetchBooks}
+        rowSelected={selectedRows}
+        setRowSelected={setSelectedRows}
+      />
     </>
   );
 }
