@@ -5,11 +5,7 @@ import { X } from "lucide-react";
 import axios from "../../../api/axios";
 import toast, { Toaster } from "react-hot-toast";
 import ExcelStudent from "./ExcelStudent";
-const ModalAddStudent = ({
-  isModalVisible,
-  handleCloseModal,
-  fetchStudent,
-}) => {
+const ModalAddStudent = ({ isModalVisible, handleCloseModal, fetchData }) => {
   const [degreedata, setdegreedata] = useState([]);
   const [majordata, setmajordata] = useState([]);
   const dateToday = new Date().toISOString().split("T")[0];
@@ -81,7 +77,7 @@ const ModalAddStudent = ({
           publicationYear: "",
           generation: "",
         });
-        fetchStudent(); // Refresh the list after adding the new book
+        fetchData(); // Refresh the list after adding the new book
       })
       .catch((error) => {
         // Handle error based on the response
@@ -110,7 +106,7 @@ const ModalAddStudent = ({
               បន្ថែមនិស្សិតថ្មី
             </label>
             <div className="flex justify-end mt-0 w-2/3">
-              <ExcelStudent fetchStudent={fetchStudent} />
+              <ExcelStudent fetchData={fetchData} />
             </div>
             <button
               onClick={handleCloseModal}
@@ -170,11 +166,7 @@ const ModalAddStudent = ({
                     </option>
                     {degreedata.map((e, index) => (
                       <option key={index} value={e.degreeLevelId}>
-                        {e.degreeLevelId === "ac"
-                          ? "បរិញ្ញាប័ត្ររង"
-                          : e.degreeLevelId === "bc"
-                            ? "បរិញ្ញាប័ត្រ"
-                            : "អនុបណ្ឌិត"}
+                        {e.degreeLevel}
                       </option>
                     ))}
                   </select>
