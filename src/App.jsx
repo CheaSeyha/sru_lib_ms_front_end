@@ -1,5 +1,4 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Layout from "./pages/Layout";
 import { HideSideBarProvidor } from "./context/HideSidebarContext";
 import { ThemeSwitchProvider } from "./context/ThemeSwitchContext";
@@ -12,69 +11,77 @@ import BookManagement from "./pages/Book/BookManagement";
 import AnalyticForm from "./pages/Analytic/AnalyticForm";
 import StaffManageForm from "./pages/StaffManage/StaffManageForm";
 import StudentManage from "./pages/StudentManage/StudentManage";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
+  const location = useLocation();
+
   return (
     <AuthProvider>
       <HideSideBarProvidor>
         <ThemeSwitchProvider>
           <div className="bg-base-300">
-            <Routes>
-              {/* Public Route: Login Page */}
-              <Route path="/Login" element={<LoginForm />} />
-
-              {/* Protected Routes: Only accessible after login */}
-              <Route
-                element={
-                  <ProtectedRoute>
-                    <Layout />
-                  </ProtectedRoute>
-                }
+            <AnimatePresence mode="wait">
+              <Routes
+                location={location}
+                key={location.pathname.split("/")[1] || "/"}
               >
-                <Route path="/" element={<Dashbaord />} />
-                <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
-                <Route path="BookManagement">
-                  <Route path="AddBook" element={<BookManagement />} />
-                  <Route path="BookBorrowed" element={<BookManagement />} />
-                  <Route path="TimeSpent" element={<BookManagement />} />
-                  <Route path="Backup" element={<BookManagement />} />
-                  <Route path="Donation" element={<BookManagement />} />
+                {/* Public Route: Login Page */}
+                <Route path="/Login" element={<LoginForm />} />
+
+                {/* Protected Routes: Only accessible after login */}
+                <Route
+                  element={
+                    <ProtectedRoute>
+                      <Layout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route path="/" element={<Dashbaord />} />
+                  <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
+                  <Route path="BookManagement">
+                    <Route path="AddBook" element={<BookManagement />} />
+                    <Route path="BookBorrowed" element={<BookManagement />} />
+                    <Route path="TimeSpent" element={<BookManagement />} />
+                    <Route path="Backup" element={<BookManagement />} />
+                    <Route path="Donation" element={<BookManagement />} />
+                  </Route>
+                  <Route
+                    path="/StaffManage"
+                    element={
+                      <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
+                        <StaffManageForm />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/StudentManage" element={<StudentManage />} />
+                  <Route
+                    path="/Analytic"
+                    element={
+                      <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
+                        <AnalyticForm />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/unauthorized"
+                    element={
+                      <main className="flex text-accent justify-center items-center w-full h-full space-y-5">
+                        <p>Unauthorized</p>
+                      </main>
+                    }
+                  />
+                  <Route
+                    path="*"
+                    element={
+                      <main className="flex text-accent justify-center items-center w-full h-full space-y-5">
+                        <p>404 Not Found</p>
+                      </main>
+                    }
+                  />
                 </Route>
-                <Route
-                  path="/StaffManage"
-                  element={
-                    <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
-                      <StaffManageForm />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/StudentManage" element={<StudentManage />} />
-                <Route
-                  path="/Analytic"
-                  element={
-                    <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
-                      <AnalyticForm />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/unauthorized"
-                  element={
-                    <main className="flex text-accent justify-center items-center w-full h-full space-y-5">
-                      <p>Unauthorized</p>
-                    </main>
-                  }
-                />
-                <Route
-                  path="*"
-                  element={
-                    <main className="flex text-accent justify-center items-center w-full h-full space-y-5">
-                      <p>404 Not Found</p>
-                    </main>
-                  }
-                />
-              </Route>
-            </Routes>
+              </Routes>
+            </AnimatePresence>
           </div>
         </ThemeSwitchProvider>
       </HideSideBarProvidor>
