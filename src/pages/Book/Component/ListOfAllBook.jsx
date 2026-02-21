@@ -125,23 +125,25 @@ export default function ListOfAllBook() {
     setSearchTerm(event.target.value);
   };
   const handledelete = () => {
-    axios
-      .put("/book/trash", null, {
-        params: {
-          bookId: selectedRows.map((row) => row.bookId),
-        },
-      })
-      .then((response) => {
-        toast.success("បានផ្លាស់ទីទៅក្នុង Trash ដោយជោគជ័យ!!!", {
-          style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
-        }); // Show success toast
-        setSelectedRows([]);
-        fetchBooks();
-      })
-      .catch((error) => {
-        toast.error("There was an error with the return request.");
-        console.error(error);
-      });
+    selectedRows.map((row) => {
+      axios
+        .put("/book/trash", null, {
+          params: {
+            bookId: row.bookId,
+          },
+        })
+        .then((response) => {
+          toast.success("បានផ្លាស់ទីទៅក្នុង Trash ដោយជោគជ័យ!!!", {
+            style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
+          }); // Show success toast
+          setSelectedRows([]);
+          fetchBooks();
+        })
+        .catch((error) => {
+          toast.error("There was an error with the return request.");
+          console.error(error);
+        });
+    });
   };
   return (
     <>
