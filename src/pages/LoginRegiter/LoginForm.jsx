@@ -4,7 +4,7 @@ import SRUlogo from "../../assets/logo/sru_logo.png";
 import { Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
-import { useAuth } from "../../Context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 function LoginForm() {
   const navigate = useNavigate();

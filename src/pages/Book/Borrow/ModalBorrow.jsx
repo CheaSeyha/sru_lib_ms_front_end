@@ -32,6 +32,7 @@ const ModalBorrow = ({
         toast.success("សងសៀវភៅបានដោយជោគជ័យ!", {
           style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
         }); // Show success toast
+        fetchBorrow();
       })
       .catch((error) => {
         toast.error("There was an error with the return request.");

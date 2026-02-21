@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useScanResultID } from "../../../Context/ScanResultIDContext";
+import { useScanResultID } from "../../../context/ScanResultIDContext";
 import axios from "../../../api/axios";
 import toast, { Toaster } from "react-hot-toast";
 

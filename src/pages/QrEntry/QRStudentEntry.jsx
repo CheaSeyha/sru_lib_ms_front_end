@@ -3,7 +3,7 @@ import CameraScanQR from "./Component/CameraScanQR";
 import CardDataOfStudentEntry from "./Component/CardDataOfStudentEntry";
 import FormConfirmEntry from "./Component/FormConfirmEntry";
 import TableStudentEntryData from "./Component/TableStudentEntryData";
-import useScanEntry from "../../Hook/useScanEntry";
+import useScanEntry from "../../hooks/useScanEntry";
 import StudentCardInfor from "./Component/StudentCardInfor";
 
 function QRStudentEntry() {

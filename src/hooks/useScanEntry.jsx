@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import toast from "react-hot-toast";
-import { useScanResultID } from "../Context/ScanResultIDContext";
+import { useScanResultID } from "../context/ScanResultIDContext";
 
 function useScanEntry() {
   const { scanResultID, setScanResultID } = useScanResultID();

@@ -1,7 +1,7 @@
 import React from "react";
 import { Undo2 } from "lucide-react";
 import DateTimeCard from "./DateTimeCard";
-import useTableData from "../../../Hook/useTableData";
+import useTableData from "../../../hooks/useTableData";
 
 function TableStudentEntryData({ studentEntryData }) {
   const {

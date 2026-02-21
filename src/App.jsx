@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout";
-import { HideSideBarProvidor } from "./Context/HideSidebarContext";
-import { ThemeSwitchProvider } from "./Context/ThemeSwitchContext";
-import { AuthProvider } from "./Context/AuthProvider";
+import { HideSideBarProvidor } from "./context/HideSidebarContext";
+import { ThemeSwitchProvider } from "./context/ThemeSwitchContext";
+import { AuthProvider } from "./context/AuthProvider";
 import LoginForm from "./pages/LoginRegiter/LoginForm";
 import ProtectedRoute from "./pages/ProtectedRoute"; // Ensure this path is correct
 import Dashbaord from "./pages/Dashboard/Dashboard";

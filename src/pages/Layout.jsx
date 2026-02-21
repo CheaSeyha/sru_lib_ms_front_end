@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../layout/SideBar";
 import { Outlet, useLocation } from "react-router-dom";
 import SideBarToggle from "../layout/components/SideBarToggle";
-import { ScanResultIDProvider } from "../Context/ScanResultIDContext";
+import { ScanResultIDProvider } from "../context/ScanResultIDContext";
 
 function Layout() {
   const { pathname } = useLocation();

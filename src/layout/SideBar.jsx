@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import imageProfile from "../assets/logo/sru_logo.png";
 import SidebarMenuButton from "./components/SidebarMenuButton";
-import { useHideSideBar } from "../Context/HideSidebarContext";
-import { useThemeSwitch } from "../Context/ThemeSwitchContext";
+import { useHideSideBar } from "../context/HideSidebarContext";
+import { useThemeSwitch } from "../context/ThemeSwitchContext";
 import { useLocation } from "react-router-dom";
 import medal from "../../src/assets/image/medal.svg";
 import backup from "../../src/assets/image/backup.svg";
@@ -14,7 +14,7 @@ import {
   DatabaseBackup,
   BookUser,
 } from "lucide-react";
-import { useAuth } from "../Context/AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 import Modal from "./components/Modal";
 import { X } from "lucide-react";
 import BtnGredient from "./components/BtnGredient";

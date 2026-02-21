@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 import Modal from "../../../layout/components/Modal";
 import useCRUDStaff from "../Hook/useCRUDStaff";
-import useMajor from "../../../Hook/useMajor";
-import useDegreeLevel from "../../../Hook/useDegreeLevel";
+import useMajor from "../../../hooks/useMajor";
+import useDegreeLevel from "../../../hooks/useDegreeLevel";
 import toast, { Toaster } from "react-hot-toast";
 import * as XLSX from "xlsx";
 import axios from "../../../api/axios";

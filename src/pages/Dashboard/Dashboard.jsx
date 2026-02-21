@@ -8,7 +8,7 @@ import RadialBarChart from "./Component/RadialBarChart";
 import { useTranslation } from "react-i18next";
 import axios from "../../api/axios";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../Context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import useWSDashboard from "./Hook/useWSDashbaord"; // <- your hook
 
 function Dashbaord() {

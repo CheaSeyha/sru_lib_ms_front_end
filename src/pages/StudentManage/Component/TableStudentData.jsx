@@ -17,7 +17,7 @@ import ModalAddMajor from "./ModalAddMajor";
 import ModalUpdateStudent from "./ModalUpdateStudent";
 import ModalDeleteMajor from "./ModalDeleteMajor";
 import ModalDeleteCollege from "./ModalDeleteCollege";
-import { useAuth } from "@/Context/AuthProvider";
+import { useAuth } from "@/context/AuthProvider";
 
 function TableStudentData() {
   const { userInfor } = useAuth();
