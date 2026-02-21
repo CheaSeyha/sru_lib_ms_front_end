@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { useDevices } from "@yudiel/react-qr-scanner";
-import { useScanResultID } from "../../Context/ScanResultIDContext";
+import { useScanResultID } from "../../../Context/ScanResultIDContext";
 import { useNavigate } from "react-router-dom";
 import { Undo2, Settings, X } from "lucide-react";
 import Modal from "../../../layout/components/Modal";

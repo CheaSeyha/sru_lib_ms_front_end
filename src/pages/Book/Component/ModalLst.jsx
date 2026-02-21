@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "../../../layout/components/Modal";
 import BtnGredient from "../BtnGredient";
 import { X } from "lucide-react";
-import useScanEntry from "../../Hook/useScanEntry";
+import useScanEntry from "../../../Hook/useScanEntry";
 import axios from "../../../api/axios";
 import toast, { Toaster } from "react-hot-toast";
 const ModalLst = ({ isModalVisible, closeModal, entry, fetchBooks }) => {

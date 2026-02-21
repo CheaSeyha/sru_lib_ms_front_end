@@ -3,10 +3,10 @@ import { UserRoundPlus, X } from "lucide-react";
 import BtnGredient from "./BtnGredient";
 import Modal from "../../../layout/components/Modal";
 import axios from "../../../api/axios";
-import useScanEntry from "../../Hook/useScanEntry";
+import useScanEntry from "../../../Hook/useScanEntry";
 import toast, { Toaster } from "react-hot-toast";
 import { Search, ShieldAlert, ShieldCheck } from "lucide-react";
-import useCheckStudentEntryExit from "../../Hook/useCheckStudentEntryExit";
+import useCheckStudentEntryExit from "../../../Hook/useCheckStudentEntryExit";
 
 export default function TableStuEntry({
   getCardDataApi,
