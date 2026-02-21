@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Modal from "../../../layout/Component/Modal";
-import BtnGredient from "../../../layout/Component/BtnGredient";
+import Modal from "../../../layout/components/Modal";
+import BtnGredient from "../../../layout/components/BtnGredient";
 import BtnGredient1 from "../../Book/BtnGredient";
 import {
   UserPlus,
@@ -17,8 +17,11 @@ import ModalAddMajor from "./ModalAddMajor";
 import ModalUpdateStudent from "./ModalUpdateStudent";
 import ModalDeleteMajor from "./ModalDeleteMajor";
 import ModalDeleteCollege from "./ModalDeleteCollege";
+import { useAuth } from "@/Context/AuthProvider";
 
 function TableStudentData() {
+  const { userInfor } = useAuth();
+
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowModalMajor, setIsShowModalMajor] = useState(false);
   const [isModalCollege, setIssModalCollege] = useState(false);
@@ -43,16 +46,19 @@ function TableStudentData() {
   const fetchData = async () => {
     setIsLoading(true); // Set loading to true before fetching
     try {
-      const [studentResponse, majorResponse, collegeResponse] = await Promise.all([
-        axios.get("/student"),
-        axios.get("/major"),
-        axios.get("/college"),
-      ]);
+      const [studentResponse, majorResponse, collegeResponse] =
+        await Promise.all([
+          axios.get("/student"),
+          axios.get("/major"),
+          axios.get("/college"),
+        ]);
 
       // Process student data
       const flatData = studentResponse.data.flat();
       setStudent(flatData);
-      const uniquegen = [...new Set(studentResponse.data.map((stu) => stu.generation))];
+      const uniquegen = [
+        ...new Set(studentResponse.data.map((stu) => stu.generation)),
+      ];
       setGeneration(uniquegen);
 
       // Process major data
@@ -78,9 +84,18 @@ function TableStudentData() {
 
   const filteredData = student.filter(
     (item) =>
-      item.studentId.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.studentName.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.majorName.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      item.studentId
+        .toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      item.studentName
+        .toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      item.majorName
+        .toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
 
   const handleCloseModal = () => {
@@ -150,9 +165,13 @@ function TableStudentData() {
 
   const toggleRowSelection = (entry) => {
     setSelectedRows((prevSelectedRows) => {
-      const isSelected = prevSelectedRows.some((row) => row.studentId === entry.studentId);
+      const isSelected = prevSelectedRows.some(
+        (row) => row.studentId === entry.studentId,
+      );
       if (isSelected) {
-        return prevSelectedRows.filter((row) => row.studentId !== entry.studentId);
+        return prevSelectedRows.filter(
+          (row) => row.studentId !== entry.studentId,
+        );
       } else {
         return [...prevSelectedRows, entry];
       }
@@ -165,10 +184,13 @@ function TableStudentData() {
         await axios.post(`/student/delete/${selectedRows[i].studentId}`);
         toast.success(
           `បានលុបសិស្សអត្តលេខ ${selectedRows[i].studentId} ដោយជោគជ័យ!!!`,
-          { style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" } }
+          { style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" } },
         );
       } catch (error) {
-        console.error(`Error deleting student with ID: ${selectedRows[i].studentId}`, error);
+        console.error(
+          `Error deleting student with ID: ${selectedRows[i].studentId}`,
+          error,
+        );
       }
     }
     setSelectedRows([]);
@@ -198,7 +220,7 @@ function TableStudentData() {
             {/* Header Content */}
             <div className="header flex flex-col-reverse xl:flex-row lg:flex-row md:flex-col-reverse">
               <div className="button-container md:w-full w-full flex flex-row md:flex-row gap-2">
-                <label className="input input-bordered w-full md:w-full flex items-center gap-2">
+                <label className="input input-bordered w-full md:w-[300px] flex items-center gap-2">
                   <input
                     id="searchStaff"
                     type="text"
@@ -220,53 +242,61 @@ function TableStudentData() {
                     />
                   </svg>
                 </label>
-                <BtnGredient onClick={() => setIsShowModal(true)}>
-                  <UserPlus />
-                  <p className="hidden md:block">បន្ថែមនិស្សិតថ្មី</p>
-                </BtnGredient>
-              </div>
-              <div className="w-full">
-                <div className="w-3/5 text-right">
-                  {selectedRows.length > 0 && (
-                    <div className="inline-block pr-2">
-                      <BtnGredient1
-                        className="w-full h-full"
-                        onClick={handledelete}
-                        color={"from-[#ff0000] to-[#E7FBFF]"}
-                        hover={"hover:from-[#E7FBFF] hover:to-[#ff0000]"}
-                      >
-                        <Trash2 />
-                        <p className="font-noto">លុប</p>
-                      </BtnGredient1>
-                    </div>
-                  )}
-                  {selectedRows.length === 1 && (
-                    <div className="inline-block pl-2">
-                      <BtnGredient1
-                        className="w-full h-full pr-5"
-                        onClick={() => setIsModalUpdate(true)}
-                        color={"from-[#1aff00] to-[#E7FBFF]"}
-                        hover={"hover:from-[#E7FBFF] hover:to-[#1aff00]"}
-                      >
-                        <Pencil />
-                        <p className="font-noto">កែសម្រួល</p>
-                      </BtnGredient1>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="flex w-full">
-                <div className="text-right w-full space-x-5">
-                  <BtnGredient onClick={() => setIsShowModalMajor(true)}>
-                    <ArrowDownWideNarrow />
-                    <p className="hidden md:block">បន្ថែមជំនាញ</p>
+                {userInfor.role === "ADMIN" ||
+                userInfor.role === "SUPER_ADMIN" ? (
+                  <BtnGredient onClick={() => setIsShowModal(true)}>
+                    <UserPlus />
+                    <p className="hidden md:block">បន្ថែមនិស្សិតថ្មី</p>
                   </BtnGredient>
-                  <BtnGredient onClick={() => setIssModalCollege(true)}>
-                    <School />
-                    <p className="hidden md:block">បន្ថែមមហាវិទ្យាល័យ</p>
-                  </BtnGredient>
-                </div>
+                ) : null}
               </div>
+              {userInfor.role === "ADMIN" ||
+              userInfor.role === "SUPER_ADMIN" ? (
+                <>
+                  <div className="w-full">
+                    <div className="w-3/5 text-right">
+                      {selectedRows.length > 0 && (
+                        <div className="inline-block pr-2">
+                          <BtnGredient1
+                            className="w-full h-full"
+                            onClick={handledelete}
+                            color={"from-[#ff0000] to-[#E7FBFF]"}
+                            hover={"hover:from-[#E7FBFF] hover:to-[#ff0000]"}
+                          >
+                            <Trash2 />
+                            <p className="font-noto">លុប</p>
+                          </BtnGredient1>
+                        </div>
+                      )}
+                      {selectedRows.length === 1 && (
+                        <div className="inline-block pl-2">
+                          <BtnGredient1
+                            className="w-full h-full pr-5"
+                            onClick={() => setIsModalUpdate(true)}
+                            color={"from-[#1aff00] to-[#E7FBFF]"}
+                            hover={"hover:from-[#E7FBFF] hover:to-[#1aff00]"}
+                          >
+                            <Pencil />
+                            <p className="font-noto">កែសម្រួល</p>
+                          </BtnGredient1>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex w-full">
+                    <div className="text-right w-full space-x-5">
+                      <BtnGredient onClick={() => setIsShowModalMajor(true)}>
+                        <ArrowDownWideNarrow />
+                        <p className="hidden md:block">បន្ថែមជំនាញ</p>
+                      </BtnGredient>
+                      <BtnGredient onClick={() => setIssModalCollege(true)}>
+                        <School />
+                        <p className="hidden md:block">បន្ថែមមហាវិទ្យាល័យ</p>
+                      </BtnGredient>
+                    </div>
+                  </div>
+                </>
+              ) : null}
             </div>
             {/* Table Data */}
             <div className="table-container overflow-y-auto gap-5 flex-1 flex-col lg:flex-row md:flex-col flex w-full items-start">
@@ -297,7 +327,9 @@ function TableStudentData() {
                         onMouseDown={(e) => handleMouseDown(entry, e)}
                         onMouseOver={() => handleMouseOver(entry)}
                         className={`hover:bg-primary ${
-                          selectedRows.some((row) => row.studentId === entry.studentId)
+                          selectedRows.some(
+                            (row) => row.studentId === entry.studentId,
+                          )
                             ? "bg-primary"
                             : ""
                         } text-sm cursor-pointer active:bg-primary`}
@@ -403,7 +435,9 @@ function TableStudentData() {
           <Modal isVisible={isModalCollege} onClose={handleCloseModal}>
             <div className="container w-full h-full space-y-5">
               <div className="header-modal flex items-center justify-between">
-                <label className="font-noto font-semibold text-lg">បន្ថែមមហាវិទ្យាល័យ</label>
+                <label className="font-noto font-semibold text-lg">
+                  បន្ថែមមហាវិទ្យាល័យ
+                </label>
                 <button
                   onClick={handleCloseModal}
                   className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
@@ -415,7 +449,9 @@ function TableStudentData() {
                 <div className="container w-full h-full space-y-5">
                   <div className="flex mt-5">
                     <div className="w-2/5 mr-1">
-                      <div className="w-full font-noto font-semibold">លេខមហាវិទ្យាល័យ :</div>
+                      <div className="w-full font-noto font-semibold">
+                        លេខមហាវិទ្យាល័យ :
+                      </div>
                       <input
                         type="text"
                         className="input input-bordered w-full bg-secondary font-noto"
@@ -426,7 +462,9 @@ function TableStudentData() {
                       />
                     </div>
                     <div className="mr-1 w-full">
-                      <div className="font-noto font-semibold">មហាវិទ្យាល័យ :</div>
+                      <div className="font-noto font-semibold">
+                        មហាវិទ្យាល័យ :
+                      </div>
                       <input
                         type="text"
                         className="input input-bordered w-full bg-secondary font-noto"

@@ -1,43 +1,44 @@
-import React, { useState,useEffect } from 'react'
-import Modal from '../../../layout/Component/Modal';
-import BtnGredient from '../BtnGredient';
-import { X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import Modal from "../../../layout/components/Modal";
+import BtnGredient from "../BtnGredient";
+import { X } from "lucide-react";
 import axios from "../../../api/axios";
-import toast, { Toaster } from 'react-hot-toast';
-import ExcelDonation from './ExcelDonation';
-const ModalAddDonation = ({isModalVisible, handleCloseModal,fetchDonation }) => {
-    const [collegeData, setCollegeData]=useState([]);
-    const dateToday=new Date().toISOString().split('T')[0];
-  const [formData, setFormData] = useState(
-    {
+import toast, { Toaster } from "react-hot-toast";
+import ExcelDonation from "./ExcelDonation";
+const ModalAddDonation = ({
+  isModalVisible,
+  handleCloseModal,
+  fetchDonation,
+}) => {
+  const [collegeData, setCollegeData] = useState([]);
+  const dateToday = new Date().toISOString().split("T")[0];
+  const [formData, setFormData] = useState({
     donatorName: "",
     bookTitle: "",
     bookId: "",
-    bookQuan: '',
+    bookQuan: "",
     languageId: "",
     collegeId: "",
     author: "",
-    publicationYear: '',
+    publicationYear: "",
     genre: "",
-    donateDate:dateToday,
-    }
-);
+    donateDate: dateToday,
+  });
   useEffect(() => {
-    axios.get('/college')
-      .then(response => {
-        // Filter books where isActive is true
-        setCollegeData(response.data);
-      });
+    axios.get("/college").then((response) => {
+      // Filter books where isActive is true
+      setCollegeData(response.data);
+    });
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     // For author and publicationYear, set to null if empty
-    if (name === 'author' || name === 'publicationYear') {
+    if (name === "author" || name === "publicationYear") {
       setFormData({
         ...formData,
-        [name]: value.trim() === '' ? null : value,
+        [name]: value.trim() === "" ? null : value,
       });
     } else {
       setFormData({
@@ -49,179 +50,254 @@ const ModalAddDonation = ({isModalVisible, handleCloseModal,fetchDonation }) => 
   // Function to handle radio button changes for languageId
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const submissionData = [{
-      ...formData,
-      // Explicitly set author and publicationYear to null if they are empty strings
-      author: formData.author === '' ? null : formData.author,
-      publicationYear:
-        formData.publicationYear === '' ? null : Number(formData.publicationYear),
-      // Convert bookQuan to a number if necessary
-      bookQuan: Number(formData.bookQuan),
-    },];
+    const submissionData = [
+      {
+        ...formData,
+        // Explicitly set author and publicationYear to null if they are empty strings
+        author: formData.author === "" ? null : formData.author,
+        publicationYear:
+          formData.publicationYear === ""
+            ? null
+            : Number(formData.publicationYear),
+        // Convert bookQuan to a number if necessary
+        bookQuan: Number(formData.bookQuan),
+      },
+    ];
     console.log(submissionData);
     // try {
-       axios.post('/donation', submissionData, {
+    axios
+      .post("/donation", submissionData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-      }).then(response => {
-          toast.success('បានបញ្ចូលអ្នកឧបត្ថម្ភដោយជោគជ័យ!!!', {style:{fontFamily:' NotoSansKhmer-Regular, sans-serif'}}); 
-          console.log(submissionData);
-          fetchDonation(); // Refresh the list after adding the new book
-          // Clear the form data
-    setFormData({
-      donatorName: "",
-      bookTitle: "",
-      bookId: "",
-      bookQuan: '',
-      languageId: "",
-      collegeId: "",
-      author: "",
-      publicationYear: '',
-      genre: "",
-      donateDate: dateToday,
-    });
       })
-      .catch(error => {
+      .then((response) => {
+        toast.success("បានបញ្ចូលអ្នកឧបត្ថម្ភដោយជោគជ័យ!!!", {
+          style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
+        });
+        console.log(submissionData);
+        fetchDonation(); // Refresh the list after adding the new book
+        // Clear the form data
+        setFormData({
+          donatorName: "",
+          bookTitle: "",
+          bookId: "",
+          bookQuan: "",
+          languageId: "",
+          collegeId: "",
+          author: "",
+          publicationYear: "",
+          genre: "",
+          donateDate: dateToday,
+        });
+      })
+      .catch((error) => {
         // Handle error based on the response
         if (error.response) {
-          console.error('Backend Error:', error.response.data);
+          console.error("Backend Error:", error.response.data);
           if (error.response.status === 400) {
-            toast.error('សូមពិនិត្យមើលទិន្នន័យម្តងទៀត!!!',{style:{fontFamily:' NotoSansKhmer-Regular, sans-serif'}});
+            toast.error("សូមពិនិត្យមើលទិន្នន័យម្តងទៀត!!!", {
+              style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
+            });
           } else if (error.response.status === 500) {
-            toast.error('Server error, please try again later.');
+            toast.error("Server error, please try again later.");
           } else {
-            toast.error('There was an error submitting the form.');
+            toast.error("There was an error submitting the form.");
           }
         } else {
-          console.error('Submission Error:', error.message);
-          toast.error('There was an error submitting the form.');
+          console.error("Submission Error:", error.message);
+          toast.error("There was an error submitting the form.");
         }
       });
   };
   return (
     <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
-        <div className="container w-full h-full space-y-5 font-noto">
-          <div className="header-modal flex items-center justify-between">
-            {/* <input type="radio" id='guestRadio' name="entryType" value="guest" className="radio radio-accent" onChange={handleRadioChange} checked={!isStudent} /> */}
-            <label className='font-semibold text-lg'>ការឧបត្ថម្ភ</label>
-            <div className="flex justify-end mt-0 w-2/3">
-              <ExcelDonation fetchDonation={fetchDonation}/>
-            </div>
-            <button onClick={handleCloseModal} className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out">
-              <X />
-            </button>
+      <div className="container w-full h-full space-y-5 font-noto">
+        <div className="header-modal flex items-center justify-between">
+          {/* <input type="radio" id='guestRadio' name="entryType" value="guest" className="radio radio-accent" onChange={handleRadioChange} checked={!isStudent} /> */}
+          <label className="font-semibold text-lg">ការឧបត្ថម្ភ</label>
+          <div className="flex justify-end mt-0 w-2/3">
+            <ExcelDonation fetchDonation={fetchDonation} />
           </div>
+          <button
+            onClick={handleCloseModal}
+            className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
+          >
+            <X />
+          </button>
         </div>
-        <>
-          <form onSubmit={handleSubmit}>
-            <div className="container w-full h-full space-y-5 font-noto">
-              {/* Write here */}
-              <div className='flex'>
-                <div className="w-full mt-5 mr-1">
-                  <div className="w-full font-semibold">អ្នកឧបត្ថម្ភ :</div>
-                  <input type="text" className="input input-bordered bg-secondary w-full" name="donatorName" value={formData.donatorName} onChange={handleChange} required />
-                </div>
-                <div className="w-full mt-5 ml-1">
-                  <div className=" w-full font-semibold">លេខសម្គាល់សៀវភៅ :</div>
-                  <input type="text" className="input input-bordered bg-secondary w-full" name="bookId" value={formData.bookId} onChange={handleChange} required />
-                </div>
+      </div>
+      <>
+        <form onSubmit={handleSubmit}>
+          <div className="container w-full h-full space-y-5 font-noto">
+            {/* Write here */}
+            <div className="flex">
+              <div className="w-full mt-5 mr-1">
+                <div className="w-full font-semibold">អ្នកឧបត្ថម្ភ :</div>
+                <input
+                  type="text"
+                  className="input input-bordered bg-secondary w-full"
+                  name="donatorName"
+                  value={formData.donatorName}
+                  onChange={handleChange}
+                  required
+                />
               </div>
-              <div className='flex'>
+              <div className="w-full mt-5 ml-1">
+                <div className=" w-full font-semibold">លេខសម្គាល់សៀវភៅ :</div>
+                <input
+                  type="text"
+                  className="input input-bordered bg-secondary w-full"
+                  name="bookId"
+                  value={formData.bookId}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex">
               <div className="w-full mr-1">
-                  <div className=" w-full font-semibold">ចំណងជើង :</div>
-                  <input type="text" className="input input-bordered bg-secondary w-full" name="bookTitle" value={formData.bookTitle} onChange={handleChange} />
-                </div>
-                <div className="w-full ml-1">
-                  <div className=" w-full font-semibold">មហាវិទ្យាល័យ :</div>
-                  <select
-        name="collegeId"
-        value={formData.collegeId}
-        onChange={handleChange}
-        required
-        className="select select-bordered w-full bg-secondary"
-    >
-      {/* <option value="ST">English</option>
+                <div className=" w-full font-semibold">ចំណងជើង :</div>
+                <input
+                  type="text"
+                  className="input input-bordered bg-secondary w-full"
+                  name="bookTitle"
+                  value={formData.bookTitle}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="w-full ml-1">
+                <div className=" w-full font-semibold">មហាវិទ្យាល័យ :</div>
+                <select
+                  name="collegeId"
+                  value={formData.collegeId}
+                  onChange={handleChange}
+                  required
+                  className="select select-bordered w-full bg-secondary"
+                >
+                  {/* <option value="ST">English</option>
     <option value="ST">Khmer</option>
     <option value="ST">Other</option> */}
-    <option disabled className="refresh" value="">
-                ជ្រើសរើសមហាវិទ្យាល័យ
-              </option>
-    {collegeData.map((e, index) => (
-                      <option key={index} value={e.collegeId}>{e.collegeName}</option>
-                    ))}
-
-</select>
-                </div>
-                
+                  <option disabled className="refresh" value="">
+                    ជ្រើសរើសមហាវិទ្យាល័យ
+                  </option>
+                  {collegeData.map((e, index) => (
+                    <option key={index} value={e.collegeId}>
+                      {e.collegeName}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div className='flex'>
+            </div>
+            <div className="flex">
               <div className="w-full mr-1">
-                  <div className=" w-full font-semibold">អ្នកនិពន្ធ :</div>
-                  <input type="text" className="input input-bordered bg-secondary w-full" name="author" value={formData.author || ''} onChange={handleChange} />
-                </div>
-                <div className="w-full ml-1">
-                  <div className=" w-full font-semibold">ប្រភេទ :</div>
-                  <input type="text" className="input input-bordered bg-secondary w-full" name="genre" value={formData.genre} onChange={handleChange} required />
-                </div>
+                <div className=" w-full font-semibold">អ្នកនិពន្ធ :</div>
+                <input
+                  type="text"
+                  className="input input-bordered bg-secondary w-full"
+                  name="author"
+                  value={formData.author || ""}
+                  onChange={handleChange}
+                />
               </div>
-              <div className='flex'>
+              <div className="w-full ml-1">
+                <div className=" w-full font-semibold">ប្រភេទ :</div>
+                <input
+                  type="text"
+                  className="input input-bordered bg-secondary w-full"
+                  name="genre"
+                  value={formData.genre}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex">
               <div className="w-full mr-1">
-                  <div className=" w-full font-semibold">ឆ្នាំបោះពុម្ព :</div>
-                  <input type="number" className="input input-bordered bg-secondary w-full" name="publicationYear" value={formData.publicationYear || ''} onChange={handleChange} />
-                </div>
-                <div className="w-full ml-1">
-                  <div className=" w-full font-semibold">កាលបរិច្ឆេទឧបត្ថម្ភ :</div>
-                  <input type="date" className="input input-bordered bg-secondary w-full" name="donateDate" value={formData.donateDate} onChange={handleChange} required />
-                </div>
+                <div className=" w-full font-semibold">ឆ្នាំបោះពុម្ព :</div>
+                <input
+                  type="number"
+                  className="input input-bordered bg-secondary w-full"
+                  name="publicationYear"
+                  value={formData.publicationYear || ""}
+                  onChange={handleChange}
+                />
               </div>
-              <div className='flex'>
-                <div className="w-full mr-1">
-                  <div className=" w-full font-semibold">ចំនួន :</div>
-                  <input type="number" className="input input-bordered bg-secondary w-full" name="bookQuan" value={formData.bookQuan} onChange={handleChange} required />
+              <div className="w-full ml-1">
+                <div className=" w-full font-semibold">
+                  កាលបរិច្ឆេទឧបត្ថម្ភ :
                 </div>
-                <div className="w-full">
-                  <div className='ml-1'>
-                    <label className="w-full font-semibold">ជ្រើសរើសភាសា</label>
-                    <div className="mt-3">
-                      <label className="inline-flex items-center w-1/2">
-                        <input
-                          type="radio"
-                          name="languageId"
-                          value="eng"
-                          checked={formData.languageId === 'eng'}
-                          onChange={handleChange}
-                          required
-                          className="radio radio-accent"
-                        />
-                        <span className="ml-2 text-accent">អង់គ្លេស</span>
-                      </label>
-                      <label className="inline-flex items-center w-1/2">
-                        <input
-                          type="radio"
-                          name="languageId"
-                          value="kh"
-                          checked={formData.languageId === 'kh'}
-                          onChange={handleChange}
-                          required
-                          className="radio radio-accent"
-                        />
-                        <span className="ml-2 text-accent">ខ្មែរ</span>
-                      </label>
-                    </div></div>
+                <input
+                  type="date"
+                  className="input input-bordered bg-secondary w-full"
+                  name="donateDate"
+                  value={formData.donateDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex">
+              <div className="w-full mr-1">
+                <div className=" w-full font-semibold">ចំនួន :</div>
+                <input
+                  type="number"
+                  className="input input-bordered bg-secondary w-full"
+                  name="bookQuan"
+                  value={formData.bookQuan}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="w-full">
+                <div className="ml-1">
+                  <label className="w-full font-semibold">ជ្រើសរើសភាសា</label>
+                  <div className="mt-3">
+                    <label className="inline-flex items-center w-1/2">
+                      <input
+                        type="radio"
+                        name="languageId"
+                        value="eng"
+                        checked={formData.languageId === "eng"}
+                        onChange={handleChange}
+                        required
+                        className="radio radio-accent"
+                      />
+                      <span className="ml-2 text-accent">អង់គ្លេស</span>
+                    </label>
+                    <label className="inline-flex items-center w-1/2">
+                      <input
+                        type="radio"
+                        name="languageId"
+                        value="kh"
+                        checked={formData.languageId === "kh"}
+                        onChange={handleChange}
+                        required
+                        className="radio radio-accent"
+                      />
+                      <span className="ml-2 text-accent">ខ្មែរ</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 content-center pt-5 pb-5">
-              <BtnGredient type='submit' className="rounded-" color={'from-[#00d0ffb1] to-[#E7FBFF]'} hover={'from-[#00D9FF] to-[#a5cef3]'}>
-                <label className='text-xl font-noto'>បញ្ជួន</label>
-                {/* <button type='submit' className='text-xl text-accent'>Add</button> */}
-              </BtnGredient>
-            </div>
-          </form></>
-        <Toaster position='bottom-center' />
-      </Modal>
-  )
-}
+          </div>
+          <div className="grid grid-cols-1 gap-4 content-center pt-5 pb-5">
+            <BtnGredient
+              type="submit"
+              className="rounded-"
+              color={"from-[#00d0ffb1] to-[#E7FBFF]"}
+              hover={"from-[#00D9FF] to-[#a5cef3]"}
+            >
+              <label className="text-xl font-noto">បញ្ជួន</label>
+              {/* <button type='submit' className='text-xl text-accent'>Add</button> */}
+            </BtnGredient>
+          </div>
+        </form>
+      </>
+      <Toaster position="bottom-center" />
+    </Modal>
+  );
+};
 
-export default ModalAddDonation
+export default ModalAddDonation;

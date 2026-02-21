@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserRoundPlus, X } from "lucide-react";
 import BtnGredient from "./BtnGredient";
-import Modal from "../../../layout/Component/Modal";
+import Modal from "../../../layout/components/Modal";
 import axios from "../../../api/axios";
 import useScanEntry from "../../Hook/useScanEntry";
 import toast, { Toaster } from "react-hot-toast";

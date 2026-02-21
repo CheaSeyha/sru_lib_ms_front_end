@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import BtnGredient from "../../../layout/Component/BtnGredient";
+import BtnGredient from "../../../layout/components/BtnGredient";
 import { UserPlus } from "lucide-react";
 import {
   UserRoundPlus,
@@ -12,7 +12,7 @@ import {
   EditIcon,
   ArrowDownToLine,
 } from "lucide-react";
-import Modal from "../../../layout/Component/Modal";
+import Modal from "../../../layout/components/Modal";
 import useCRUDStaff from "../Hook/useCRUDStaff";
 import useMajor from "../../../Hook/useMajor";
 import useDegreeLevel from "../../../Hook/useDegreeLevel";

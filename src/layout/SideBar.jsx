@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import imageProfile from "../assets/logo/sru_logo.png";
-import SidebarMenuButton from "../layout/Component/SidebarMenuButton";
+import SidebarMenuButton from "./components/SidebarMenuButton";
 import { useHideSideBar } from "../Context/HideSidebarContext";
 import { useThemeSwitch } from "../Context/ThemeSwitchContext";
 import { useLocation } from "react-router-dom";
@@ -15,9 +15,9 @@ import {
   BookUser,
 } from "lucide-react";
 import { useAuth } from "../Context/AuthProvider";
-import Modal from "../layout/Component/Modal";
+import Modal from "./components/Modal";
 import { X } from "lucide-react";
-import BtnGredient from "../layout/Component/BtnGredient";
+import BtnGredient from "./components/BtnGredient";
 import SRULogo from "../assets/logo/sru_logo.png";
 import toast, { Toaster } from "react-hot-toast";
 import { getSoundState, setSoundState } from "../utils/soundUtils";

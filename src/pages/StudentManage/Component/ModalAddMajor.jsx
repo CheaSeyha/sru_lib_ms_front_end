@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import Modal from '../../../layout/Component/Modal';
-import BtnGredient from '../../Book/BtnGredient';
-import { X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import Modal from "../../../layout/components/Modal";
+import BtnGredient from "../../Book/BtnGredient";
+import { X } from "lucide-react";
 import axios from "../../../api/axios";
-import toast, { Toaster } from 'react-hot-toast';
-import ExcelStudent from './ExcelStudent';
+import toast, { Toaster } from "react-hot-toast";
+import ExcelStudent from "./ExcelStudent";
 const ModalAddMajor = ({ isModalVisible, handleCloseModal, fetchmajor }) => {
-  const [collegedata, setcollegedata]=useState([]);
+  const [collegedata, setcollegedata] = useState([]);
   const [formData, setFormData] = useState({
-    majorId:"",
-    majorName:"",
-    collegeId:""
+    majorId: "",
+    majorName: "",
+    collegeId: "",
   });
   useEffect(() => {
-    axios.get('/college')
-      .then(response => {
-        // Filter books where isActive is true
-        setcollegedata(response.data);
-      });
+    axios.get("/college").then((response) => {
+      // Filter books where isActive is true
+      setcollegedata(response.data);
+    });
   }, []);
 
   const handleChange = (e) => {
@@ -34,23 +33,27 @@ const ModalAddMajor = ({ isModalVisible, handleCloseModal, fetchmajor }) => {
       ...formData,
     };
     // try {
-    axios.post('/major', submissionData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(response => {
-      toast.success('បានបញ្ចូលជំនាញដោយជោគជ័យ!!!', { style: { fontFamily: ' NotoSansKhmer-Regular, sans-serif' } });
-      setFormData({
-        majorId:"",
-        majorName:"",
-        collegeId:""
+    axios
+      .post("/major", submissionData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      fetchmajor(); // Refresh the list after adding the new book
-    })
-      .catch(error => {
+      .then((response) => {
+        toast.success("បានបញ្ចូលជំនាញដោយជោគជ័យ!!!", {
+          style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
+        });
+        setFormData({
+          majorId: "",
+          majorName: "",
+          collegeId: "",
+        });
+        fetchmajor(); // Refresh the list after adding the new book
+      })
+      .catch((error) => {
         // Handle error based on the response
-          toast.error('មិនអាចបញ្ចួលបានទេ!!!.');
-          console.log(error);
+        toast.error("មិនអាចបញ្ចួលបានទេ!!!.");
+        console.log(error);
       });
   };
   return (
@@ -59,10 +62,15 @@ const ModalAddMajor = ({ isModalVisible, handleCloseModal, fetchmajor }) => {
         <div className="container w-full h-full space-y-5">
           <div className="header-modal flex items-center justify-between">
             {/* <input type="radio" id='guestRadio' name="entryType" value="guest" className="radio radio-accent" onChange={handleRadioChange} checked={!isStudent} /> */}
-            <label className='font-noto font-semibold text-lg'>បន្ថែមជំនាញថ្មី</label>
+            <label className="font-noto font-semibold text-lg">
+              បន្ថែមជំនាញថ្មី
+            </label>
             {/* <div className="flex justify-end mt-0 w-2/3">
             </div> */}
-            <button onClick={handleCloseModal} className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out">
+            <button
+              onClick={handleCloseModal}
+              className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
+            >
               <X />
             </button>
           </div>
@@ -71,49 +79,81 @@ const ModalAddMajor = ({ isModalVisible, handleCloseModal, fetchmajor }) => {
           <form onSubmit={handleSubmit}>
             <div className="container w-full h-full space-y-5">
               {/* Write here */}
-              <div className='flex mt-5'>
+              <div className="flex mt-5">
                 <div className="w-full mr-1">
-                  <div className="w-full font-noto font-semibold">លេខជំនាញ​ :</div>
-                  <input type="text" className="input input-bordered  w-full bg-secondary font-noto" name="majorId" value={formData.majorId} onChange={handleChange} required />
+                  <div className="w-full font-noto font-semibold">
+                    លេខជំនាញ​ :
+                  </div>
+                  <input
+                    type="text"
+                    className="input input-bordered  w-full bg-secondary font-noto"
+                    name="majorId"
+                    value={formData.majorId}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="mr-1 w-full">
                   <div className=" font-noto font-semibold">មហាវិទ្យាល័យ :</div>
                   <select
-        name="collegeId"
-        value={formData.collegeId}
-        onChange={handleChange}
-        required
-        className="select select-bordered w-full font-noto bg-secondary"
-    >
-      {/* <option value="ST">English</option>
+                    name="collegeId"
+                    value={formData.collegeId}
+                    onChange={handleChange}
+                    required
+                    className="select select-bordered w-full font-noto bg-secondary"
+                  >
+                    {/* <option value="ST">English</option>
     <option value="ST">Khmer</option>
     <option value="ST">Other</option> */}
-    <option disabled className="refresh" value="">
-                ជ្រើសរើសមហាវិទ្យាល័យ
-              </option>
-    {collegedata.map((e, index) => (
-                      <option key={index} value={e.collegeId}>{e.collegeId==='AHFL'?'សិល្បៈ មនុស្សសាស្ត្រ និងភាសា':e.collegeId==='BA'?'គ្រប់គ្រងពាណិជ្ជកម្ម':e.collegeId==='SS'?'វិទ្យសាស្ត្រសង្គម':'បច្ចេកវិទ្យា និងវិទ្យាសាស្ត្រ'}</option>
+                    <option disabled className="refresh" value="">
+                      ជ្រើសរើសមហាវិទ្យាល័យ
+                    </option>
+                    {collegedata.map((e, index) => (
+                      <option key={index} value={e.collegeId}>
+                        {e.collegeId === "AHFL"
+                          ? "សិល្បៈ មនុស្សសាស្ត្រ និងភាសា"
+                          : e.collegeId === "BA"
+                            ? "គ្រប់គ្រងពាណិជ្ជកម្ម"
+                            : e.collegeId === "SS"
+                              ? "វិទ្យសាស្ត្រសង្គម"
+                              : "បច្ចេកវិទ្យា និងវិទ្យាសាស្ត្រ"}
+                      </option>
                     ))}
-</select>
+                  </select>
                 </div>
               </div>
-              <div className='flex'>
+              <div className="flex">
                 <div className="w-full mr-1">
-                  <div className=" w-full font-noto font-semibold">ឈ្មោះជំនាញ :</div>
-                  <input type="text" className="input input-bordered  w-full bg-secondary font-noto" name="majorName" value={formData.majorName} onChange={handleChange} required />
+                  <div className=" w-full font-noto font-semibold">
+                    ឈ្មោះជំនាញ :
+                  </div>
+                  <input
+                    type="text"
+                    className="input input-bordered  w-full bg-secondary font-noto"
+                    name="majorName"
+                    value={formData.majorName}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4 content-center pt-5 pb-5">
-              <BtnGredient type='submit' className="rounded-" color={'from-[#00d0ffb1] to-[#E7FBFF]'} hover={'from-[#00D9FF] to-[#a5cef3]'}>
-                <label className='text-xl font-noto'>បញ្ចូល</label>
+              <BtnGredient
+                type="submit"
+                className="rounded-"
+                color={"from-[#00d0ffb1] to-[#E7FBFF]"}
+                hover={"from-[#00D9FF] to-[#a5cef3]"}
+              >
+                <label className="text-xl font-noto">បញ្ចូល</label>
                 {/* <button type='submit' className='text-xl text-accent'>Add</button> */}
               </BtnGredient>
             </div>
-          </form></>
+          </form>
+        </>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default ModalAddMajor
+export default ModalAddMajor;
