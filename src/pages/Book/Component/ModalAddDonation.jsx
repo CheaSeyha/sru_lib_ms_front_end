@@ -62,19 +62,22 @@ const ModalAddDonation = ({
     e.preventDefault();
     const submissionData = [
       {
-        ...formData,
-        // Explicitly set author and publicationYear to null if they are empty strings
-        author: formData.author === "" ? null : formData.author,
-        publicationYear:
-          formData.publicationYear === ""
-            ? null
-            : Number(formData.publicationYear),
-        // Convert bookQuan to a number if necessary
+        donatorName: formData.donatorName,
+        bookId: formData.bookId,
+        bookTitle: formData.bookTitle,
         bookQuan: Number(formData.bookQuan),
+        languageId: formData.languageId,
+        collegeId: formData.collegeId,
+        author: formData.author || null,
+        publicationYear: formData.publicationYear
+          ? Number(formData.publicationYear)
+          : null,
+        genre: formData.genre,
+        donateDate: formData.donateDate,
       },
     ];
-    console.log(submissionData);
-    // try {
+    console.log("Submission Data:", submissionData);
+
     axios
       .post("/donation", submissionData, {
         headers: {
@@ -85,7 +88,6 @@ const ModalAddDonation = ({
         toast.success("បានបញ្ចូលអ្នកឧបត្ថម្ភដោយជោគជ័យ!!!", {
           style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
         });
-        console.log(submissionData);
         fetchDonation(); // Refresh the list after adding the new book
         // Clear the form data
         setFormData({
@@ -106,7 +108,7 @@ const ModalAddDonation = ({
         if (error.response) {
           console.error("Backend Error:", error.response.data);
           if (error.response.status === 400) {
-            toast.error("សូមពិនិត្យមើលទិន្នន័យម្តងទៀត!!!", {
+            toast.error(`សៀវភៅ ${formData.bookId} នេះមានរួចហើយ!!!`, {
               style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
             });
           } else if (error.response.status === 500) {
@@ -118,8 +120,10 @@ const ModalAddDonation = ({
           console.error("Submission Error:", error.message);
           toast.error("There was an error submitting the form.");
         }
+      })
+      .finally(() => {
+        handleCloseModal();
       });
-    handleCloseModal();
   };
   return (
     <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
@@ -268,8 +272,8 @@ const ModalAddDonation = ({
                       <input
                         type="radio"
                         name="languageId"
-                        value="eng"
-                        checked={formData.languageId === "eng"}
+                        value="L_ENG"
+                        checked={formData.languageId === "L_ENG"}
                         onChange={handleChange}
                         required
                         className="radio radio-accent"
@@ -280,8 +284,8 @@ const ModalAddDonation = ({
                       <input
                         type="radio"
                         name="languageId"
-                        value="kh"
-                        checked={formData.languageId === "kh"}
+                        value="L_KH"
+                        checked={formData.languageId === "L_KH"}
                         onChange={handleChange}
                         required
                         className="radio radio-accent"
