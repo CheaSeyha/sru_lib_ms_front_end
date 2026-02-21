@@ -209,13 +209,13 @@ function TableStudentData() {
 
   return (
     <>
+      <Toaster />
       {isLoading ? (
         <main className="flex justify-center items-center w-full h-full space-y-5">
           <span className="loading loading-dots text-accent loading-lg"></span>
         </main>
       ) : (
         <>
-          <Toaster />
           <div className="w-full h-full flex flex-col gap-5">
             {/* Header Content */}
             <div className="header flex flex-col-reverse xl:flex-row lg:flex-row md:flex-col-reverse">

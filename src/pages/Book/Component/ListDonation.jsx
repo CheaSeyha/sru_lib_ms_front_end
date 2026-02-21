@@ -5,6 +5,7 @@ import axios from "../../../api/axios";
 import refresh from "../../../assets/logo/refresh.svg";
 import { RotateCcw, CircleFadingPlus } from "lucide-react";
 import CerAppreciation from "./CerAppreciation";
+import { Toaster } from "react-hot-toast";
 export default function ListDonation() {
   // Data of All Book
   const [books, setBooks] = useState([]);
@@ -63,6 +64,7 @@ export default function ListDonation() {
 
   return (
     <>
+      <Toaster />
       <div className="flex flex-col w-full h-full font-noto space-y-5 scrollbar-hide">
         <div className="w-full flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
           <div className="flex md:flex-row flex-col gap-2 w-full">

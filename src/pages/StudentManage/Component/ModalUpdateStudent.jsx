@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 const ModalUpdateStudent = ({
   isModalVisible,
   handleCloseModal,
-  fetchstudent,
+  fetchData,
   rowSelected,
   setRowSelected,
 }) => {
@@ -53,14 +53,14 @@ const ModalUpdateStudent = ({
         generation: selectedStudent.generation || "",
         majorId:
           majordata.find((row) => row.majorName === selectedStudent.majorName)
-            .majorId || "",
+            ?.majorId || "",
         degreeLevelId:
           degreedata.find(
             (row) => row.degreeLevel === selectedStudent.degreeLevel,
-          ).degreeLevelId || "",
+          )?.degreeLevelId || "",
       });
     }
-  }, [rowSelected]);
+  }, [rowSelected, majordata, degreedata]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,19 +82,19 @@ const ModalUpdateStudent = ({
       );
 
       if (updateResponse.status === 202 || updateResponse.status === 200) {
-        toast.success("អ្នកបានកែរប្រែព័ត៌មានសិស្សបានដោយជោគជ័យ!!!", {
+        toast.success("អ្នកបានកែប្រែព័ត៌មាននិស្សិតបានដោយជោគជ័យ!!!", {
           style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
         });
-        fetchstudent();
+        fetchData();
         setRowSelected([]);
+        handleCloseModal();
       } else {
-        toast.error("Failed to update book. Please try again.");
+        toast.error("មិនអាចកែប្រែព័ត៌មានបានទេ!!!.");
       }
     } catch (error) {
-      console.error("There was an error updating the book:", error);
-      toast.error("An error occurred while updating the book.");
+      console.error("There was an error updating the student:", error);
+      toast.error("មានបញ្ហាក្នុងការកែប្រែព័ត៌មាន។");
     }
-    console.log(formData);
   };
   return (
     <>

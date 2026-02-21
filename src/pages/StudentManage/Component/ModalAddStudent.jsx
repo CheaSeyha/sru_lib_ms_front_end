@@ -34,6 +34,16 @@ const ModalAddStudent = ({ isModalVisible, handleCloseModal, fetchData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === "studentId") {
+      // Allow only numbers + limit to 10 characters
+      const numericValue = value.replace(/\D/g, "").slice(0, 10);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+      return;
+    }
+
     // For majorId and publicationYear, set to null if empty
     if (name === "majorId" || name === "publicationYear") {
       setFormData({
@@ -47,16 +57,15 @@ const ModalAddStudent = ({ isModalVisible, handleCloseModal, fetchData }) => {
       });
     }
   };
-  // Function to handle radio button changes for dateOfBirth
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const submissionData = {
       ...formData,
-      // Convert studentId to a number if necessary
       studentId: Number(formData.studentId),
       generation: Number(formData.generation),
     };
-    // try {
+
     axios
       .post("/student", submissionData, {
         headers: {
@@ -64,7 +73,7 @@ const ModalAddStudent = ({ isModalVisible, handleCloseModal, fetchData }) => {
         },
       })
       .then((response) => {
-        toast.success("បានបញ្ចូលសៀវភៅដោយជោគជ័យ!!!", {
+        toast.success("បានបញ្ចូលនិស្សិតដោយជោគជ័យ!!!", {
           style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
         });
         setFormData({
@@ -77,10 +86,9 @@ const ModalAddStudent = ({ isModalVisible, handleCloseModal, fetchData }) => {
           publicationYear: "",
           generation: "",
         });
-        fetchData(); // Refresh the list after adding the new book
+        fetchData(); // Refresh the list
       })
       .catch((error) => {
-        // Handle error based on the response
         if (error.response) {
           console.error("Backend Error:", error.response.data);
           if (error.response.status === 400) {
@@ -94,6 +102,9 @@ const ModalAddStudent = ({ isModalVisible, handleCloseModal, fetchData }) => {
           console.error("Submission Error:", error.message);
           toast.error("There was an error submitting the form.");
         }
+      })
+      .finally(() => {
+        handleCloseModal();
       });
   };
   return (
