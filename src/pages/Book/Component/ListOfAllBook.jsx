@@ -147,11 +147,12 @@ export default function ListOfAllBook() {
     <>
       <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
         <div className="w-full flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
-          <div className="flex w-full">
-            <div className="inline-block w-full h-full">
+          <div className="flex gap-2 w-full">
+            <div className="flex gap-2 max-w-[500px]">
+              {/* Search Innput  */}
               <label
                 htmlFor=""
-                className="input input-bordered font-noto rounded-[50px] w-full md:w-full flex items-center bg-base-100 p-2 h-full gap-2"
+                className="input input-bordered font-noto rounded-[50px] w-[750px] flex items-center bg-base-100 p-2 h-full gap-2"
               >
                 <input
                   type="text"
@@ -173,12 +174,11 @@ export default function ListOfAllBook() {
                   />
                 </svg>
               </label>
-            </div>
-            <div className="inline-block w-3/5 h-full pl-5">
+              {/* Filter Book type  */}
               <select
                 value={selectedGenre}
                 onChange={handleSelectType}
-                className="p-2 border rounded-[50px] font-noto input-bordered bg-base-100 h-full w-full"
+                className="p-2 border rounded-[50px] font-noto input-bordered bg-base-100 h-full w-fit"
               >
                 <option disabled className="refresh font-noto" value="">
                   ជ្រើសរើសប្រភេទ
@@ -190,35 +190,39 @@ export default function ListOfAllBook() {
                 ))}
               </select>
             </div>
-          </div>
-          <div className="flex w-full pb-5 sm:pb-5 xl:pb-0">
-            <div className="inline-block w-2/5">
-              <BtnGredient
-                className="w-full h-full"
-                onClick={resetSelection}
-                color={"from-[#00D1FF] to-[#E7FBFF]"}
-                hover={"hover:from-[#00D9FF] hover:to-[#E7FBFF]"}
-              >
-                <RotateCcw />
-                <p className="font-noto">ធ្វើឡើងវិញ</p>
-              </BtnGredient>
-            </div>
-            <div className="inline-block pl-5 w-2/5">
-              {selectedRows.length > 0 && (
-                <div className="inline-block pr-2">
-                  <BtnGredient
-                    className="w-full h-full"
-                    onClick={handledelete}
-                    color={"from-[#ff0000] to-[#E7FBFF]"}
-                    hover={"hover:from-[#E7FBFF] hover:to-[#ff0000]"}
-                  >
-                    <Trash2 />
-                    <p className="font-noto">លុប</p>
-                  </BtnGredient>
-                </div>
-              )}
-              {selectedRows.length == 1 && (
-                <div className="inline-block pl-2 ">
+            {/* Restart button  */}
+            <BtnGredient
+              className="w-fit h-fit"
+              onClick={resetSelection}
+              color={"from-[#00D1FF] to-[#E7FBFF]"}
+              hover={"hover:from-[#00D9FF] hover:to-[#E7FBFF]"}
+            >
+              <RotateCcw />
+            </BtnGredient>
+
+            {/* Add button  */}
+            <BtnGredient
+              className="flex items-center justify-center"
+              onClick={() => setIsModalVisible(true)}
+              color={"from-[#00D1FF] to-[#E7FBFF]"}
+              hover={"hover:from-[#00D9FF] hover:to-[#a5cef3]"}
+            >
+              <CircleFadingPlus />
+              <p className="font-noto">បញ្ចូល</p>
+            </BtnGredient>
+            {/* show edit and delete button when select row  */}
+            {selectedRows.length > 0 && (
+              <>
+                <BtnGredient
+                  className="w-full h-full"
+                  onClick={handledelete}
+                  color={"from-[#ff0000] to-[#E7FBFF]"}
+                  hover={"hover:from-[#E7FBFF] hover:to-[#ff0000]"}
+                >
+                  <Trash2 />
+                  <p className="font-noto">លុប</p>
+                </BtnGredient>
+                {selectedRows.length <= 1 && (
                   <BtnGredient
                     className="w-full h-full pr-5"
                     onClick={() => setIsModalUpdateVisible(true)}
@@ -228,20 +232,9 @@ export default function ListOfAllBook() {
                     <Pencil />
                     <p className="font-noto">កែសម្រួល</p>
                   </BtnGredient>
-                </div>
-              )}
-            </div>
-            <div className="inline-block w-1/5 text-right">
-              <BtnGredient
-                className="flex items-center justify-center"
-                onClick={() => setIsModalVisible(true)}
-                color={"from-[#00D1FF] to-[#E7FBFF]"}
-                hover={"hover:from-[#00D9FF] hover:to-[#a5cef3]"}
-              >
-                <CircleFadingPlus />
-                <p className="font-noto">បញ្ចូល</p>
-              </BtnGredient>
-            </div>
+                )}
+              </>
+            )}
           </div>
         </div>
         <div className="variable-book overflow-y-auto flex-1 w-full grid items-start scrollbar-hide">
