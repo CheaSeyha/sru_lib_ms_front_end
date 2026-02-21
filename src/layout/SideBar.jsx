@@ -52,7 +52,7 @@ function Sidebar() {
   //Get The Link Path To Know Is In /QRStudentEntry if true then hide the sidebar
   const GetLinkPath = useLocation().pathname;
 
-  const BtnMenuData = [
+  const sidebarItems = [
     {
       btnType: "Dashboard",
       path: "/",
@@ -331,7 +331,7 @@ function Sidebar() {
 
   // Function to filter menu items based on role
   const getFilteredMenuItems = (role) => {
-    return BtnMenuData.filter((item) => {
+    return sidebarItems.filter((item) => {
       if (role === "ADMIN" || role === "SUPER_ADMIN") return true;
 
       if (role === "USER") {

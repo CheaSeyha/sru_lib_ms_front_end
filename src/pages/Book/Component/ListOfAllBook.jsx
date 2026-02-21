@@ -149,12 +149,12 @@ export default function ListOfAllBook() {
     <>
       <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
         <div className="w-full flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
-          <div className="flex gap-2 w-full">
-            <div className="flex gap-2 max-w-[500px]">
+          <div className="flex md:flex-row flex-col gap-2 w-full">
+            <div className="flex md:flex-row flex-col gap-2 max-w-[500px]">
               {/* Search Innput  */}
               <label
                 htmlFor=""
-                className="input input-bordered font-noto rounded-[50px] w-[750px] flex items-center bg-base-100 p-2 h-full gap-2"
+                className="input input-bordered font-noto rounded-[50px] w-full lg:w-[750px] flex items-center bg-base-100 p-2 h-full gap-2"
               >
                 <input
                   type="text"
@@ -180,7 +180,7 @@ export default function ListOfAllBook() {
               <select
                 value={selectedGenre}
                 onChange={handleSelectType}
-                className="p-2 border rounded-[50px] font-noto input-bordered bg-base-100 h-full w-fit"
+                className="p-2 border rounded-[50px] font-noto input-bordered bg-base-100 h-full w-full md:w-fit"
               >
                 <option disabled className="refresh font-noto" value="">
                   ជ្រើសរើសប្រភេទ
