@@ -29,19 +29,42 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // For author and publicationYear, set to null if empty
+    if (name === "bookId") {
+      // Allow only numbers + limit to 5 characters
+      const numericValue = value.replace(/\D/g, "").slice(0, 10);
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+      return;
+    }
+
     if (name === "author" || name === "publicationYear") {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         [name]: value.trim() === "" ? null : value,
-      });
+      }));
     } else {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         [name]: value,
-      });
+      }));
     }
   };
+
+  const [languageData, setLanguageData] = useState([]);
+
+  const getLanguage = () => {
+    axios.get("/language").then((response) => {
+      setLanguageData(response.data);
+    });
+  };
+
+  useEffect(() => {
+    getLanguage();
+  }, []);
+
   // Function to handle radio button changes for languageId
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -128,7 +151,7 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
                     លេខសម្គាល់ :
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     className="input input-bordered  w-full bg-secondary font-noto"
                     name="bookId"
                     value={formData.bookId}
@@ -233,34 +256,25 @@ const ModalAdd = ({ isModalVisible, handleCloseModal, fetchBooks }) => {
                       ជ្រើសរើសភាសា
                     </label>
                     <div className="mt-3">
-                      <label className="inline-flex items-center w-1/2">
-                        <input
-                          type="radio"
-                          name="languageId"
-                          value="eng"
-                          checked={formData.languageId === "eng"}
-                          onChange={handleChange}
-                          required
-                          className="radio radio-accent"
-                        />
-                        <span className="ml-2 text-accent font-noto">
-                          អង់គ្លេស
-                        </span>
-                      </label>
-                      <label className="inline-flex items-center w-1/2">
-                        <input
-                          type="radio"
-                          name="languageId"
-                          value="kh"
-                          checked={formData.languageId === "kh"}
-                          onChange={handleChange}
-                          required
-                          className="radio radio-accent"
-                        />
-                        <span className="ml-2 text-accent font-noto">
-                          ខ្មែរ
-                        </span>
-                      </label>
+                      {languageData.map((language) => (
+                        <label className="inline-flex items-center w-1/2">
+                          <input
+                            key={language.languageId}
+                            type="radio"
+                            name="languageId"
+                            value={language.languageId}
+                            checked={
+                              formData.languageId === language.languageId
+                            }
+                            onChange={handleChange}
+                            required
+                            className="radio radio-accent"
+                          />
+                          <span className="ml-2 text-accent font-noto">
+                            {language.languageName}
+                          </span>
+                        </label>
+                      ))}
                     </div>
                   </div>
                 </div>

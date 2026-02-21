@@ -1,10 +1,8 @@
-import React from 'react'
-import FormInput from './Component/FormInput'
-import ListOfAllBook from './Component/ListOfAllBook'
+import React from "react";
+import FormInput from "./Component/FormInput";
+import ListOfAllBook from "./Component/ListOfAllBook";
 function BookManagement() {
-    return (
-            <FormInput/>
-    )
+  return <FormInput />;
 }
 
-export default BookManagement
+export default BookManagement;
