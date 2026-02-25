@@ -90,39 +90,7 @@ export default function TableStuEntry({
   const handleGenderChange = (event) => setGender(event.target.value);
   const handlePositionChange = (event) => setPosition(event.target.value);
 
-  // Function to get checked checkboxes
-  function getCheckboxValues() {
-    const checkboxes = document.querySelectorAll(".checkbox:checked");
-    const entryPurpose = {};
-    checkboxes.forEach((checkbox) => {
-      entryPurpose[checkbox.id] = true;
-    });
-    return entryPurpose;
-  }
-
   // Function to get form values based on entry type
-  function getFormValues(
-    checkRadio,
-    studentID,
-    guestName,
-    gender,
-    position,
-    entryPurpose,
-  ) {
-    if (checkRadio) {
-      return {
-        studentID,
-        entryPurpose,
-      };
-    } else {
-      return {
-        guestName,
-        gender,
-        position,
-        entryPurpose,
-      };
-    }
-  }
   const clearAllCheckboxes = () => {
     const checkboxes = document.querySelectorAll(
       '.container-check-purpose input[type="checkbox"]',
@@ -177,14 +145,6 @@ export default function TableStuEntry({
       }
       return values.join(", ");
     });
-  };
-
-  const startTimeout = () => {
-    clearTimeout(timeoutId); // Clear previous timeout if any
-    const id = setTimeout(() => {
-      clearForm();
-    }, 3000); // 1 minute timeout
-    setTimeoutId(id); // Save timeout ID to state
   };
 
   let currentIntervalId = null;
@@ -280,58 +240,114 @@ export default function TableStuEntry({
       if (checkPurpose === "") {
         toast.error("Please Check Entry Purpose");
       } else {
-        const saveEntry = await handleSaveEntry(studentID, checkPurpose);
-        if (saveEntry.status === "error") {
-          toast.error(saveEntry.message);
-        } else {
-          refreshCardData();
-          fetchRecentEntryData(); //get new table data
-          clearForm();
-          toast.success(saveEntry.message);
+        try {
+          const checkStatus = await axios.get(
+            `/entry/check?entryId=${studentID}`,
+          );
+          if (
+            checkStatus.data.status === "new attend!" ||
+            checkStatus.data.status === "exited"
+          ) {
+            const saveEntry = await axios.post(
+              `/entry?entryId=${studentID}&purpose=${checkPurpose}`,
+            );
+            console.log(saveEntry.data);
+            toast.success("Student Entry Success");
+            clearForm();
+          }
+        } catch (error) {
+          console.log(error);
         }
+        // const saveEntry = await handleSaveEntry(studentID, checkPurpose);
+        // if (saveEntry.status === "error") {
+        //   toast.error(saveEntry.message);
+        // } else {
+        //   refreshCardData();
+        //   fetchRecentEntryData(); //get new table data
+        //   clearForm();
+        //   toast.success(saveEntry.message);
+        // }
       }
     }
   };
 
   const handelSearchStudent = async () => {
-    if (studentID !== "") {
-      const searchStu = await handleSearchStudent(studentID); // search student
-      if (searchStu.status === "not found") {
-        // If student not found
-        setStudentIDErrorMsx(
-          `Student ID ${studentID} Not Found, Try Different ID...`,
-        );
-        setStudentIDErrorColor(true);
-        setStudentID("");
-      } else if (searchStu.status === "success") {
-        // if student found
-        const checkEntryExit = await handleCheckScanEntryExit(studentID);
-        if (checkEntryExit.status === "entry") {
-          // Show Student info and wait for user check purpose
-          setstuEntryInfor(searchStu.data); // get info of student from searchStu
-          console.log(stuEntryInfor.data);
-          setStudentIDErrorMsx(
-            `Student ID ${studentID} Found, Check Purpose To Entry`,
-          );
-          setStudentIDErrorColor(false); // show green on text error
-          setDisbleEntryBTN(false); // Enable Button Entry
-          setAreDisabled(false); // enable check box
+    setStudentIDError(false);
+    setStudentIDErrorMsx("");
+    if (studentID) {
+      //Check if student not exit then update
+      try {
+        const checkIsExit = await axios.put(`/entry?entryId=${studentID}`);
+        console.log(checkIsExit.data);
+        toast.success("Student exist success");
+        clearForm();
+      } catch (error) {
+        //Check if 400 let studetn scan in
+        if (
+          error.response.status === 400 &&
+          error.response.data === "No active attendance to scan out"
+        ) {
+          // Search studetn info
+          try {
+            const searchStu = await axios.get(`/student/${studentID}`);
+            toast.success("Student Found");
+            setstuEntryInfor(searchStu.data);
+            //allow to check purpose
+            setAreDisabled(false);
+            setDisbleEntryBTN(false);
+          } catch (error) {
+            if (error.response.status === 400) {
+              toast.error("Student ID Not Found");
+            } else {
+              toast.error("Something went wrong");
+            }
+          }
         } else {
-          // Update Student Exit
-          showMessageErrorSuccess(
-            studentID,
-            `Student ID ${studentID} Exited Success.`,
-            5,
-          );
+          toast.error("Error while searching student please try again");
         }
-      } else {
-        setStudentIDErrorMsx(searchStu.message);
-        setStudentID("");
       }
-      setStudentIDError(true); // show Error
     } else {
-      setStudentIDError(true);
+      toast.error("Please Enter Student ID");
     }
+
+    // if (studentID !== "") {
+    //   const searchStu = await handleSearchStudent(studentID); // search student
+    //   if (searchStu.status === 400) {
+    //     // If student not found
+    //     setStudentIDErrorMsx(
+    //       `Student ID ${studentID} Not Found, Try Different ID...`,
+    //     );
+    //     setStudentIDErrorColor(true);
+    //     setStudentID("");
+    //   } else if (searchStu.status === "success") {
+    //     // if student found
+    //     const checkEntryExit = await handleCheckScanEntryExit(studentID);
+    //     if (checkEntryExit.status === "entry") {
+    //       // Show Student info and wait for user check purpose
+    //       setstuEntryInfor(searchStu.data); // get info of student from searchStu
+    //       console.log(stuEntryInfor.data);
+    //       setStudentIDErrorMsx(
+    //         `Student ID ${studentID} Found, Check Purpose To Entry`,
+    //       );
+    //       setStudentIDErrorColor(false); // show green on text error
+    //       setDisbleEntryBTN(false); // Enable Button Entry
+    //       setAreDisabled(false); // enable check box
+    //     } else {
+    //       // Update Student Exit
+    //       showMessageErrorSuccess(
+    //         studentID,
+    //         `Student ID ${studentID} Exited Success.`,
+    //         5,
+    //       );
+    //     }
+    //   } else {
+    //     setStudentIDErrorMsx(searchStu.message);
+    //     setStudentID("");
+    //   }
+    //   setStudentIDError(true); // show Error
+    // } else {
+    //   setStudentIDError(true);
+    // }
   };
   return (
     <>
@@ -389,7 +405,9 @@ export default function TableStuEntry({
 
       <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
         <div className="container w-full h-full space-y-5">
-          <div className="header-modal flex items-center justify-between">
+          {/* radio input check student entry or guest */}
+
+          {/* <div className="header-modal flex items-center justify-between">
             <div className="radio-container flex space-x-3">
               <input
                 type="radio"
@@ -412,6 +430,17 @@ export default function TableStuEntry({
               />
               <label htmlFor="guestRadio">Guest Entry</label>
             </div>
+            <button
+              onClick={handleCloseModal}
+              className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
+            >
+              <X />
+            </button>
+          </div> */}
+          <div className="flex items-center justify-between">
+            <p className="text-accent font-bold text-center text-lg">
+              Pleas entry student ID
+            </p>
             <button
               onClick={handleCloseModal}
               className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
@@ -481,58 +510,59 @@ export default function TableStuEntry({
               </div>
             </div>
           ) : (
-            <div className="form-entry grid gap-2">
-              <label htmlFor="guestName">Guest Name*</label>
-              <input
-                type="text"
-                id="guestName"
-                value={guestName}
-                onChange={handleGuestNameChange}
-                placeholder="Guest Name"
-                className={`input input-bordered w-full bg-base-300 ${guestNameError ? "border-red-500" : ""}`}
-              />
-              {guestNameError && (
-                <p className="text-red-500 text-sm mt-1">
-                  Guest Name is required*
-                </p>
-              )}
+            <></>
+            // <div className="form-entry grid gap-2">
+            //   <label htmlFor="guestName">Guest Name*</label>
+            //   <input
+            //     type="text"
+            //     id="guestName"
+            //     value={guestName}
+            //     onChange={handleGuestNameChange}
+            //     placeholder="Guest Name"
+            //     className={`input input-bordered w-full bg-base-300 ${guestNameError ? "border-red-500" : ""}`}
+            //   />
+            //   {guestNameError && (
+            //     <p className="text-red-500 text-sm mt-1">
+            //       Guest Name is required*
+            //     </p>
+            //   )}
 
-              <label htmlFor="gender">Select Gender*</label>
-              <select
-                id="gender"
-                value={gender}
-                onChange={handleGenderChange}
-                className={`select select-bordered w-full bg-base-300 ${genderError ? "border-red-500" : ""}`}
-              >
-                <option disabled value="">
-                  Select Gender
-                </option>
-                <option value="m">Male</option>
-                <option value="f">Female</option>
-              </select>
-              {genderError && (
-                <p className="text-red-500 text-sm mt-1">Gender is required</p>
-              )}
+            //   <label htmlFor="gender">Select Gender*</label>
+            //   <select
+            //     id="gender"
+            //     value={gender}
+            //     onChange={handleGenderChange}
+            //     className={`select select-bordered w-full bg-base-300 ${genderError ? "border-red-500" : ""}`}
+            //   >
+            //     <option disabled value="">
+            //       Select Gender
+            //     </option>
+            //     <option value="m">Male</option>
+            //     <option value="f">Female</option>
+            //   </select>
+            //   {genderError && (
+            //     <p className="text-red-500 text-sm mt-1">Gender is required</p>
+            //   )}
 
-              <label htmlFor="position">Select Position*</label>
-              <select
-                id="position"
-                value={position}
-                onChange={handlePositionChange}
-                className={`select select-bordered w-full bg-base-300 ${positionError ? "border-red-500" : ""}`}
-              >
-                <option disabled value="">
-                  Select Position
-                </option>
-                <option value="teacher">Teacher</option>
-                <option value="normalGuest">Normal Guest</option>
-              </select>
-              {positionError && (
-                <p className="text-red-500 text-sm mt-1">
-                  Position is required
-                </p>
-              )}
-            </div>
+            //   <label htmlFor="position">Select Position*</label>
+            //   <select
+            //     id="position"
+            //     value={position}
+            //     onChange={handlePositionChange}
+            //     className={`select select-bordered w-full bg-base-300 ${positionError ? "border-red-500" : ""}`}
+            //   >
+            //     <option disabled value="">
+            //       Select Position
+            //     </option>
+            //     <option value="teacher">Teacher</option>
+            //     <option value="normalGuest">Normal Guest</option>
+            //   </select>
+            //   {positionError && (
+            //     <p className="text-red-500 text-sm mt-1">
+            //       Position is required
+            //     </p>
+            //   )}
+            // </div>
           )}
           <div className="check-purpose text-accent mt-5">
             <p className="font-bold">Entry Purpose</p>

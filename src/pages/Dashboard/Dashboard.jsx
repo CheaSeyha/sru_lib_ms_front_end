@@ -154,7 +154,7 @@ function Dashbaord() {
                 )}
               </div>
 
-              {role === "admin" && (
+              {role !== "USER" && (
                 <NavLink
                   className="btn text-accent hidden sm:flex items-center justify-center rounded-[50px]"
                   to="/Analytic"
