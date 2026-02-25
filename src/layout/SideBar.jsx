@@ -42,10 +42,6 @@ function Sidebar() {
   const role = userInfor?.role || "";
   const username = userInfor?.username || userInfor?.name || "";
 
-  useEffect(() => {
-    console.log("user infor", userInfor);
-  }, [userInfor]);
-
   // State to track the current theme
   // For disble and enable side bar on mobile screen
   const { isHideSideBar } = useHideSideBar();
@@ -377,8 +373,8 @@ function Sidebar() {
             <img src={imageProfile} alt="logo sru" />
           </div>
           <div className="user-name font-sans text-light-text ps-2 blok sm:hidden lg:block">
-            <p className="font-bold">{username}</p>
-            <p className="text-[10px]">{role}</p>
+            <p className="font-bold uppercase">{username}</p>
+            <p className="text-[10px]">ROLE : {role}</p>
           </div>
         </header>
         {/* User Frofile  */}

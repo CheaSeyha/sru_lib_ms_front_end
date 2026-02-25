@@ -23,13 +23,13 @@ export default function useWSDashboard() {
         }
 
         const wsUrl = `${WS_BASE}dashboard?token=${encodeURIComponent(token)}`;
-        console.log("🔌 Connecting to WebSocket:", wsUrl);
+        // console.log("🔌 Connecting to WebSocket:", wsUrl);
 
         const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
 
         ws.onopen = () => {
-            console.log("✅ WebSocket connected");
+            // console.log("✅ WebSocket connected");
             setConnected(true);
             setError(null);
             // Clear reconnect timeout if successful
@@ -44,26 +44,28 @@ export default function useWSDashboard() {
                 const parsed = JSON.parse(event.data);
                 setData(parsed);
             } catch (e) {
-                console.error("❌ WS JSON parse error:", e, event.data);
+                // console.error("❌ WS JSON parse error:", e, event.data);
+                throw new Error(e);
             }
         };
 
         ws.onerror = (e) => {
-            console.error("❌ WebSocket error:", e);
+            // console.error("❌ WebSocket error:", e);
             setError("WebSocket error");
+            throw new Error("WebSocket error");
         };
 
         ws.onclose = (e) => {
-            console.log("🔌 WebSocket closed:", e.reason);
+            // console.log("🔌 WebSocket closed:", e.reason);
             setConnected(false);
-
+            throw new Error(e.reason);
             // Auto-reconnect after 3 seconds
-            if (!reconnectTimeoutRef.current) {
-                reconnectTimeoutRef.current = setTimeout(() => {
-                    reconnectTimeoutRef.current = null;
-                    connect();
-                }, 3000);
-            }
+            // if (!reconnectTimeoutRef.current) {
+            //     reconnectTimeoutRef.current = setTimeout(() => {
+            //         reconnectTimeoutRef.current = null;
+            //         connect();
+            //     }, 3000);
+            // }
         };
     }, []);
 

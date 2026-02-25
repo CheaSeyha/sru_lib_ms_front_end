@@ -13,6 +13,11 @@ import useWSDashboard from "./Hook/useWSDashbaord"; // <- your hook
 
 function Dashbaord() {
   const { username, role } = useAuth();
+
+  useEffect(() => {
+    console.log("from dashboard", username, role);
+  }, [username, role]);
+
   const { t } = useTranslation();
 
   const defaultCardData = [
@@ -136,26 +141,12 @@ function Dashbaord() {
                 </p>
 
                 <div className="flex items-center gap-3">
-                  <p className="text-[10px] xl:text-[15px] font-bold font-noto tracking-wide">
-                    WELCOME BACK,{" "}
-                    <span className="text-accent uppercase">{username}</span>
-                  </p>
-
-                  <div
-                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all duration-300 ${
-                      wsConnected
-                        ? "bg-green-500/10 border-green-500/30 text-green-400 shadow-[0_0_10px_rgba(74,222,128,0.2)]"
-                        : "bg-red-500/10 border-red-500/30 text-red-400"
-                    }`}
-                    title={wsError ?? "WebSocket Status"}
-                  >
-                    <div
-                      className={`w-1.5 h-1.5 rounded-full ${wsConnected ? "bg-green-400 animate-pulse" : "bg-red-400"}`}
-                    />
-                    <span className="text-[9px] font-black uppercase tracking-widest">
-                      {wsConnected ? "Live" : "Offline"}
+                  <p className="text-[10px] xl:text-[15px] font-bold font-noto tracking-wide uppercase">
+                    {t("welcomeBack") || "Welcome back"}{" "}
+                    <span className="text-accent decoration-2 underline-offset-4">
+                      {username}
                     </span>
-                  </div>
+                  </p>
                 </div>
 
                 {wsError && (

@@ -14,26 +14,25 @@ export const AuthProvider = ({ children }) => {
       sessionStorage.getItem("refreshToken") ||
       localStorage.getItem("refreshToken"),
   );
-  const [authLoading, setAuthLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(!!accessToken);
   const [userID, setUserID] = useState(
     () => sessionStorage.getItem("userID") || localStorage.getItem("userID"),
   );
   const [userInfor, setUserInfor] = useState({});
 
   const checkUser = async (id) => {
+    if (!id) {
+      setAuthLoading(false);
+      return null;
+    }
     setAuthLoading(true);
     try {
       const response = await axios.get(`/user/profile/${id}`);
 
       setUserInfor(response.data);
-      console.log("✅ profile:", response.data);
-
       return response.data; // ✅ IMPORTANT
     } catch (error) {
-      console.error(
-        "❌ Error checking user:",
-        error?.response?.data || error.message,
-      );
+      console.error("Check user error:", error);
       return null;
     } finally {
       setAuthLoading(false);
@@ -41,12 +40,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken && userID) {
       checkUser(userID);
-      console.log("Stafff info", userInfor);
-      console.log("Id", userID);
+    } else {
+      setAuthLoading(false);
     }
-  }, [accessToken]);
+  }, [accessToken, userID]);
 
   const login = async (email, password, rememberMe) => {
     try {
@@ -64,16 +63,13 @@ export const AuthProvider = ({ children }) => {
       storage.setItem("refreshToken", refreshToken);
       storage.setItem("userID", userId);
 
-      const getUserInfor = await checkUser(userId);
-      // ✅ IMPORTANT: update React state (this triggers rerender)
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
       setUserID(userId);
-      setUserInfor(getUserInfor);
-      console.log(getUserInfor);
+
+      const userProfile = await checkUser(userId);
+      setUserInfor(userProfile || {});
     } catch (error) {
-      // Log error details to the console and rethrow it
-      // console.error("Login error: ", error.response ? error.response.data : error.message);
       throw error;
     }
   };
@@ -85,14 +81,8 @@ export const AuthProvider = ({ children }) => {
         username,
         password,
       });
-      console.log("Registration successful. Please log in.");
       return response.data; // Optionally, return the response if needed
     } catch (error) {
-      if (error.response) {
-        console.error("Registration error details:", error.response.data);
-      } else {
-        console.error("Registration error:", error.message);
-      }
       throw error;
     }
   };
@@ -109,6 +99,7 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setUserID(null);
+    setUserInfor({});
   };
 
   const refreshTokens = async () => {
@@ -126,7 +117,6 @@ export const AuthProvider = ({ children }) => {
 
       setAccessToken(newAccessToken);
     } catch (error) {
-      console.error("Refresh token error: ", error);
       logout();
     }
   };
@@ -135,12 +125,7 @@ export const AuthProvider = ({ children }) => {
   const requestOtp = async (email) => {
     try {
       await apiClient.post(`/auth/otp?email=${encodeURIComponent(email)}`);
-      console.log("OTP sent to:", email);
     } catch (error) {
-      console.error(
-        "Error requesting OTP: ",
-        error.response ? error.response.data : error.message,
-      );
       throw error;
     }
   };
@@ -150,12 +135,7 @@ export const AuthProvider = ({ children }) => {
       await apiClient.post(
         `/auth/verify?otp=${encodeURIComponent(otp)}&email=${encodeURIComponent(email)}`,
       );
-      console.log("OTP verified for:", email);
     } catch (error) {
-      console.error(
-        "Error verifying OTP: ",
-        error.response ? error.response.data : error.message,
-      );
       throw error;
     }
   };
@@ -164,13 +144,7 @@ export const AuthProvider = ({ children }) => {
   const changePassword = async (email, password) => {
     try {
       await apiClient.put("/auth/change-password", { email, password });
-
-      console.log("Password changed for:", email);
     } catch (error) {
-      console.error(
-        "Error changing password: ",
-        error.response ? error.response.data : error.message,
-      );
       throw error;
     }
   };
@@ -199,6 +173,8 @@ export const AuthProvider = ({ children }) => {
         accessToken,
         refreshToken,
         userInfor,
+        username: userInfor?.username || userInfor?.name || "",
+        role: userInfor?.role || "",
         login,
         register,
         logout,
