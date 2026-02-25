@@ -1,158 +1,193 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Modal from "../../../layout/components/Modal";
 import BtnGredient from "../../Book/BtnGredient";
 import { X } from "lucide-react";
 import axios from "../../../api/axios";
-import toast, { Toaster } from "react-hot-toast";
-import ExcelStudent from "./ExcelStudent";
+import toast from "react-hot-toast";
+
 const ModalAddMajor = ({ isModalVisible, handleCloseModal, fetchmajor }) => {
   const [collegedata, setcollegedata] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // optional: prevent setState when component unmounts
+  const mountedRef = useRef(true);
+
   const [formData, setFormData] = useState({
     majorId: "",
     majorName: "",
     collegeId: "",
   });
+
   useEffect(() => {
-    axios.get("/college").then((response) => {
-      // Filter books where isActive is true
-      setcollegedata(response.data);
-    });
+    mountedRef.current = true;
+
+    const loadCollege = async () => {
+      try {
+        const res = await axios.get("/college");
+        if (!mountedRef.current) return;
+        setcollegedata(res.data);
+      } catch (err) {
+        console.log(err.response || err);
+        toast.error("មិនអាចទាញយកទិន្នន័យមហាវិទ្យាល័យបានទេ!", {
+          style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
+        });
+      }
+    };
+
+    loadCollege();
+
+    return () => {
+      mountedRef.current = false;
+    };
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
-  // Function to handle radio button changes for dateOfBirth
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const submissionData = {
-      ...formData,
-    };
-    // try {
-    axios
-      .post("/major", submissionData, {
+
+    if (isSubmitting) return;
+
+    const submissionData = { ...formData };
+
+    setIsSubmitting(true);
+
+    try {
+      await axios.post("/major", submissionData, {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-      .then((response) => {
-        toast.success("បានបញ្ចូលជំនាញដោយជោគជ័យ!!!", {
-          style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
-        });
-        setFormData({
-          majorId: "",
-          majorName: "",
-          collegeId: "",
-        });
-        fetchmajor(); // Refresh the list after adding the new book
-      })
-      .catch((error) => {
-        // Handle error based on the response
-        toast.error("មិនអាចបញ្ចួលបានទេ!!!.");
-        console.log(error);
       });
+
+      toast.success("បានបញ្ចូលជំនាញដោយជោគជ័យ!!!", {
+        style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
+      });
+
+      // reset form
+      setFormData({
+        majorId: "",
+        majorName: "",
+        collegeId: "",
+      });
+
+      try {
+        await fetchmajor?.();
+      } catch (refreshErr) {
+        console.log("fetchmajor failed:", refreshErr);
+        // optional toast for refresh only:
+        // toast.error("បញ្ចូលបាន តែ refresh list មិនបាន!", { style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" } });
+      }
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        "មិនអាចបញ្ចូលបានទេ!!!";
+
+      toast.error(message, {
+        style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
+      });
+
+      console.log(error.response || error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
   return (
-    <>
-      <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
-        <div className="container w-full h-full space-y-5">
-          <div className="header-modal flex items-center justify-between">
-            {/* <input type="radio" id='guestRadio' name="entryType" value="guest" className="radio radio-accent" onChange={handleRadioChange} checked={!isStudent} /> */}
-            <label className="font-noto font-semibold text-lg">
-              បន្ថែមជំនាញថ្មី
-            </label>
-            {/* <div className="flex justify-end mt-0 w-2/3">
-            </div> */}
-            <button
-              onClick={handleCloseModal}
-              className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
-            >
-              <X />
-            </button>
-          </div>
+    <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
+      <div className="container w-full h-full space-y-5">
+        <div className="header-modal flex items-center justify-between">
+          <label className="font-noto font-semibold text-lg">
+            បន្ថែមជំនាញថ្មី
+          </label>
+
+          <button
+            onClick={handleCloseModal}
+            className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
+            type="button"
+          >
+            <X />
+          </button>
         </div>
-        <>
-          <form onSubmit={handleSubmit}>
-            <div className="container w-full h-full space-y-5">
-              {/* Write here */}
-              <div className="flex mt-5">
-                <div className="w-full mr-1">
-                  <div className="w-full font-noto font-semibold">
-                    លេខជំនាញ​ :
-                  </div>
-                  <input
-                    type="text"
-                    className="input input-bordered  w-full bg-secondary font-noto"
-                    name="majorId"
-                    value={formData.majorId}
-                    onChange={handleChange}
-                    required
-                  />
+
+        <form onSubmit={handleSubmit}>
+          <div className="container w-full h-full space-y-5">
+            <div className="flex mt-5">
+              <div className="w-full mr-1">
+                <div className="w-full font-noto font-semibold">
+                  លេខជំនាញ​ :
                 </div>
-                <div className="mr-1 w-full">
-                  <div className=" font-noto font-semibold">មហាវិទ្យាល័យ :</div>
-                  <select
-                    name="collegeId"
-                    value={formData.collegeId}
-                    onChange={handleChange}
-                    required
-                    className="select select-bordered w-full font-noto bg-secondary"
-                  >
-                    {/* <option value="ST">English</option>
-    <option value="ST">Khmer</option>
-    <option value="ST">Other</option> */}
-                    <option disabled className="refresh" value="">
-                      ជ្រើសរើសមហាវិទ្យាល័យ
+                <input
+                  type="text"
+                  className="input input-bordered w-full bg-secondary font-noto"
+                  name="majorId"
+                  value={formData.majorId}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="mr-1 w-full">
+                <div className="font-noto font-semibold">មហាវិទ្យាល័យ :</div>
+                <select
+                  name="collegeId"
+                  value={formData.collegeId}
+                  onChange={handleChange}
+                  required
+                  className="select select-bordered w-full font-noto bg-secondary"
+                >
+                  <option disabled value="">
+                    ជ្រើសរើសមហាវិទ្យាល័យ
+                  </option>
+
+                  {collegedata.map((c) => (
+                    <option key={c.collegeId} value={c.collegeId}>
+                      {c.collegeName}
                     </option>
-                    {collegedata.map((e, index) => (
-                      <option key={index} value={e.collegeId}>
-                        {e.collegeId === "AHFL"
-                          ? "សិល្បៈ មនុស្សសាស្ត្រ និងភាសា"
-                          : e.collegeId === "BA"
-                            ? "គ្រប់គ្រងពាណិជ្ជកម្ម"
-                            : e.collegeId === "SS"
-                              ? "វិទ្យសាស្ត្រសង្គម"
-                              : "បច្ចេកវិទ្យា និងវិទ្យាសាស្ត្រ"}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="flex">
-                <div className="w-full mr-1">
-                  <div className=" w-full font-noto font-semibold">
-                    ឈ្មោះជំនាញ :
-                  </div>
-                  <input
-                    type="text"
-                    className="input input-bordered  w-full bg-secondary font-noto"
-                    name="majorName"
-                    value={formData.majorName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                  ))}
+                </select>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 content-center pt-5 pb-5">
-              <BtnGredient
-                type="submit"
-                className="rounded-"
-                color={"from-[#00d0ffb1] to-[#E7FBFF]"}
-                hover={"from-[#00D9FF] to-[#a5cef3]"}
-              >
-                <label className="text-xl font-noto">បញ្ចូល</label>
-                {/* <button type='submit' className='text-xl text-accent'>Add</button> */}
-              </BtnGredient>
+
+            <div className="flex">
+              <div className="w-full mr-1">
+                <div className="w-full font-noto font-semibold">
+                  ឈ្មោះជំនាញ :
+                </div>
+                <input
+                  type="text"
+                  className="input input-bordered w-full bg-secondary font-noto"
+                  name="majorName"
+                  value={formData.majorName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-          </form>
-        </>
-      </Modal>
-    </>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 content-center pt-5 pb-5">
+            <BtnGredient
+              type="submit"
+              disabled={isSubmitting}
+              className="rounded-"
+              color={"from-[#00d0ffb1] to-[#E7FBFF]"}
+              hover={"from-[#00D9FF] to-[#a5cef3]"}
+            >
+              <label className="text-xl font-noto">
+                {isSubmitting ? "កំពុងបញ្ចូល..." : "បញ្ចូល"}
+              </label>
+            </BtnGredient>
+          </div>
+        </form>
+      </div>
+    </Modal>
   );
 };
 

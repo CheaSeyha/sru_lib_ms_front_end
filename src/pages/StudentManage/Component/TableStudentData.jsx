@@ -405,31 +405,35 @@ function TableStudentData() {
           <ModalDeleteCollege
             isModalVisible={isModalDeleteCollege}
             handleCloseModal={handleCloseModal}
-            fetchData={fetchData} // Use fetchData instead of fetchcollege
+            fetchcollege={fetchData}
             entry={deleteEntry}
           />
+
           <ModalDeleteMajor
             isModalVisible={isModalDeleteMajor}
             handleCloseModal={handleCloseModal}
-            fetchData={fetchData} // Use fetchData instead of fetchmajor
+            fetchmajor={fetchData}
             entry={deleteEntry}
           />
-          <ModalUpdateStudent
-            isModalVisible={isModalUpdate}
-            handleCloseModal={handleCloseModalUpdate}
-            fetchData={fetchData} // Use fetchData instead of fetchstudent
-            rowSelected={selectedRows}
-            setRowSelected={setSelectedRows}
-          />
+
           <ModalAddStudent
             isModalVisible={isShowModal}
             handleCloseModal={handleCloseModal}
-            fetchData={fetchData} // Use fetchData instead of fetchstudent
+            fetchstudent={fetchData} // if modal expects fetchstudent
           />
+
           <ModalAddMajor
             isModalVisible={isShowModalMajor}
             handleCloseModal={handleCloseModalMajor}
-            fetchData={fetchData} // Use fetchData instead of fetchmajor
+            fetchmajor={fetchData}
+          />
+
+          <ModalUpdateStudent
+            isModalVisible={isModalUpdate}
+            handleCloseModal={handleCloseModalUpdate}
+            fetchstudent={fetchData}
+            rowSelected={selectedRows}
+            setRowSelected={setSelectedRows}
           />
           {/* ModalCollege */}
           <Modal isVisible={isModalCollege} onClose={handleCloseModal}>

@@ -48,6 +48,7 @@ const ModalAddMajor = ({ isModalVisible, handleCloseModal, fetchmajor }) => {
           majorName: "",
           collegeId: "",
         });
+        handleCloseModal();
         fetchmajor(); // Refresh the list after adding the new book
       })
       .catch((error) => {
