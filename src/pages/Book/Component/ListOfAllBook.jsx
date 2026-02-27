@@ -1,119 +1,123 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BtnGredient from "../BtnGredient";
 import ModalAdd from "./ModalAdd.jsx";
 import axios from "../../../api/axios";
 import ModalLst from "./ModalLst";
-import refresh from "../../../assets/logo/refresh.svg";
 import { RotateCcw, Trash2, Pencil, CircleFadingPlus } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import ModalUpdateBook from "./ModalUpdateBook.jsx";
+
 export default function ListOfAllBook() {
-  // Data of All Book
-  const [collegeId, setCollectId] = useState([]);
-  const [bookLangueId, setBookLangueId] = useState([]);
+  // Data
+  const [colleges, setColleges] = useState([]); //  renamed for clarity
+  const [languages, setLanguages] = useState([]); //  renamed for clarity
   const [books, setBooks] = useState([]);
-  const [genre, setgenre] = useState([]);
+  const [genre, setGenre] = useState([]);
 
-  const getCollectName = () => {
-    axios.get("/college").then((res) => {
-      setCollectId(res.data);
-      console.log(collegeId);
-    });
-  };
-
-  const getBookLangueId = () => {
-    axios.get("/language").then((response) => {
-      setBookLangueId(response.data);
-      console.log(response.data);
-    });
-  };
-
-  const collegeMap = React.useMemo(() => {
-    return Object.fromEntries(
-      (collegeId || []).map((c) => [c.collegeId, c.collegeName]),
-    );
-  }, [collegeId]);
-
-  const languageMap = React.useMemo(() => {
-    return Object.fromEntries(
-      (bookLangueId || []).map((l) => [l.languageId, l.languageName]),
-    );
-  }, [bookLangueId]);
-
-  const fetchBooks = () => {
-    axios
-      .get("/book/current-book")
-      .then((response) => {
-        // Filter books where isActive is true
-        const filteredBooks = response.data.filter(
-          (book) => book.isActive === true,
-        );
-        setBooks(filteredBooks);
-        const uniqueBookTypes = [
-          ...new Set(response.data.map((book) => book.genre)),
-        ];
-        setgenre(uniqueBookTypes);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the books!", error);
-      });
-  };
-  useEffect(() => {
-    fetchBooks();
-    getBookLangueId();
-    getCollectName();
-  }, []);
-
+  // UI State
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedGenre, setSelectType] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalLstVisible, setIsModalLstVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState(null);
-  //Seleted row
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [isRightMousePressed, setIsRightMousePressed] = useState(false);
   const [isModalUpdateVisible, setIsModalUpdateVisible] = useState(false);
 
+  // Fetch colleges
+  const getCollegeList = async () => {
+    try {
+      const res = await axios.get("/college");
+      //  make sure it is an array
+      setColleges(Array.isArray(res.data) ? res.data : (res.data?.data ?? []));
+    } catch (err) {
+      console.log(err);
+      setColleges([]);
+    }
+  };
+
+  // Fetch languages
+  const getLanguageList = async () => {
+    try {
+      const res = await axios.get("/language");
+      setLanguages(Array.isArray(res.data) ? res.data : (res.data?.data ?? []));
+    } catch (err) {
+      console.log(err);
+      setLanguages([]);
+    }
+  };
+
+  // Fetch books
+  const fetchBooks = async () => {
+    try {
+      const res = await axios.get("/book/current-book");
+      const data = Array.isArray(res.data) ? res.data : [];
+      const filtered = data.filter((b) => b.isActive === true);
+
+      setBooks(filtered);
+
+      const uniqueGenres = [...new Set(data.map((b) => b.genre))];
+      setGenre(uniqueGenres);
+    } catch (err) {
+      console.error("There was an error fetching the books!", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks();
+    getLanguageList();
+    getCollegeList();
+  }, []);
+
+  //  fast lookups
+  const collegeMap = useMemo(() => {
+    return Object.fromEntries(
+      (colleges || []).map((c) => [c.collegeId, c.collegeName]),
+    );
+  }, [colleges]);
+
+  const languageMap = useMemo(() => {
+    return Object.fromEntries(
+      (languages || []).map((l) => [l.languageId, l.languageName]),
+    );
+  }, [languages]);
+
+  // Row selection
+  const toggleRowSelection = (entry) => {
+    setSelectedRows((prev) => {
+      const isSelected = prev.some((row) => row.bookId === entry.bookId);
+      return isSelected
+        ? prev.filter((row) => row.bookId !== entry.bookId)
+        : [...prev, entry];
+    });
+  };
+
   const handleMouseDown = (entry, event) => {
     if (event.button === 2) {
-      // Right mouse button
       setIsRightMousePressed(true);
       toggleRowSelection(entry);
     }
   };
 
   const handleMouseOver = (entry) => {
-    if (isRightMousePressed) {
-      toggleRowSelection(entry);
-    }
+    if (isRightMousePressed) toggleRowSelection(entry);
   };
 
-  const handleMouseUp = () => {
-    setIsRightMousePressed(false);
-  };
+  const handleMouseUp = () => setIsRightMousePressed(false);
 
-  const toggleRowSelection = (entry) => {
-    setSelectedRows((prevSelectedRows) => {
-      const isSelected = prevSelectedRows.some(
-        (row) => row.bookId === entry.bookId,
-      );
-      if (isSelected) {
-        return prevSelectedRows.filter((row) => row.bookId !== entry.bookId);
-      } else {
-        return [...prevSelectedRows, entry];
-      }
-    });
-  };
-  //Selected row
+  //  IMPORTANT FIX: don’t reset/fetch while opening modal
   const handleRowClick = (entry) => {
     setSelectedEntry(entry);
     setIsModalLstVisible(true);
-    resetSelection();
+    setSelectedRows([]); // optional: clear multi select when opening detail
   };
 
+  //  Close modal -> refresh if you want
   const closeModal = () => {
     setIsModalLstVisible(false);
     setSelectedEntry(null);
+    fetchBooks(); // refresh after closing (safe)
   };
 
   const handleCloseModal = () => {
@@ -122,40 +126,30 @@ export default function ListOfAllBook() {
   };
 
   const resetSelection = () => {
-    setSelectType("");
+    setSelectedGenre("");
     setSearchTerm("");
     setSelectedRows([]);
     fetchBooks();
   };
-  const handleSelectType = (e) => {
-    setSelectType(e.target.value);
-  };
 
   const filteredBooks = books.filter(
     (book) =>
-      (book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (book.bookTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         book.bookId
-          .toString()
+          ?.toString()
           .toLowerCase()
           .includes(searchTerm.toLowerCase())) &&
       (selectedGenre === "" || book.genre === selectedGenre),
   );
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
   const handledelete = () => {
-    selectedRows.map((row) => {
+    selectedRows.forEach((row) => {
       axios
-        .put("/book/trash", null, {
-          params: {
-            bookId: row.bookId,
-          },
-        })
-        .then((response) => {
+        .put("/book/trash", null, { params: { bookId: row.bookId } })
+        .then(() => {
           toast.success("បានផ្លាស់ទីទៅក្នុង Trash ដោយជោគជ័យ!!!", {
-            style: { fontFamily: " NotoSansKhmer-Regular, sans-serif" },
-          }); // Show success toast
+            style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
+          });
           setSelectedRows([]);
           fetchBooks();
         })
@@ -165,22 +159,20 @@ export default function ListOfAllBook() {
         });
     });
   };
+
   return (
     <>
       <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
         <div className="w-full flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
           <div className="flex md:flex-row flex-col gap-2 w-full">
             <div className="flex md:flex-row flex-col gap-2 max-w-[500px]">
-              {/* Search Innput  */}
-              <label
-                htmlFor=""
-                className="input input-bordered font-noto rounded-[50px] w-full lg:w-[750px] flex items-center bg-base-100 p-2 h-full gap-2"
-              >
+              {/* Search */}
+              <label className="input input-bordered font-noto rounded-[50px] w-full lg:w-[750px] flex items-center bg-base-100 p-2 h-full gap-2">
                 <input
                   type="text"
                   placeholder="ស្វែងរកតាមលេខសម្គាល់​ ឬចំណងជើង"
                   value={searchTerm}
-                  onChange={handleSearchChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full h-full"
                 />
                 <svg
@@ -196,13 +188,14 @@ export default function ListOfAllBook() {
                   />
                 </svg>
               </label>
-              {/* Filter Book type  */}
+
+              {/* Filter */}
               <select
                 value={selectedGenre}
-                onChange={handleSelectType}
+                onChange={(e) => setSelectedGenre(e.target.value)}
                 className="p-2 border rounded-[50px] font-noto input-bordered bg-base-100 h-full w-full md:w-fit"
               >
-                <option disabled className="refresh font-noto" value="">
+                <option value="" disabled>
                   ជ្រើសរើសប្រភេទ
                 </option>
                 {genre.map((type, index) => (
@@ -212,9 +205,8 @@ export default function ListOfAllBook() {
                 ))}
               </select>
             </div>
-            {/* Restart button  */}
+
             <BtnGredient
-              className="w-fit h-fit"
               onClick={resetSelection}
               color={"from-[#00D1FF] to-[#E7FBFF]"}
               hover={"hover:from-[#00D9FF] hover:to-[#E7FBFF]"}
@@ -222,7 +214,6 @@ export default function ListOfAllBook() {
               <RotateCcw />
             </BtnGredient>
 
-            {/* Add button  */}
             <BtnGredient
               className="flex items-center justify-center"
               onClick={() => setIsModalVisible(true)}
@@ -232,11 +223,10 @@ export default function ListOfAllBook() {
               <CircleFadingPlus />
               <p className="font-noto">បញ្ចូល</p>
             </BtnGredient>
-            {/* show edit and delete button when select row  */}
+
             {selectedRows.length > 0 && (
               <>
                 <BtnGredient
-                  className="w-full h-full"
                   onClick={handledelete}
                   color={"from-[#ff0000] to-[#E7FBFF]"}
                   hover={"hover:from-[#E7FBFF] hover:to-[#ff0000]"}
@@ -244,9 +234,10 @@ export default function ListOfAllBook() {
                   <Trash2 />
                   <p className="font-noto">លុប</p>
                 </BtnGredient>
+
                 {selectedRows.length <= 1 && (
                   <BtnGredient
-                    className="w-full h-full pr-5"
+                    className="pr-5"
                     onClick={() => setIsModalUpdateVisible(true)}
                     color={"from-[#1aff00] to-[#E7FBFF]"}
                     hover={"hover:from-[#E7FBFF] hover:to-[#1aff00]"}
@@ -259,13 +250,14 @@ export default function ListOfAllBook() {
             )}
           </div>
         </div>
+
         <div className="variable-book overflow-y-auto flex-1 w-full grid items-start scrollbar-hide">
           <table
             className="table tectav min-w-full divide-y divide-gray-200"
             onContextMenu={(e) => e.preventDefault()}
             onMouseUp={handleMouseUp}
           >
-            <thead className="text-accent font-noto ">
+            <thead className="text-accent font-noto">
               <tr>
                 <th className="sticky top-0 text-left text-sm bg-secondary">
                   ល.រ
@@ -296,14 +288,19 @@ export default function ListOfAllBook() {
                 </th>
               </tr>
             </thead>
+
             <tbody>
               {filteredBooks.map((entry, index) => (
                 <tr
-                  key={index}
+                  key={entry.bookId ?? index} //  better key than index
                   onClick={() => handleRowClick(entry)}
                   onMouseDown={(e) => handleMouseDown(entry, e)}
                   onMouseOver={() => handleMouseOver(entry)}
-                  className={`hover:bg-primary cursor-pointer font-noto active:bg-primary ${selectedRows.some((row) => row.bookId === entry.bookId) ? "bg-primary" : ""}`}
+                  className={`hover:bg-primary cursor-pointer font-noto active:bg-primary ${
+                    selectedRows.some((row) => row.bookId === entry.bookId)
+                      ? "bg-primary"
+                      : ""
+                  }`}
                 >
                   <th>{index + 1}</th>
                   <td>{entry.bookId}</td>
@@ -319,22 +316,27 @@ export default function ListOfAllBook() {
             </tbody>
           </table>
         </div>
+
         <Toaster />
       </div>
+
+      {/*  IMPORTANT: ModalLst must be safe inside */}
       <ModalLst
         entry={selectedEntry}
         closeModal={closeModal}
         isModalVisible={isModalLstVisible}
         fetchBooks={fetchBooks}
       />
+
       <ModalAdd
-        bookLangueId={bookLangueId}
+        bookLangueId={languages}
         isModalVisible={isModalVisible}
         handleCloseModal={handleCloseModal}
         fetchBooks={fetchBooks}
       />
+
       <ModalUpdateBook
-        bookLangueId={bookLangueId}
+        bookLangueId={languages}
         isModalVisible={isModalUpdateVisible}
         handleCloseModal={handleCloseModal}
         fetchBooks={fetchBooks}
