@@ -25,11 +25,11 @@ function SidebarMenuButton({
     if (dropDownButton) {
       // Check if the current path is in the dropdown menu
       const dropdownPaths = [
-        "/BookManagement/AddBook",
-        "/BookManagement/Donation",
-        "/BookManagement/BookBorrowed",
-        "/BookManagement/TimeSpent",
-        "/BookManagement/Backup",
+        "/book-management/add-book",
+        "/book-management/donation",
+        "/book-management/book-borrowed",
+        "/book-management/time-spent",
+        "/book-management/backup",
       ];
       setShowDropdown(dropdownPaths.includes(GetLinkPath));
     }

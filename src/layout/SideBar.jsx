@@ -169,7 +169,7 @@ function Sidebar() {
         {
           iconName: <BookPlus className="w-[18px]" />,
           dropDownBtnType: "Add Book",
-          urlPath: "/book-management/addBook",
+          urlPath: "/book-management/add-book",
         },
         {
           iconName: <NotebookPen className="w-[18px]" />,
@@ -184,12 +184,12 @@ function Sidebar() {
         {
           iconName: <DatabaseBackup className="w-[18px]" />,
           dropDownBtnType: "Backup",
-          urlPath: "//book-management/backup",
+          urlPath: "/book-management/backup",
         },
         {
           iconName: <BookUser className="w-[18px]" />,
           dropDownBtnType: "Donation",
-          urlPath: "//book-management/donation",
+          urlPath: "/book-management/donation",
         },
       ],
     },

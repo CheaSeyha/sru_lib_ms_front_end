@@ -43,7 +43,7 @@ function App() {
                     element={<QRStudentEntry />}
                   />
                   <Route path="book-management">
-                    <Route path="addBook" element={<BookManagement />} />
+                    <Route path="add-book" element={<BookManagement />} />
                     <Route path="book-borrowed" element={<BookManagement />} />
                     <Route path="time-spent" element={<BookManagement />} />
                     <Route path="backup" element={<BookManagement />} />
