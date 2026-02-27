@@ -1,24 +1,24 @@
-import React,{useState} from 'react'
-import ListOfAllBook from './ListOfAllBook';
-import ListDonation from './ListDonation';
-import ListOfBorrow from '../Borrow/ListOfBorrow'
-import ListCertificate from '../../ScoreStudent/Component/ListCertificate';
+import React, { useState } from "react";
+import ListOfAllBook from "./ListOfAllBook";
+import ListDonation from "./ListDonation";
+import ListOfBorrow from "../Borrow/ListOfBorrow";
+import ListCertificate from "../../ScoreStudent/Component/ListCertificate";
 import ListBackup from "../../Backup/Component/BackupBook";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 const NavBarBook = () => {
-    const location = useLocation();
-    const path = location.pathname;
+  const location = useLocation();
+  const path = location.pathname;
   const renderComponent = () => {
     switch (path) {
-      case "/BookManagement/AddBook":
+      case "/book-management/add-book":
         return <ListOfAllBook />;
-      case "/BookManagement/BookBorrowed":
+      case "/book-management/book-borrowed":
         return <ListOfBorrow />;
-      case "/BookManagement/TimeSpent":
+      case "/book-management/time-spent":
         return <ListCertificate />;
-      case "/BookManagement/Backup":
+      case "/book-management/backup":
         return <ListBackup />;
-      case "/BookManagement/Donation":
+      case "/book-management/donation":
         return <ListDonation />;
       default:
         return <ListOfAllBook />;
@@ -26,12 +26,11 @@ const NavBarBook = () => {
   };
   return (
     <>
-      <div className='table-container table-borrow-book h-full w-full bg-secondary text-accent rounded-[20px] p-5'>
-      {renderComponent()}
+      <div className="table-container table-borrow-book h-full w-full bg-secondary text-accent rounded-[20px] p-5">
+        {renderComponent()}
       </div>
     </>
   );
-}
+};
 
-
-export default NavBarBook
+export default NavBarBook;

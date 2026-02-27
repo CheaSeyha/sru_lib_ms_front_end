@@ -9,10 +9,17 @@ import toast, { Toaster } from "react-hot-toast";
 import ModalUpdateBook from "./ModalUpdateBook.jsx";
 export default function ListOfAllBook() {
   // Data of All Book
-
+  const [collegeId, setCollectId] = useState([]);
   const [bookLangueId, setBookLangueId] = useState([]);
   const [books, setBooks] = useState([]);
   const [genre, setgenre] = useState([]);
+
+  const getCollectName = () => {
+    axios.get("/college").then((res) => {
+      setCollectId(res.data);
+      console.log(collegeId);
+    });
+  };
 
   const getBookLangueId = () => {
     axios.get("/language").then((response) => {
@@ -20,6 +27,18 @@ export default function ListOfAllBook() {
       console.log(response.data);
     });
   };
+
+  const collegeMap = React.useMemo(() => {
+    return Object.fromEntries(
+      (collegeId || []).map((c) => [c.collegeId, c.collegeName]),
+    );
+  }, [collegeId]);
+
+  const languageMap = React.useMemo(() => {
+    return Object.fromEntries(
+      (bookLangueId || []).map((l) => [l.languageId, l.languageName]),
+    );
+  }, [bookLangueId]);
 
   const fetchBooks = () => {
     axios
@@ -42,6 +61,7 @@ export default function ListOfAllBook() {
   useEffect(() => {
     fetchBooks();
     getBookLangueId();
+    getCollectName();
   }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -288,20 +308,10 @@ export default function ListOfAllBook() {
                   <th>{index + 1}</th>
                   <td>{entry.bookId}</td>
                   <td>{entry.bookTitle}</td>
-                  <td>
-                    {entry.collegeId === "ST"
-                      ? "វីទ្យាសាស្ត្រ និងបច្ចេកវិទ្យា"
-                      : entry.collegeId === "BA"
-                        ? "គ្រប់គ្រងពាណិជ្ជកម្ម"
-                        : entry.collegeId === "AHFL"
-                          ? "សិល្បៈ មនុស្សសាស្ត្រនិងភាសា"
-                          : entry.collegeId === "SS"
-                            ? "វិទ្យាសាស្ត្រសង្គម"
-                            : "កសិកម្ម"}
-                  </td>
+                  <td>{collegeMap[entry.collegeId] || "N/A"}</td>
                   <td>{entry.author ?? "N/A"}</td>
                   <td>{entry.genre}</td>
-                  <td>{entry.languageId === "eng" ? "អង់គ្លេស" : "ខ្មែរ"}</td>
+                  <td>{languageMap[entry.languageId] || "N/A"}</td>
                   <td>{entry.publicationYear ?? "N/A"}</td>
                   <td>{entry.bookQuan}</td>
                 </tr>
