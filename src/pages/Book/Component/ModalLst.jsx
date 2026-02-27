@@ -46,13 +46,33 @@ const ModalLst = ({ isModalVisible, closeModal, entry, fetchBooks }) => {
           style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
         });
         fetchBooks?.();
-        closeModal?.(); // optional: close after success
+        closeModal?.();
       })
       .catch((error) => {
-        toast.error("សូមជ្រើសរើសនិស្សិត!!!", {
+        const status = error?.response?.status;
+
+        // ✅ get message for BOTH JSON + plain text responses
+        const serverData = error?.response?.data;
+        const serverMessage =
+          typeof serverData === "string"
+            ? serverData // plain text: "Field cannot be blank."
+            : serverData?.message || serverData?.error; // json: {message: "..."} or {error:"..."}
+
+        if (status === 400) {
+          // if backend returns message, use it; otherwise use your custom text
+          toast.error(
+            serverMessage ||
+              `ឈ្មោះនិស្សិត ${submitData.studentId} បានខ្ចីរួចហើយ`,
+            { style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" } },
+          );
+          return;
+        }
+
+        toast.error(serverMessage || "សូមជ្រើសរើសនិស្សិត!!!", {
           style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
         });
-        console.error("Backend Error:", error?.response?.data || error);
+
+        console.log(error);
       });
   };
 

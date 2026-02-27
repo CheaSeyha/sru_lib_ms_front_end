@@ -162,6 +162,7 @@ export default function ListOfAllBook() {
 
   return (
     <>
+      <Toaster />
       <div className="flex flex-col w-full h-full space-y-5 scrollbar-hide">
         <div className="w-full flex flex-col-reverse xl:flex-row sm:flex-col-reverse m-0">
           <div className="flex md:flex-row flex-col gap-2 w-full">
@@ -316,8 +317,6 @@ export default function ListOfAllBook() {
             </tbody>
           </table>
         </div>
-
-        <Toaster />
       </div>
 
       {/*  IMPORTANT: ModalLst must be safe inside */}
