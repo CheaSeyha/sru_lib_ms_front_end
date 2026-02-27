@@ -9,6 +9,7 @@ import {
   School,
   Trash2,
   Pencil,
+  Plus,
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "../../../api/axios";
@@ -219,7 +220,7 @@ function TableStudentData() {
           <div className="w-full h-full flex flex-col gap-5">
             {/* Header Content */}
             <div className="header flex flex-col-reverse xl:flex-row lg:flex-row md:flex-col-reverse">
-              <div className="button-container md:w-full w-full flex flex-row md:flex-row gap-2">
+              {/* <div className="button-container md:w-full w-full flex flex-row md:flex-row gap-2">
                 <label className="input input-bordered w-full md:w-[300px] flex items-center gap-2">
                   <input
                     id="searchStaff"
@@ -249,9 +250,8 @@ function TableStudentData() {
                     <p className="hidden md:block">បន្ថែមនិស្សិតថ្មី</p>
                   </BtnGredient>
                 ) : null}
-              </div>
-              {userInfor.role === "ADMIN" ||
-              userInfor.role === "SUPER_ADMIN" ? (
+              </div> */}
+              {userInfor.role !== "USER" ? (
                 <>
                   <div className="w-full">
                     <div className="w-3/5 text-right">
@@ -286,12 +286,12 @@ function TableStudentData() {
                   <div className="flex w-full">
                     <div className="text-right w-full space-x-5">
                       <BtnGredient onClick={() => setIsShowModalMajor(true)}>
-                        <ArrowDownWideNarrow />
-                        <p className="hidden md:block">បន្ថែមជំនាញ</p>
+                        <Plus />
+                        <p className="block">បញ្ចូលជំនាញថ្មី</p>
                       </BtnGredient>
                       <BtnGredient onClick={() => setIssModalCollege(true)}>
                         <School />
-                        <p className="hidden md:block">បន្ថែមមហាវិទ្យាល័យ</p>
+                        <p className="block">បញ្ចូលឈ្មេាះមហាវិទ្យាល័យថ្មី</p>
                       </BtnGredient>
                     </div>
                   </div>
@@ -301,7 +301,7 @@ function TableStudentData() {
             {/* Table Data */}
             <div className="table-container overflow-y-auto gap-5 flex-1 flex-col lg:flex-row md:flex-col flex w-full items-start">
               {/* Table Student */}
-              <div className="table-container w-full h-[700px] md:h-full overflow-auto rounded-[10px] border border-primary shadow-xl">
+              {/* <div className="table-container w-full h-full md:h-full overflow-auto rounded-[10px] border border-primary shadow-xl">
                 <table
                   className="table tectav min-w-full divide-y divide-gray-200"
                   onContextMenu={(e) => e.preventDefault()}
@@ -346,59 +346,57 @@ function TableStudentData() {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </div> */}
               {/* Table College and Major */}
-              <div className="grid grid-rows-2 gap-5 w-full lg:w-[500px] h-[700px] md:h-full">
-                <div className="table-container scrollbar-hide overflow-auto border border-primary shadow-xl rounded-[10px]">
-                  <table className="table">
-                    <thead>
-                      <tr className="sticky top-0 text-left text-sm bg-secondary text-accent">
-                        <td>ល.រ</td>
-                        <td>លេខ</td>
-                        <td>ឈ្មោះជំនាញ</td>
-                        <td>មហា.វិ</td>
+              <div className="table-container w-full h-full scrollbar-hide overflow-auto border border-primary shadow-xl rounded-[10px]">
+                <table className="table border">
+                  <thead>
+                    <tr className="sticky top-0 text-left text-sm bg-secondary text-accent">
+                      <td>ល.រ</td>
+                      <td>លេខ</td>
+                      <td>ឈ្មោះជំនាញ</td>
+                      <td>មហា.វិ</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {major.map((entry, index) => (
+                      <tr
+                        key={entry.majorId}
+                        onClick={() => handleDeleteMajor(entry)}
+                        className="hover:bg-primary cursor-pointer active:bg-primary"
+                      >
+                        <td>{index + 1}</td>
+                        <td>{entry.majorId}</td>
+                        <td>{entry.majorName}</td>
+                        <td>{entry.collegeId}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {major.map((entry, index) => (
-                        <tr
-                          key={entry.majorId}
-                          onClick={() => handleDeleteMajor(entry)}
-                          className="hover:bg-primary cursor-pointer active:bg-primary"
-                        >
-                          <td>{index + 1}</td>
-                          <td>{entry.majorId}</td>
-                          <td>{entry.majorName}</td>
-                          <td>{entry.collegeId}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="table-container scrollbar-hide overflow-auto rounded-[10px] border border-primary shadow-xl">
-                  <table className="table">
-                    <thead>
-                      <tr className="sticky top-0 text-left text-sm bg-secondary text-accent">
-                        <td>ល.រ</td>
-                        <td>លេខមហាវិទ្យាល័យ</td>
-                        <td>ឈ្មោះមហាវិទ្យាល័យ</td>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="table-container w-full h-full scrollbar-hide overflow-auto rounded-[10px] border border-primary shadow-xl">
+                <table className="table">
+                  <thead>
+                    <tr className="sticky top-0 text-left text-sm bg-secondary text-accent">
+                      <td>ល.រ</td>
+                      <td>លេខមហាវិទ្យាល័យ</td>
+                      <td>ឈ្មោះមហាវិទ្យាល័យ</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {college.map((entry, index) => (
+                      <tr
+                        key={entry.collegeId}
+                        onClick={() => handleDeleteCollege(entry)}
+                        className="text-[15px] hover:bg-primary cursor-pointer active:bg-primary"
+                      >
+                        <td>{index + 1}</td>
+                        <td>{entry.collegeId}</td>
+                        <td>{entry.collegeName}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {college.map((entry, index) => (
-                        <tr
-                          key={entry.collegeId}
-                          onClick={() => handleDeleteCollege(entry)}
-                          className="text-[15px] hover:bg-primary cursor-pointer active:bg-primary"
-                        >
-                          <td>{index + 1}</td>
-                          <td>{entry.collegeId}</td>
-                          <td>{entry.collegeName}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

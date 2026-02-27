@@ -60,12 +60,12 @@ export default function useWSDashboard() {
             setConnected(false);
             throw new Error(e.reason);
             // Auto-reconnect after 3 seconds
-            // if (!reconnectTimeoutRef.current) {
-            //     reconnectTimeoutRef.current = setTimeout(() => {
-            //         reconnectTimeoutRef.current = null;
-            //         connect();
-            //     }, 3000);
-            // }
+            if (!reconnectTimeoutRef.current) {
+                reconnectTimeoutRef.current = setTimeout(() => {
+                    reconnectTimeoutRef.current = null;
+                    connect();
+                }, 3000);
+            }
         };
     }, []);
 

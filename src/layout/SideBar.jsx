@@ -78,7 +78,7 @@ function Sidebar() {
     },
     {
       btnType: "QR Student Entry",
-      path: "/QRStudentEntry",
+      path: "/qr-student-entry",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +115,7 @@ function Sidebar() {
     },
     {
       btnType: "Book Manage",
-      path: "/BookManagement/AddBook",
+      path: "/book-management/add-book",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -169,34 +169,34 @@ function Sidebar() {
         {
           iconName: <BookPlus className="w-[18px]" />,
           dropDownBtnType: "Add Book",
-          urlPath: "/BookManagement/AddBook",
+          urlPath: "/book-management/addBook",
         },
         {
           iconName: <NotebookPen className="w-[18px]" />,
           dropDownBtnType: "Book Borrowed",
-          urlPath: "/BookManagement/BookBorrowed",
+          urlPath: "/book-management/book-borrowed",
         },
         {
           iconName: <ShieldCheck className="w-[18px]" />,
           dropDownBtnType: "Time Spent",
-          urlPath: "/BookManagement/TimeSpent",
+          urlPath: "/book-management/time-spent",
         },
         {
           iconName: <DatabaseBackup className="w-[18px]" />,
           dropDownBtnType: "Backup",
-          urlPath: "/BookManagement/Backup",
+          urlPath: "//book-management/backup",
         },
         {
           iconName: <BookUser className="w-[18px]" />,
           dropDownBtnType: "Donation",
-          urlPath: "/BookManagement/Donation",
+          urlPath: "//book-management/donation",
         },
       ],
     },
     {
       requiredRole: ["ADMIN", "SUPER_ADMIN"],
       btnType: "Staff Manage",
-      path: "/StaffManage",
+      path: "/staff-manage",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -223,8 +223,8 @@ function Sidebar() {
       dropDownButtonData: [],
     },
     {
-      btnType: "Student Manage",
-      path: "/StudentManage",
+      btnType: "College Manage",
+      path: "/college-manage",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -359,7 +359,7 @@ function Sidebar() {
         className={`
                 z-50 sidebar 
                 ${isHideSideBar ? "translate-x-0" : "translate-x-[-250px]"}
-                ${GetLinkPath === "/QRStudentEntry" ? "absolute translate-x-[-250px]" : "absolute sm:relative translate-x-0 sm:translate-x-0"}
+                ${GetLinkPath === "/qr-student-entry" ? "absolute translate-x-[-250px]" : "absolute sm:relative translate-x-0 sm:translate-x-0"}
                  transition-transform ease-in-out 
                 delay-150 sm:left-0 sm:right-0  
                 w-[223px] sm:w-fit lg:w-[223px] h-[100vh] shadow-xl 

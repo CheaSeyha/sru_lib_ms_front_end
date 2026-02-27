@@ -38,25 +38,28 @@ function App() {
                   }
                 >
                   <Route path="/" element={<Dashbaord />} />
-                  <Route path="/QRStudentEntry" element={<QRStudentEntry />} />
-                  <Route path="BookManagement">
-                    <Route path="AddBook" element={<BookManagement />} />
-                    <Route path="BookBorrowed" element={<BookManagement />} />
-                    <Route path="TimeSpent" element={<BookManagement />} />
-                    <Route path="Backup" element={<BookManagement />} />
-                    <Route path="Donation" element={<BookManagement />} />
+                  <Route
+                    path="/qr-student-entry"
+                    element={<QRStudentEntry />}
+                  />
+                  <Route path="book-management">
+                    <Route path="addBook" element={<BookManagement />} />
+                    <Route path="book-borrowed" element={<BookManagement />} />
+                    <Route path="time-spent" element={<BookManagement />} />
+                    <Route path="backup" element={<BookManagement />} />
+                    <Route path="donation" element={<BookManagement />} />
                   </Route>
                   <Route
-                    path="/StaffManage"
+                    path="/staff-manage"
                     element={
                       <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
                         <StaffManageForm />
                       </ProtectedRoute>
                     }
                   />
-                  <Route path="/StudentManage" element={<StudentManage />} />
+                  <Route path="/college-manage" element={<StudentManage />} />
                   <Route
-                    path="/Analytic"
+                    path="/analytic"
                     element={
                       <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
                         <AnalyticForm />
