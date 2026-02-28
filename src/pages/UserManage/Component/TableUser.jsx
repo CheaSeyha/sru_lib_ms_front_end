@@ -1,58 +1,57 @@
 import React, { useCallback, useEffect, useState } from "react";
 import BtnGredient from "../../../layout/components/BtnGredient";
 import {
-  UserRoundPlus,
+  UserPlus,
   X,
   Save,
-  UserCheck,
-  UserX,
-  Trash2,
-  SquarePen,
-  EditIcon,
-  ArrowDownToLine,
   UserCog,
+  Lock,
+  Mail,
+  User,
+  Eye,
+  EyeOff,
+  RefreshCw,
 } from "lucide-react";
 import Modal from "../../../layout/components/Modal";
 import toast, { Toaster } from "react-hot-toast";
-import api from "../../../api/axios";
-import { useAuth } from "../../../context/AuthProvider";
+import useCRUDUser from "../Hook/useCRUDUser";
 
 function TableUser() {
-  const { userInfor } = useAuth();
-  const [users, setUsers] = useState([]);
+  const { users, loading, registerUser, changeUserRole } = useCRUDUser();
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newRole, setNewRole] = useState("");
 
-  const roles = ["SUPER_ADMIN", "ADMIN", "USER"];
+  // Registration state
+  const [registrationData, setRegistrationData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
 
-  const fetchUsers = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get("/user");
-      // Filter out the current user by email
-      const allUsers = response.data;
-      const otherUsers = allUsers.filter(
-        (user) => user.email !== userInfor.email,
-      );
-      setUsers(otherUsers);
-      setFilteredUsers(otherUsers);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      toast.error("បរាជ័យក្នុងការទាញយកទិន្នន័យអ្នកប្រើប្រាស់");
-    } finally {
-      setLoading(false);
+  const roles = ["SUPER_ADMIN", "ADMIN", "USER"];
+  const [showPassword, setShowPassword] = useState(false);
+
+  const generatePassword = () => {
+    const chars =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+    const passwordLength = 12;
+    let password = "";
+    for (let i = 0; i < passwordLength; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      password += chars[randomIndex];
     }
+    setRegistrationData((prev) => ({ ...prev, password }));
+    setShowPassword(true);
+    toast.success("លេខសម្ងាត់ត្រូវបានបង្កើតដោយស្វ័យប្រវត្តិ");
   };
 
   useEffect(() => {
-    if (userInfor?.email) {
-      fetchUsers();
-    }
-  }, [userInfor?.email]);
+    setFilteredUsers(users);
+  }, [users]);
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
@@ -65,29 +64,39 @@ function TableUser() {
     setFilteredUsers(filtered);
   };
 
-  const handleOpenEditModal = (user) => {
+  const handleOpenRoleModal = (user) => {
     setSelectedUser(user);
     setNewRole(user.role);
-    setIsModalVisible(true);
+    setIsRoleModalVisible(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
+  const handleCloseRoleModal = () => {
+    setIsRoleModalVisible(false);
     setSelectedUser(null);
     setNewRole("");
   };
 
-  const handleChangeRole = async (e) => {
+  const handleOpenAddModal = () => {
+    setRegistrationData({
+      username: "",
+      email: "",
+      password: "",
+    });
+    setShowPassword(false);
+    setIsAddModalVisible(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setIsAddModalVisible(false);
+  };
+
+  const handleChangeRoleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedUser) return;
 
     try {
-      const response = await api.put("/user/change-role", {
-        email: selectedUser.email,
-        role: newRole,
-      });
+      const response = await changeUserRole(selectedUser.email, newRole);
 
-      // Handle 200, 201, 202 status codes and check for text response
       const isSuccess =
         [200, 201, 202].includes(response.status) ||
         response.data === "Update successful";
@@ -96,15 +105,40 @@ function TableUser() {
         toast.success(
           `ប្តូរតួនាទីអ្នកប្រើប្រាស់ ${selectedUser.username} ជោគជ័យ`,
         );
-        handleCloseModal();
-        fetchUsers();
+        handleCloseRoleModal();
       } else {
         toast.error("បរាជ័យក្នុងការប្តូរតួនាទី");
       }
     } catch (error) {
-      console.error("Error changing role:", error);
       toast.error("មានបញ្ហាក្នុងការប្តូរតួនាទី");
     }
+  };
+
+  const handleAddUserSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await registerUser(registrationData);
+      const isSuccess =
+        [200, 201, 202].includes(response.status) ||
+        response.data === "Register successful" ||
+        typeof response.data === "object"; // Handle direct object return if any
+
+      if (isSuccess) {
+        toast.success(
+          `ចុះឈ្មោះអ្នកប្រើប្រាស់ ${registrationData.username} ជោគជ័យ`,
+        );
+        handleCloseAddModal();
+      } else {
+        toast.error("បរាជ័យក្នុងការចុះឈ្មោះ");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "មានបញ្ហាក្នុងការចុះឈ្មោះ");
+    }
+  };
+
+  const handleRegistrationInputChange = (e) => {
+    const { id, value } = e.target;
+    setRegistrationData((prev) => ({ ...prev, [id]: value }));
   };
 
   if (loading && users.length === 0)
@@ -123,6 +157,10 @@ function TableUser() {
             គ្រប់គ្រងអ្នកប្រើប្រាស់ក្នុងប្រព័ន្ធ
           </p>
           <div className="button-container flex flex-col md:flex-row gap-2">
+            <BtnGredient onClick={handleOpenAddModal}>
+              <UserPlus size={20} />
+              <p className="hidden md:block">បន្ថែមអ្នកប្រើប្រាស់</p>
+            </BtnGredient>
             <label className="input input-bordered w-[250px] md:w-full flex items-center gap-2">
               <input
                 type="text"
@@ -169,10 +207,10 @@ function TableUser() {
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${
                         user.role === "SUPER_ADMIN"
-                          ? "bg-red-500/10 text-red-500"
+                          ? "bg-red-500/10 text-blue-500"
                           : user.role === "ADMIN"
-                            ? "bg-blue-500/10 text-blue-500"
-                            : "bg-green-500/10 text-green-500"
+                            ? "bg-blue-500/10 text-yellow-500"
+                            : "bg-green-500/10 text-gray-500"
                       }`}
                     >
                       {user.role}
@@ -181,7 +219,7 @@ function TableUser() {
                   <td className="text-center">
                     <button
                       className="text-blue-500 hover:scale-110 transition-transform p-2"
-                      onClick={() => handleOpenEditModal(user)}
+                      onClick={() => handleOpenRoleModal(user)}
                     >
                       <UserCog size={20} />
                     </button>
@@ -201,9 +239,116 @@ function TableUser() {
         <Toaster position="bottom-center" />
       </div>
 
-      <Modal isVisible={isModalVisible} onClose={handleCloseModal}>
+      {/* Register User Modal */}
+      <Modal isVisible={isAddModalVisible} onClose={handleCloseAddModal}>
         <form
-          onSubmit={handleChangeRole}
+          onSubmit={handleAddUserSubmit}
+          className="container text-accent w-full h-full space-y-5 font-noto"
+        >
+          <div className="header-modal flex justify-between">
+            <div className="radio-container flex items-center space-x-3">
+              <UserPlus className="text-accent" />
+              <p className="text-lg font-semibold">
+                ចុះឈ្មោះអ្នកប្រើប្រាស់ថ្មី
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleCloseAddModal}
+              className="btnClose w-[40px] h-[40px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
+            >
+              <X />
+            </button>
+          </div>
+
+          <div className="modal-form space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">ឈ្មោះអ្នកប្រើ*</label>
+              <label className="input input-bordered flex items-center gap-2 bg-secondary">
+                <User size={18} className="opacity-50" />
+                <input
+                  id="username"
+                  type="text"
+                  className="grow"
+                  placeholder="Username"
+                  required
+                  value={registrationData.username}
+                  onChange={handleRegistrationInputChange}
+                  minLength={3}
+                />
+              </label>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">អ៊ីមែល*</label>
+              <label className="input input-bordered flex items-center gap-2 bg-secondary">
+                <Mail size={18} className="opacity-50" />
+                <input
+                  id="email"
+                  type="email"
+                  className="grow"
+                  placeholder="name@example.com"
+                  required
+                  value={registrationData.email}
+                  onChange={handleRegistrationInputChange}
+                />
+              </label>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-sm font-medium">លេខសម្ងាត់*</label>
+                <button
+                  type="button"
+                  onClick={generatePassword}
+                  className="text-xs flex items-center gap-1 text-blue-500 hover:underline"
+                >
+                  <RefreshCw size={12} />
+                  បង្កើតលេខសម្ងាត់
+                </button>
+              </div>
+              <label className="input input-bordered flex items-center gap-2 bg-secondary relative">
+                <Lock size={18} className="opacity-50" />
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  className="grow pr-10"
+                  placeholder="••••••••"
+                  required
+                  value={registrationData.password}
+                  onChange={handleRegistrationInputChange}
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 opacity-50 hover:opacity-100 transition-opacity"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </label>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] text-secondary font-bold hover:shadow-xl transition-all ease-in-out duration-300 disabled:opacity-50"
+          >
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              <Save size={18} />
+            )}
+            ចុះឈ្មោះ
+          </button>
+        </form>
+      </Modal>
+
+      {/* Role Change Modal */}
+      <Modal isVisible={isRoleModalVisible} onClose={handleCloseRoleModal}>
+        <form
+          onSubmit={handleChangeRoleSubmit}
           className="container text-accent w-full h-full space-y-5 font-noto"
         >
           <div className="header-modal flex justify-between">
@@ -215,7 +360,7 @@ function TableUser() {
             </div>
             <button
               type="button"
-              onClick={handleCloseModal}
+              onClick={handleCloseRoleModal}
               className="btnClose w-[40px] h-[40px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"
             >
               <X />
@@ -256,9 +401,14 @@ function TableUser() {
 
           <button
             type="submit"
+            disabled={loading}
             className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] text-secondary font-bold hover:shadow-xl transition-all ease-in-out duration-300"
           >
-            <Save size={18} />
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              <Save size={18} />
+            )}
             រក្សាទុក
           </button>
         </form>
