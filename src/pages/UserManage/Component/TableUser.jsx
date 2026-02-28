@@ -210,7 +210,7 @@ function TableUser() {
                           ? "bg-red-500/10 text-blue-500"
                           : user.role === "ADMIN"
                             ? "bg-blue-500/10 text-yellow-500"
-                            : "bg-green-500/10 text-gray-500"
+                            : "bg-green-500/10 text-green-500"
                       }`}
                     >
                       {user.role}
