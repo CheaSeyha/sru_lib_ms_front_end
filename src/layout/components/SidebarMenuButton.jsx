@@ -29,7 +29,7 @@ function SidebarMenuButton({
         "/book-management/donation",
         "/book-management/book-borrowed",
         "/book-management/time-spent",
-        "/book-management/backup",
+        "/book-management/book-recovery",
       ];
       setShowDropdown(dropdownPaths.includes(GetLinkPath));
     }

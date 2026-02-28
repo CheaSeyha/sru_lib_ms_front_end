@@ -5,8 +5,6 @@ import SidebarMenuButton from "./components/SidebarMenuButton";
 import { useHideSideBar } from "../context/HideSidebarContext";
 import { useThemeSwitch } from "../context/ThemeSwitchContext";
 import { useLocation } from "react-router-dom";
-import medal from "../../src/assets/image/medal.svg";
-import backup from "../../src/assets/image/backup.svg";
 import {
   ChevronUp,
   BookPlus,
@@ -20,7 +18,6 @@ import Modal from "./components/Modal";
 import { X } from "lucide-react";
 import BtnGredient from "./components/BtnGredient";
 import SRULogo from "../assets/logo/sru_logo.png";
-import toast, { Toaster } from "react-hot-toast";
 import { getSoundState, setSoundState } from "../utils/soundUtils";
 
 const menuContainer = {
@@ -212,8 +209,8 @@ function Sidebar() {
         },
         {
           iconName: <DatabaseBackup className="w-[18px]" />,
-          dropDownBtnType: "Backup",
-          urlPath: "/book-management/backup",
+          dropDownBtnType: "Book Recovery",
+          urlPath: "/book-management/book-recovery",
         },
         {
           iconName: <BookUser className="w-[18px]" />,

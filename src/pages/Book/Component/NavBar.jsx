@@ -16,7 +16,7 @@ const NavBarBook = () => {
         return <ListOfBorrow />;
       case "/book-management/time-spent":
         return <ListCertificate />;
-      case "/book-management/backup":
+      case "/book-management/book-recovery":
         return <ListBackup />;
       case "/book-management/donation":
         return <ListDonation />;
