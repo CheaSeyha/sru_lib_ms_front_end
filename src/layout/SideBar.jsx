@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   DatabaseBackup,
   BookUser,
+  UserCog,
 } from "lucide-react";
 import { useAuth } from "../context/AuthProvider";
 import Modal from "./components/Modal";
@@ -245,6 +246,14 @@ function Sidebar() {
           </g>
         </svg>
       ),
+      dropDownButton: false,
+      dropDownButtonData: [],
+    },
+    {
+      requiredRole: ["ADMIN", "SUPER_ADMIN"],
+      btnType: "User Manage",
+      path: "/user-manage",
+      icon: <UserCog className="w-[18px] text-blue-300" />,
       dropDownButton: false,
       dropDownButtonData: [],
     },

@@ -12,6 +12,7 @@ import AnalyticForm from "./pages/Analytic/AnalyticForm";
 import StaffManageForm from "./pages/StaffManage/StaffManageForm";
 import StudentManage from "./pages/StudentManage/StudentManage";
 import { AnimatePresence } from "framer-motion";
+import UserMange from "./pages/UserManage/UserMange";
 
 function App() {
   const location = useLocation();
@@ -63,6 +64,14 @@ function App() {
                     element={
                       <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
                         <AnalyticForm />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/user-manage"
+                    element={
+                      <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
+                        <UserMange />
                       </ProtectedRoute>
                     }
                   />
