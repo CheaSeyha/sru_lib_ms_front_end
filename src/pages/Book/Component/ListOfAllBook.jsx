@@ -142,22 +142,28 @@ export default function ListOfAllBook() {
       (selectedGenre === "" || book.genre === selectedGenre),
   );
 
-  const handledelete = () => {
-    selectedRows.forEach((row) => {
-      axios
-        .put("/book/trash", null, { params: { bookId: row.bookId } })
-        .then(() => {
-          toast.success("បានផ្លាស់ទីទៅក្នុង Trash ដោយជោគជ័យ!!!", {
-            style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
-          });
-          setSelectedRows([]);
-          fetchBooks();
-        })
-        .catch((error) => {
-          toast.error("There was an error with the return request.");
-          console.error(error);
-        });
-    });
+  const handleDelete = async () => {
+    try {
+      // Create array of promises
+      const requests = selectedRows.map((row) =>
+        axios.put("/book/trash", null, {
+          params: { bookId: row.bookId },
+        }),
+      );
+
+      // Wait for all requests to finish
+      await Promise.all(requests);
+
+      toast.success("បានផ្លាស់ទីទៅក្នុង Trash ដោយជោគជ័យ!!!", {
+        style: { fontFamily: "NotoSansKhmer-Regular, sans-serif" },
+      });
+
+      setSelectedRows([]);
+      fetchBooks();
+    } catch (error) {
+      toast.error("There was an error with the delete request.");
+      console.error(error);
+    }
   };
 
   return (
@@ -228,7 +234,7 @@ export default function ListOfAllBook() {
             {selectedRows.length > 0 && (
               <>
                 <BtnGredient
-                  onClick={handledelete}
+                  onClick={handleDelete}
                   color={"from-[#ff0000] to-[#E7FBFF]"}
                   hover={"hover:from-[#E7FBFF] hover:to-[#ff0000]"}
                 >

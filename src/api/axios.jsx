@@ -1,102 +1,98 @@
 import axios from "axios";
 
-// Set the base URL and headers for the default Axios instance
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
-axios.defaults.headers["Content-Type"] = "application/json";
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: { "Content-Type": "application/json" },
+});
 
-// Flag to handle token refreshing
+// Separate instance for refresh (no interceptors)
+const refreshApi = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: { "Content-Type": "application/json" },
+});
+
 let isRefreshing = false;
 let failedRequestsQueue = [];
 
-// Helper to process the queue
 const processQueue = (error, token = null) => {
   failedRequestsQueue.forEach((prom) => {
-    if (token) {
-      prom.resolve(token);
-    } else {
-      prom.reject(error);
-    }
+    if (token) prom.resolve(token);
+    else prom.reject(error);
   });
   failedRequestsQueue = [];
 };
 
-// Helper to get the token from localStorage or sessionStorage
-const getStoredToken = (key) => {
-  return localStorage.getItem(key) || sessionStorage.getItem(key);
-};
+const getStoredToken = (key) =>
+  localStorage.getItem(key) || sessionStorage.getItem(key);
 
 const clearAuthAndRedirect = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("userID");
-
-  sessionStorage.removeItem("accessToken");
-  sessionStorage.removeItem("refreshToken");
-  sessionStorage.removeItem("userID");
-
-  // also clear axios default header
-  delete axios.defaults.headers.common["Authorization"];
-
-  // ✅ hard redirect (works outside React)
+  ["accessToken", "refreshToken", "userID"].forEach((k) => {
+    localStorage.removeItem(k);
+    sessionStorage.removeItem(k);
+  });
+  delete api.defaults.headers.common["Authorization"];
   window.location.href = "/login";
 };
 
+// ✅ Always attach latest access token for EVERY request (fixes “works after refresh”)
+api.interceptors.request.use((config) => {
+  const token = getStoredToken("accessToken");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 const refreshToken = async () => {
-  const storedRefreshToken =
-    sessionStorage.getItem("refreshToken") ||
-    localStorage.getItem("refreshToken");
+  const storedRefreshToken = getStoredToken("refreshToken");
 
   if (!storedRefreshToken) {
     clearAuthAndRedirect();
     throw new Error("No refresh token available.");
   }
 
-  try {
-    const response = await axios.post(
-      "/auth/refresh-token",
-      { refreshToken: storedRefreshToken },
-      {
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+  const res = await refreshApi.post("/auth/refresh-token", {
+    refreshToken: storedRefreshToken,
+  });
 
-    const { accessToken, refreshToken: newRefreshToken } = response.data;
+  const { accessToken, refreshToken: newRefreshToken } = res.data;
 
-    // save back to same storage where refreshToken existed
-    if (localStorage.getItem("refreshToken")) {
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", newRefreshToken);
-    } else {
-      sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", newRefreshToken);
-    }
-
-    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    return accessToken;
-  } catch (error) {
-    // if server says invalid refresh token (often 401/403)
-    clearAuthAndRedirect();
-    throw error;
+  // save back to same storage where refreshToken existed
+  if (localStorage.getItem("refreshToken")) {
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", newRefreshToken);
+  } else {
+    sessionStorage.setItem("accessToken", accessToken);
+    sessionStorage.setItem("refreshToken", newRefreshToken);
   }
+
+  // Update default header too (nice to have)
+  api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+  return accessToken;
 };
 
-// Response interceptor
-axios.interceptors.response.use(
-  (response) => response, // Pass through successful responses
+api.interceptors.response.use(
+  (res) => res,
   async (error) => {
     const originalRequest = error.config;
 
-    // Check if the error is due to token expiration
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // If no response (network error), just reject
+    if (!error.response) return Promise.reject(error);
+
+    // ✅ Don’t try refresh on the refresh endpoint itself
+    if (originalRequest?.url?.includes("/auth/refresh-token")) {
+      clearAuthAndRedirect();
+      return Promise.reject(error);
+    }
+
+    if (error.response.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // If token is already being refreshed, queue the failed request
         return new Promise((resolve, reject) => {
           failedRequestsQueue.push({
             resolve: (token) => {
-              originalRequest.headers["Authorization"] = `Bearer ${token}`;
-              resolve(axios(originalRequest));
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+              resolve(api(originalRequest));
             },
-            reject: (err) => reject(err),
+            reject,
           });
         });
       }
@@ -105,13 +101,11 @@ axios.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Refresh the token
         const newToken = await refreshToken();
-
-        // Update headers and retry the failed request
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         processQueue(null, newToken);
-        return axios(originalRequest);
+
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api(originalRequest);
       } catch (err) {
         processQueue(err, null);
         return Promise.reject(err);
@@ -124,4 +118,4 @@ axios.interceptors.response.use(
   },
 );
 
-export default axios;
+export default api;

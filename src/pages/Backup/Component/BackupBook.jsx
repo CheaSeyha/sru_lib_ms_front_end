@@ -65,10 +65,22 @@ export default function BackupBook() {
   const handleReset = () => {
     setSelectedRows([]);
   };
-  const handleClickSelect = () => {
-    selectedRows.forEach((row) => {
-      handleClick(row.bookId);
-    });
+  const handleClickSelect = async () => {
+    try {
+      await Promise.all(
+        selectedRows.map((row) =>
+          axios.put("/book/recover", null, {
+            params: { bookId: row.bookId },
+          }),
+        ),
+      );
+
+      toast.success("All books recovered successfully!");
+      fetchBackUpBook();
+      setSelectedRows([]);
+    } catch (error) {
+      toast.error("Some requests failed.");
+    }
   };
   return (
     <>
