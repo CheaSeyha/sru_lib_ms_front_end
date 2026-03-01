@@ -365,7 +365,7 @@ export default function TableStuEntry({
         <div className="flex-1 w-full h-full overflow-auto 2xl:scrollbar-hide grid items-start">
           <table className="table tectav overflow-auto">
             {/* Table Head */}
-            <thead className="text-accent sticky top-0 bg-secondary">
+            <thead className="text-accent text-[15px] sticky top-0 bg-secondary">
               <tr>
                 <th>NO</th>
                 <th>អត្តលេខសិស្ស</th>

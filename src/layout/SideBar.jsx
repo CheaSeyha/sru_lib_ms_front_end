@@ -22,6 +22,8 @@ import { X } from "lucide-react";
 import BtnGredient from "./components/BtnGredient";
 import SRULogo from "../assets/logo/sru_logo.png";
 import { getSoundState, setSoundState } from "../utils/soundUtils";
+import { savePasscode, hasPasscode } from "../utils/passcodeUtils";
+import toast from "react-hot-toast";
 
 const menuContainer = {
   hidden: {},
@@ -63,6 +65,17 @@ function Sidebar() {
   // Handle sound toggle
   const handleSoundToggle = () => {
     setSoundEnabled((prevState) => !prevState);
+  };
+
+  const [passcode, setPasscode] = useState("");
+  const handleSavePasscode = () => {
+    if (passcode.length === 4 && /^\d+$/.test(passcode)) {
+      savePasscode(passcode);
+      toast.success("លេខសម្ងាត់ត្រូវបានរក្សាទុក!");
+      setPasscode("");
+    } else {
+      toast.error("លេខសម្ងាត់ត្រូវតែមាន ៤ ខ្ទង់!");
+    }
   };
   const { theme, toggleTheme } = useThemeSwitch();
   const [isShowModal, setIsShowModal] = useState(false);
@@ -613,6 +626,31 @@ function Sidebar() {
                 <path d="M3,9H7L12,4V20L7,15H3V9M16.59,12L14,9.41L15.41,8L18,10.59L20.59,8L22,9.41L19.41,12L22,14.59L20.59,16L18,13.41L15.41,16L14,14.59L16.59,12Z" />
               </svg>
             </label>
+          </div>
+
+          <div className="passcode-setting w-full flex flex-col bg-secondary p-5 rounded-[20px] text-accent gap-3">
+            <p className="font-bold">
+              Admin Passcode {hasPasscode() && "(មានកូដរួចរាល់)"}
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="password"
+                maxLength={4}
+                value={passcode}
+                onChange={(e) => setPasscode(e.target.value)}
+                placeholder="xxxx"
+                className="input input-bordered bg-primary flex-1 text-center text-xl tracking-widest"
+              />
+              <button
+                className="btn btn-info px-5"
+                onClick={handleSavePasscode}
+              >
+                រក្សាទុក
+              </button>
+            </div>
+            <p className="text-[10px] opacity-70">
+              កំណត់លេខសម្ងាត់ដើម្បីការពារការចាកចេញពីផ្ទាំងស្កេន
+            </p>
           </div>
           {role === "ADMIN" && <BtnGredient>View User</BtnGredient>}
         </div>
