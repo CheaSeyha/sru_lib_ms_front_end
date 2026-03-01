@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CardData from "./Component/CardData";
 import TableStuEntry from "./Component/TableStuEntry";
-import BGImag from "../../assets/image/sru_lib_Vector1.jpg";
+import BGImagDark from "../../assets/image/dark-mode.avif";
+import BGImagLight from "../../assets/image/light-mode.avif";
 import MejorPieChart from "./Component/MejorPieChart";
 import WeeklyVisitorChart from "./Component/WeeklyVisitorChart";
 import RadialBarChart from "./Component/RadialBarChart";
@@ -9,10 +10,12 @@ import { useTranslation } from "react-i18next";
 import axios from "../../api/axios";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
+import { useThemeSwitch } from "../../context/ThemeSwitchContext";
 import useWSDashboard from "./Hook/useWSDashbaord"; // <- your hook
 
 function Dashbaord() {
   const { username, role } = useAuth();
+  const { theme } = useThemeSwitch();
 
   useEffect(() => {
     console.log("from dashboard", username, role);
@@ -129,7 +132,9 @@ function Dashbaord() {
           <div
             className="flex flex-col w-full h-fit sm:h-fit md:h-fit lg:h-[300px] xl:h-[400px] rounded-[20px] p-[20px] text-white gap-5 xl:gap-0"
             style={{
-              backgroundImage: `linear-gradient(to bottom, #002032bb, #00203200), url(${BGImag})`,
+              backgroundImage: `linear-gradient(to bottom, #002032bb, #00203200), url(${
+                theme === "dark" ? BGImagDark : BGImagLight
+              })`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
