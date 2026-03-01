@@ -26,19 +26,17 @@ function useScanEntry() {
   });
   const [timeoutId, setTimeoutId] = useState(null);
 
-  // ✅ Connect to WebSocket
+  //Connect to WebSocket
   const { data: wsData } = useWSDashboard();
 
   // Update data when WebSocket messages arrive
   useEffect(() => {
     if (wsData) {
-      // WS response might use customEntry or attendDetail
       const newEntries = wsData.customEntry || wsData.attendDetail;
       if (newEntries) {
         console.log("📥 Live Data Received via WS:", newEntries);
         setStudetnEntryData(newEntries);
       }
-      // Re-fetch to ensure everything else (including card counts like Exit/Total) is 100% in sync
       fetchRecentEntryData();
     }
   }, [wsData]);
@@ -54,49 +52,46 @@ function useScanEntry() {
     }
   };
 
-  // Handle scan result checking
+  // Handle scan result checking (handelSearchStudent logic)
   const handleCheckScanEntryExit = async () => {
     if (scanResultID !== 0) {
       try {
-        // Checking the student's entry/exit status
-        const result = await axios.get(`entry/check`, {
-          params: { entryId: scanResultID },
-        });
-        console.log(result.data);
+        // 1. Try to exit student first (PUT)
+        const checkIsExit = await axios.put(`/entry?entryId=${scanResultID}`);
+        console.log("Exit response:", checkIsExit.data);
+        toast.success(`Student ID ${scanResultID} Exited successfully`);
+        handleClearFormData();
+        fetchRecentEntryData();
+      } catch (error) {
+        // 2. If NO active attendance, search student info for entry (GET)
         if (
-          result.data.status === "exited" ||
-          result.data.status === "new attend!"
+          error.response?.status === 400 &&
+          error.response?.data === "No active attendance to scan out"
         ) {
-          const studentResult = await axios.get(`student/${scanResultID}`);
-
-          if (!studentResult.data) {
-            toast.error("Can't find student data");
+          try {
+            const searchStu = await axios.get(`/student/${scanResultID}`);
+            if (!searchStu.data) {
+              toast.error("Can't find student data");
+              handleClearFormData();
+            } else {
+              toast.success("Student Found");
+              setStopScan(true);
+              setStuEntryInfor(searchStu.data);
+              setDisCheckPur(false); // Enable purpose selection
+              startTimeout();
+            }
+          } catch (searchError) {
+            if (searchError.response?.status === 400) {
+              toast.error("Student ID Not Found");
+            } else {
+              toast.error("Something went wrong");
+            }
             handleClearFormData();
-          } else {
-            setStopScan(true);
-            setStuEntryInfor(studentResult.data);
-            setDisCheckPur(false); // Enable check purpose
-            startTimeout();
           }
         } else {
-          await toast.promise(
-            axios.put(`entry`, null, {
-              params: { entryId: scanResultID },
-            }),
-            {
-              loading: "Updating...",
-              success: `Student ID ${scanResultID} Exited`,
-              error: "Error updating entry.",
-            },
-          );
-          setStopScan(true);
-          fetchRecentEntryData(); // Fetch latest data after update
-          handleClearFormData();
-          startTimeout();
+          toast.error("Error while searching student please try again");
+          handleCheckScanEntryExit();
         }
-      } catch (error) {
-        console.error("Error checking scan result:", error);
-        toast.error("Error checking scan result.");
       }
     }
   };
@@ -105,19 +100,7 @@ function useScanEntry() {
   const startTimeout = () => {
     clearTimeout(timeoutId);
     const id = setTimeout(() => {
-      setScanResultID(0);
-      setStopScan(false);
-      setCheckPurpose("");
-      setStuEntryInfor({
-        studentId: 0,
-        studentName: "",
-        gender: "",
-        dateOfBirth: "",
-        degreeLevel: "",
-        majorName: "",
-        generation: "",
-      });
-      setDisCheckPur(true);
+      handleClearFormData();
       toast.error("Scan reset due to inactivity.");
     }, 60000);
     setTimeoutId(id);
@@ -142,29 +125,34 @@ function useScanEntry() {
   };
 
   // Save entry
-  const handleSaveEntry = () => {
-    clearTimeout(timeoutId);
+  const handleSaveEntry = async () => {
     if (scanResultID === 0) {
       toast.error("Please scan your card before entry...");
     } else if (checkPurpose === "") {
-      toast.error("Please select an entry purpose.");
+      toast.error("Please Check Entry Purpose");
     } else {
-      axios
-        .post("/entry", null, {
-          params: {
-            entryId: Number(scanResultID),
-            purpose: checkPurpose,
-          },
-        })
-        .then(() => {
-          toast.success(`Student ID ${scanResultID} Entry successfully.`);
+      try {
+        const checkStatus = await axios.get(
+          `/entry/check?entryId=${scanResultID}`,
+        );
+        if (
+          checkStatus.data.status === "new attend!" ||
+          checkStatus.data.status === "exited"
+        ) {
+          await axios.post("/entry", null, {
+            params: {
+              entryId: Number(scanResultID),
+              purpose: checkPurpose,
+            },
+          });
+          toast.success("Student Entry Success");
           handleClearFormData();
-          fetchRecentEntryData(); // Fetch latest data after save
-        })
-        .catch((error) => {
-          console.error("Error saving entry:", error);
-          toast.error("Error saving entry.");
-        });
+          fetchRecentEntryData();
+        }
+      } catch (error) {
+        console.error("Error saving entry:", error);
+        toast.error("Error saving entry.");
+      }
     }
   };
 
