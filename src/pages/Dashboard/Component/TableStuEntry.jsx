@@ -7,6 +7,7 @@ import useScanEntry from "../../../hooks/useScanEntry";
 import toast, { Toaster } from "react-hot-toast";
 import { Search, ShieldAlert, ShieldCheck } from "lucide-react";
 import useCheckStudentEntryExit from "../../../hooks/useCheckStudentEntryExit";
+import useKhmerTranslate from "@/hooks/useKhmerTranslate";
 
 export default function TableStuEntry({
   getCardDataApi,
@@ -349,11 +350,13 @@ export default function TableStuEntry({
     //   setStudentIDError(true);
     // }
   };
+
+  const { translateValue } = useKhmerTranslate();
   return (
     <>
       <div className="flex flex-col w-full font-noto  h-full space-y-5 scrollbar-hide">
-        <div className="text-table w-full h-[45px] flex justify-between">
-          <p>អ្នកចូលក្នុងថ្ងៃនេះ</p>
+        <div className="text-table text-lg w-full h-[45px] flex justify-between">
+          <p>ប្រវត្តិនិស្សិតដែលបានចូលក្នុងថ្ងៃនេះ</p>
           <BtnGredient onClick={handleOpenModal}>
             <UserRoundPlus />
             <p>Add Entry</p>
@@ -365,34 +368,36 @@ export default function TableStuEntry({
             <thead className="text-accent sticky top-0 bg-secondary">
               <tr>
                 <th>NO</th>
-                <th>Student ID</th>
-                <th>Student Name</th>
-                <th>Entry Times</th>
-                <th>Exiting Times</th>
-                <th>Purpose</th>
-                <th>Status</th>
+                <th>អត្តលេខសិស្ស</th>
+                <th>ឈ្មោះសិស្ស</th>
+                <th>ម៉ោងចូល</th>
+                <th>ម៉ោងចេញ</th>
+                <th>គោលបំណង</th>
+                <th>ស្ថានភាព</th>
               </tr>
             </thead>
             <tbody>
               {/* Table Rows */}
-              {displayData.map((entry, index) => (
+              {displayData.reverse().map((entry, index) => (
                 <tr
                   key={index}
                   className="hover:bg-primary cursor-pointer active:bg-primary"
                 >
-                  <th>{displayData.length - index}</th>
+                  <th>{displayData.length - displayData.length + index + 1}</th>
                   <td>{entry.studentId}</td>
                   <td>{entry.studentName}</td>
                   <td>{entry.entryTimes}</td>
                   <td>
-                    {entry.exitingTimes === null ? "N/A" : entry.exitingTimes}
+                    {entry.exitingTimes === null
+                      ? "--:--:--"
+                      : entry.exitingTimes}
                   </td>
-                  <td>{entry.purpose}</td>
+                  <td>{translateValue(entry.purpose)}</td>
                   <td className="text-white">
                     <span
                       className={`w-fit h-fit px-3 rounded-lg ${entry.exitingTimes === null ? "bg-blue-600" : "bg-red-600"}`}
                     >
-                      {entry.exitingTimes === null ? "IN" : "OUT"}
+                      {entry.exitingTimes === null ? "បានចូល" : "បានចេញ"}
                     </span>
                   </td>
                 </tr>
