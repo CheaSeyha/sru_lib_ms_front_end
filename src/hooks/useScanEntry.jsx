@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import toast from "react-hot-toast";
 import { useScanResultID } from "../context/ScanResultIDContext";
+import useWSDashboard from "../pages/Dashboard/Hook/useWSDashbaord";
 
 function useScanEntry() {
   const { scanResultID, setScanResultID } = useScanResultID();
@@ -24,6 +25,23 @@ function useScanEntry() {
     generation: "",
   });
   const [timeoutId, setTimeoutId] = useState(null);
+
+  // ✅ Connect to WebSocket
+  const { data: wsData } = useWSDashboard();
+
+  // Update data when WebSocket messages arrive
+  useEffect(() => {
+    if (wsData) {
+      // WS response might use customEntry or attendDetail
+      const newEntries = wsData.customEntry || wsData.attendDetail;
+      if (newEntries) {
+        console.log("📥 Live Data Received via WS:", newEntries);
+        setStudetnEntryData(newEntries);
+      }
+      // Re-fetch to ensure everything else (including card counts like Exit/Total) is 100% in sync
+      fetchRecentEntryData();
+    }
+  }, [wsData]);
 
   // Fetch recent entry data
   const fetchRecentEntryData = async () => {
