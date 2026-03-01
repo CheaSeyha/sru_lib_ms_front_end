@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Undo2 } from "lucide-react";
 import DateTimeCard from "./DateTimeCard";
 import useTableData from "../../../hooks/useTableData";
@@ -7,6 +7,8 @@ import {
   verifyPasscode,
   getStoredPasscode,
   hasPasscode,
+  unlockNavigation,
+  lockNavigation,
 } from "../../../utils/passcodeUtils";
 import toast from "react-hot-toast";
 
@@ -26,10 +28,16 @@ function TableStudentEntryData({ studentEntryData }) {
   const [showPasscodeModal, setShowPasscodeModal] = useState(false);
   const [inputPasscode, setInputPasscode] = useState("");
 
+  // Lock navigation when this component is active
+  useEffect(() => {
+    lockNavigation();
+  }, []);
+
   const handleProtectedBack = () => {
     if (hasPasscode()) {
       setShowPasscodeModal(true);
     } else {
+      unlockNavigation(); // Allow navigation if no passcode set
       handleBack();
     }
   };
@@ -39,9 +47,10 @@ function TableStudentEntryData({ studentEntryData }) {
     if (verifyPasscode(inputPasscode, stored)) {
       setShowPasscodeModal(false);
       setInputPasscode("");
+      unlockNavigation(); // Authorized to leave
       handleBack();
     } else {
-      toast.error("Invalid Passcode!");
+      toast.error("លេខសម្ងាត់មិនត្រឹមត្រូវ!");
       setInputPasscode("");
     }
   };

@@ -91,6 +91,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userID");
+    localStorage.removeItem("admin_passcode"); // Reset passcode on logout
 
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");

@@ -50,3 +50,25 @@ export const hasPasscode = () => {
     const stored = getStoredPasscode();
     return stored !== null && stored !== "";
 };
+
+/**
+ * Marks the current session as "unlocked" after a successful passcode entry.
+ */
+export const unlockNavigation = () => {
+    sessionStorage.setItem('nav_unlocked', 'true');
+};
+
+/**
+ * Locks the navigation again (should be called when entering the QR page).
+ */
+export const lockNavigation = () => {
+    sessionStorage.removeItem('nav_unlocked');
+};
+
+/**
+ * Checks if the navigation is currently unlocked for the session.
+ * @returns {boolean}
+ */
+export const isNavUnlocked = () => {
+    return sessionStorage.getItem('nav_unlocked') === 'true';
+};

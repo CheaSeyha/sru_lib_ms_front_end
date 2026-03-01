@@ -11,7 +11,7 @@ function Layout() {
     <ScanResultIDProvider>
       <main className="flex h-screen relative bg-base-300">
         <div
-          className={`sideBarToggle ${pathname === "/QRStudentEntry" ? "hidden" : "block"} absolute top-5 right-5 flex flex-col sm:hidden items-end z-50`}
+          className={`sideBarToggle ${pathname === "/qr-student-entry" ? "hidden" : "block"} absolute top-5 right-5 flex flex-col sm:hidden items-end z-50`}
         >
           <SideBarToggle />
         </div>

@@ -2,21 +2,37 @@ import React, { useState } from "react";
 import SRULogo from "../../assets/logo/sru_logo.png";
 import { useAuth } from "../../context/AuthProvider";
 import { useThemeSwitch } from "../../context/ThemeSwitchContext";
-import { savePasscode, hasPasscode } from "../../utils/passcodeUtils";
+import {
+  savePasscode,
+  hasPasscode,
+  verifyPasscode,
+  getStoredPasscode,
+} from "../../utils/passcodeUtils";
 import toast from "react-hot-toast";
 
 function SettingForm() {
   const { username, role, logout } = useAuth();
   const { theme, toggleTheme } = useThemeSwitch();
   const [passcode, setPasscode] = useState("");
+  const [oldPasscode, setOldPasscode] = useState("");
 
   const handleSavePasscode = () => {
+    // If passcode already exists, require old passcode verification
+    if (hasPasscode()) {
+      const stored = getStoredPasscode();
+      if (!verifyPasscode(oldPasscode, stored)) {
+        toast.error("លេខសម្ងាត់ចាស់មិនត្រឹមត្រូវ!");
+        return;
+      }
+    }
+
     if (passcode.length === 4 && /^\d+$/.test(passcode)) {
       savePasscode(passcode);
-      toast.success("Passcode saved successfully!");
+      toast.success("លេខសម្ងាត់ត្រូវបានរក្សាទុក!");
       setPasscode("");
+      setOldPasscode("");
     } else {
-      toast.error("Passcode must be a 4-digit number.");
+      toast.error("លេខសម្ងាត់ថ្មីត្រូវតែមាន ៤ ខ្ទង់!");
     }
   };
 
@@ -70,29 +86,49 @@ function SettingForm() {
 
         <div className="passcode-setting flex flex-col bg-secondary p-5 rounded-[20px] text-accent space-y-3">
           <p className="font-bold">Admin Passcode Setting</p>
-          <div className="flex flex-col space-y-2">
-            <label className="text-sm">
-              Enter 4-digit Passcode {hasPasscode() && "(Update)"}
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="password"
-                maxLength={4}
-                value={passcode}
-                onChange={(e) => setPasscode(e.target.value)}
-                placeholder="xxxx"
-                className="input input-bordered bg-primary flex-1 text-center text-xl tracking-widest"
-              />
-              <button
-                className="btn btn-info px-8"
-                onClick={handleSavePasscode}
-              >
-                Save
-              </button>
+          <div className="flex flex-col space-y-4">
+            {hasPasscode() && (
+              <div className="flex flex-col gap-1">
+                <label className="text-sm opacity-70">លេខសម្ងាត់ចាស់</label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  value={oldPasscode}
+                  onChange={(e) => setOldPasscode(e.target.value)}
+                  placeholder="xxxx"
+                  className="input input-bordered bg-primary w-full text-center text-xl tracking-widest"
+                />
+              </div>
+            )}
+
+            <div className="flex flex-col gap-1">
+              <label className="text-sm opacity-70">
+                {hasPasscode() ? "លេខសម្ងាត់ថ្មី" : "បញ្ចូលលេខសម្ងាត់ថ្មី"}
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="password"
+                  maxLength={4}
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
+                  placeholder="xxxx"
+                  className="input input-bordered bg-primary flex-1 text-center text-xl tracking-widest"
+                />
+                <button
+                  className="btn btn-info px-8"
+                  onClick={handleSavePasscode}
+                >
+                  Save
+                </button>
+              </div>
             </div>
-            <p className="text-[10px] opacity-70">
-              This passcode prevents students from exiting the QR Entry screen.
-            </p>
+
+            <div className="text-[12px] opacity-70 space-y-1">
+              <p>កំណត់លេខសម្ងាត់ដើម្បីការពារការចាកចេញពីផ្ទាំងស្កេន</p>
+              <p className="text-blue-400 italic">
+                * បើភ្លេចលេខសម្ងាត់ សូមចាកចេញ (Logout) រួចចូលម្តងទៀតដើម្បី Reset
+              </p>
+            </div>
           </div>
         </div>
       </div>
