@@ -47,7 +47,7 @@ function Dashbaord() {
   const [wsRefreshTrigger, setWsRefreshTrigger] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // ✅ WebSocket hook
+  // WebSocket hook
   const {
     data: wsData,
     connected: wsConnected,
@@ -103,12 +103,12 @@ function Dashbaord() {
   // Compatibility alias for TableStuEntry
   const getCardDataApi = () => getDataApi(false);
 
-  // ✅ initial load via API
+  // initial load via API
   useEffect(() => {
     getDataApi(true);
   }, []);
 
-  // ✅ handle WebSocket updates
+  // handle WebSocket updates
   useEffect(() => {
     if (wsData) {
       console.log("📥 Received WebSocket update:", wsData);

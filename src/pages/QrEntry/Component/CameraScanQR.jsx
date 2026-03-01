@@ -61,7 +61,9 @@ function CameraScanQR({ stopScan }) {
     <>
       <div className="flex flex-col CamScanQR bg-secondary w-full h-fit rounded-[20px] p-5">
         <div className="headerCamScanQR text-accent h-[46px] flex justify-between items-center mb-2">
-          <p className="text-[#32E2FF] font-semibold">Scan Your Card Here</p>
+          <p className="text-[#32E2FF] font-semibold font-noto">
+            ស្កេនកាតនៅទីនេះ
+          </p>
           <div className="flex gap-5">
             <button
               className="text-accent hover:text-blue-400"

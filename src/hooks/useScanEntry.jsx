@@ -69,17 +69,25 @@ function useScanEntry() {
           error.response?.data === "No active attendance to scan out"
         ) {
           try {
+            /*
+             Can replace University API here
+             example API response should look like this
+             {
+              "studentId": 200743,
+              "studentName": "Chea Seyha",
+              "gender": "ប្រុស",
+              "dateOfBirth": "2025-12-29",
+              "degreeLevel": "Associate",
+              "majorName": "English Literature",
+              "generation": 16
+              }
+            */
             const searchStu = await axios.get(`/student/${scanResultID}`);
-            if (!searchStu.data) {
-              toast.error("Can't find student data");
-              handleClearFormData();
-            } else {
-              toast.success("Student Found");
-              setStopScan(true);
-              setStuEntryInfor(searchStu.data);
-              setDisCheckPur(false); // Enable purpose selection
-              startTimeout();
-            }
+            toast.success("Student Found");
+            setStopScan(true);
+            setStuEntryInfor(searchStu.data);
+            setDisCheckPur(false); // Enable purpose selection
+            startTimeout();
           } catch (searchError) {
             if (searchError.response?.status === 400) {
               toast.error("Student ID Not Found");
