@@ -13,6 +13,8 @@ import {
   DatabaseBackup,
   BookUser,
   UserCog,
+  User,
+  Settings,
 } from "lucide-react";
 import { useAuth } from "../context/AuthProvider";
 import Modal from "./components/Modal";
@@ -522,7 +524,10 @@ function Sidebar() {
 
       <Modal isVisible={isShowModal} key={"getReport"}>
         <div className="header-modal flex items-center justify-between font-noto text-accent">
-          <p>Setting</p>
+          <div className="flex items-center gap-2">
+            <Settings />
+            <p>Setting</p>
+          </div>
           <button
             onClick={() => setIsShowModal(false)}
             className="btnClose w-[46px] h-[46px] bg-secondary flex items-center justify-center rounded-xl hover:opacity-50 transition-all duration-300 ease-in-out"

@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import BtnGredient from "../../../layout/components/BtnGredient";
 import {
+  Search,
+  MoreVertical,
   UserPlus,
   X,
   Save,
@@ -24,7 +26,7 @@ function TableUser() {
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newRole, setNewRole] = useState("");
-
+  const [isAgreeToCreate, setIsAgreeToCreate] = useState(false);
   // Registration state
   const [registrationData, setRegistrationData] = useState({
     username: "",
@@ -88,6 +90,7 @@ function TableUser() {
 
   const handleCloseAddModal = () => {
     setIsAddModalVisible(false);
+    setIsAgreeToCreate(false);
   };
 
   const handleChangeRoleSubmit = async (e) => {
@@ -151,41 +154,80 @@ function TableUser() {
 
   return (
     <>
-      <div className="w-full h-full text-accent bg-secondary rounded-[20px] p-5 font-noto space-y-5 ">
-        <div className="header flex justify-between items-center">
+      <div className="w-full h-full flex flex-col text-accent bg-secondary rounded-[20px] p-5 font-noto space-y-5 ">
+        <div className="header flex justify-start gap-5 md:justify-between items-center ">
           <p className="text-accent font-semibold">
             គ្រប់គ្រងអ្នកប្រើប្រាស់ក្នុងប្រព័ន្ធ
           </p>
-          <div className="button-container flex flex-col md:flex-row gap-2">
-            <BtnGredient onClick={handleOpenAddModal}>
-              <UserPlus size={20} />
-              <p className="hidden md:block">បន្ថែមអ្នកប្រើប្រាស់</p>
-            </BtnGredient>
-            <label className="input input-bordered w-[250px] md:w-full flex items-center gap-2">
-              <input
-                type="text"
-                className="w-full"
-                placeholder="ស្វែងរកឈ្មោះ ឬ អ៊ីមែល"
-                value={searchQuery}
-                onChange={handleSearch}
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                className="h-8 w-8 opacity-70"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                  clipRule="evenodd"
+
+          <div className="button-container flex items-center gap-2">
+            {/* Desktop */}
+            <div className="hidden md:flex items-center gap-2">
+              <BtnGredient onClick={handleOpenAddModal}>
+                <UserPlus size={20} />
+                <p>បន្ថែមអ្នកប្រើប្រាស់</p>
+              </BtnGredient>
+
+              <label className="input input-bordered w-[260px] flex items-center gap-2">
+                <Search size={18} className="opacity-70" />
+                <input
+                  type="text"
+                  className="w-full"
+                  placeholder="ស្វែងរកឈ្មោះ ឬ អ៊ីមែល"
+                  value={searchQuery}
+                  onChange={handleSearch}
                 />
-              </svg>
-            </label>
+              </label>
+            </div>
+
+            {/* Mobile Dropdown */}
+            <div className="dropdown md:hidden relative">
+              <label
+                tabIndex={0}
+                className="btn btn-sm text-accent border-none"
+              >
+                <MoreVertical size={18} />
+              </label>
+
+              <div
+                tabIndex={0}
+                className="
+      dropdown-content
+      absolute left-1/2 -translate-x-1/2
+      mt-2
+      z-[+1]
+      p-2
+      shadow
+      bg-base-100
+      rounded-box
+      w-64
+      space-y-2
+    "
+              >
+                <button
+                  className="btn btn-sm w-full justify-start text-accent"
+                  onClick={handleOpenAddModal}
+                >
+                  <UserPlus size={18} />
+                  បន្ថែមអ្នកប្រើប្រាស់
+                </button>
+
+                <label className="input input-bordered input-sm w-full flex items-center gap-2">
+                  <Search size={16} className="opacity-70" />
+                  <input
+                    type="text"
+                    className="w-full"
+                    placeholder="ស្វែងរក..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                  />
+                </label>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="table-container w-full h-[90%] overflow-auto scrollbar-hide">
+        <div className="table-container w-full h-full overflow-auto scrollbar-hide">
           <table className="table">
             <thead>
               <tr className="text-accent text-[15px] sticky top-0 bg-secondary">
@@ -229,7 +271,7 @@ function TableUser() {
               {filteredUsers.length === 0 && (
                 <tr>
                   <td colSpan="4" className="text-center py-10 opacity-50">
-                    មិនមានអ្នកប្រើប្រាស់ត្រូវនឹងការស្វែងរក
+                    ការស្វែងរកមិនមានលទ្ធផល
                   </td>
                 </tr>
               )}
@@ -327,21 +369,33 @@ function TableUser() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  onChange={(e) => setIsAgreeToCreate(e.target.checked)}
+                  className="checkbox checkbox-xs checkbox-warning"
+                />
+                <span className="text-xs text-yellow-500">
+                  សូមចំណាំ សូមរក្សាពាក្យសម្ងាត់ទុក មុនពេលបង្កើត គណនីថ្មី
+                  បន្ទាប់ពីបង្កើតគណនីថ្មី លេខសម្ងាត់និងមិនបង្ហាញពេលក្រោយទៀតទេ
+                </span>
+              </div>
             </div>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] text-secondary font-bold hover:shadow-xl transition-all ease-in-out duration-300 disabled:opacity-50"
-          >
-            {loading ? (
-              <span className="loading loading-spinner"></span>
-            ) : (
-              <Save size={18} />
-            )}
-            ចុះឈ្មោះ
-          </button>
+          {isAgreeToCreate && (
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn w-full rounded-[10px] border-none shadow-lg bg-gradient-to-r from-[#00D1FF] to-[#E7FBFF] text-secondary font-bold hover:shadow-xl transition-all ease-in-out duration-300 disabled:opacity-50"
+            >
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                <Save size={18} />
+              )}
+              ចុះឈ្មោះ
+            </button>
+          )}
         </form>
       </Modal>
 

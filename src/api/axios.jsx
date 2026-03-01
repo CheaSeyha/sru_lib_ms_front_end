@@ -34,7 +34,7 @@ const clearAuthAndRedirect = () => {
   window.location.href = "/login";
 };
 
-// ✅ Always attach latest access token for EVERY request (fixes “works after refresh”)
+//  Always attach latest access token for EVERY request (fixes “works after refresh”)
 api.interceptors.request.use((config) => {
   const token = getStoredToken("accessToken");
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -78,7 +78,7 @@ api.interceptors.response.use(
     // If no response (network error), just reject
     if (!error.response) return Promise.reject(error);
 
-    // ✅ Don’t try refresh on the refresh endpoint itself
+    //  Don’t try refresh on the refresh endpoint itself
     if (originalRequest?.url?.includes("/auth/refresh-token")) {
       clearAuthAndRedirect();
       return Promise.reject(error);
