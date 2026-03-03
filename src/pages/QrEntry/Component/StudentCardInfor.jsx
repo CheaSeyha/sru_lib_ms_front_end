@@ -61,12 +61,12 @@ function StudentCardInfor({
             <p className="text-[16px] sm:text-[14px] xl:text-[16px]">
               សកលវិទ្យាល័យស្វាយរៀង
             </p>
-            <p className="text-[12px]">SVAYRIENG UNIVERSITY</p>
+            <p className="text-[12px]">Svay Rieng University</p>
           </div>
         </div>
         <div className="big-text py-3 text-white">
           <h1 className="text-[15px] xl:text-[20px] text-center font-bold">
-            ENTRY INFO
+            ព័តមាននិស្សិត
           </h1>
         </div>
         <div className="profile-student w-full h-fit grid place-items-center">
@@ -80,7 +80,7 @@ function StudentCardInfor({
           <div className="stu-info py-[10px]">
             <p className="font-bold text-[15px] xl:text-xl">
               {stuEntryInfor.studentName === ""
-                ? "NAME"
+                ? "ឈ្មោះ"
                 : stuEntryInfor.studentName}
             </p>
           </div>
