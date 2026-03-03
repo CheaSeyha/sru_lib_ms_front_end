@@ -15,6 +15,7 @@ import {
   UserCog,
   User,
   Settings,
+  LogIn,
 } from "lucide-react";
 import { useAuth } from "../context/AuthProvider";
 import Modal from "./components/Modal";
@@ -566,7 +567,7 @@ function Sidebar() {
           </button>
         </div>
         <div className="modal-body font-noto mt-5 text-accent w-full flex flex-col gap-5">
-          <div className="card-user-infor w-full h-[100px] bg-secondary p-5 rounded-5 rounded-[20px] flex items-center justify-between">
+          <div className="card-user-infor w-full h-fit gap-4 bg-secondary p-5 rounded-5 rounded-[20px] flex md:flex-row flex-col items-center justify-between">
             <div className="user-profile h-full text-accent flex place-items-center w-full gap-2">
               <img src={SRULogo} alt="sru-logo" className="w-[60px] h-[60px]" />
               <div className="user h-fit flex flex-col justify-between">
@@ -578,7 +579,11 @@ function Sidebar() {
                 </div>
               </div>
             </div>
-            <button className="btn btn-primary" onClick={handleLogout}>
+            <button
+              className="btn bg-red-500 border-none text-white hover:bg-red-600"
+              onClick={handleLogout}
+            >
+              <LogIn />
               Logout
             </button>
           </div>
@@ -669,14 +674,14 @@ function Sidebar() {
               <label className="text-[13px] opacity-70">
                 {hasPasscode() ? "លេខសម្ងាត់ថ្មី" : "បញ្ចូលលេខសម្ងាត់"}
               </label>
-              <div className="flex gap-2">
+              <div className="flex md:flex-row flex-col gap-2">
                 <input
                   type="password"
                   maxLength={4}
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
                   placeholder="xxxx"
-                  className="input input-bordered bg-primary flex-1 text-center text-xl tracking-widest"
+                  className="input input-bordered bg-primary flex-1 py-3 text-center text-xl tracking-widest"
                 />
                 <button
                   className="btn btn-info px-5"
@@ -694,7 +699,6 @@ function Sidebar() {
               </p>
             </div>
           </div>
-          {role === "ADMIN" && <BtnGredient>View User</BtnGredient>}
         </div>
       </Modal>
     </>
