@@ -398,12 +398,7 @@ function Sidebar() {
       if (role === "ADMIN" || role === "SUPER_ADMIN") return true;
 
       if (role === "USER") {
-        const allowedItems = [
-          "Dashboard",
-          "QR Student Entry",
-          "Book Manage",
-          "Student Manage",
-        ];
+        const allowedItems = ["Dashboard", "QR Student Entry", "Book Manage"];
         return allowedItems.includes(item.btnType);
       }
 
@@ -567,13 +562,13 @@ function Sidebar() {
         </div>
         <div className="modal-body font-noto mt-5 text-accent w-full flex flex-col gap-5">
           <div className="card-user-infor w-full h-[100px] bg-secondary p-5 rounded-5 rounded-[20px] flex items-center justify-between">
-            <div className="user-profile h-full text-accent flex gap-5">
-              <img src={SRULogo} alt="sru-logo" className="w-full h-full" />
-              <div className="user h-full flex flex-col justify-between">
-                <div className="user-name text-xl font-bold">
+            <div className="user-profile h-full text-accent flex place-items-center w-full gap-2">
+              <img src={SRULogo} alt="sru-logo" className="w-[60px] h-[60px]" />
+              <div className="user h-fit flex flex-col justify-between">
+                <div className="user-name font-bold">
                   <p>{username}</p>
                 </div>
-                <div className="user-role">
+                <div className="user-role text-[13px]">
                   <p>{role}</p>
                 </div>
               </div>
@@ -584,7 +579,7 @@ function Sidebar() {
           </div>
           <div className="theme-switch w-full flex flex-row bg-secondary p-5 rounded-[20px] text-accent">
             <div className="text w-full">
-              <p>មុខងារងងឹត</p>
+              <p>មុខផ្ទៃងងឹត</p>
             </div>
             <div className="themeSwitch w-fit flex justify-center">
               <label className="swap swap-rotate">
@@ -611,7 +606,7 @@ function Sidebar() {
           </div>
           <div className="tunr-on-camera-sound w-full flex flex-row bg-secondary p-5 rounded-[20px] text-accent">
             <div className="text w-full">
-              <p>បើកសម្លេង Camera ពេលស្កេនកាត</p>
+              <p>បិត/បើកសម្លេង Camera ពេលស្កេនកាត</p>
             </div>
             <label className="swap">
               {/* hidden checkbox to control the state */}
@@ -652,7 +647,7 @@ function Sidebar() {
 
             {hasPasscode() && (
               <div className="flex flex-col gap-1">
-                <label className="text-[12px] opacity-70">លេខសម្ងាត់ចាស់</label>
+                <label className="text-[13px] opacity-70">លេខសម្ងាត់ចាស់</label>
                 <input
                   type="password"
                   maxLength={4}
@@ -665,7 +660,7 @@ function Sidebar() {
             )}
 
             <div className="flex flex-col gap-1">
-              <label className="text-[12px] opacity-70">
+              <label className="text-[13px] opacity-70">
                 {hasPasscode() ? "លេខសម្ងាត់ថ្មី" : "បញ្ចូលលេខសម្ងាត់"}
               </label>
               <div className="flex gap-2">
@@ -686,7 +681,7 @@ function Sidebar() {
               </div>
             </div>
 
-            <div className="text-[10px] opacity-70 space-y-1">
+            <div className="text-[13px] opacity-70 space-y-1">
               <p>កំណត់លេខសម្ងាត់ដើម្បីការពារការចាកចេញពីផ្ទាំងស្កេន</p>
               <p className="text-blue-400 italic">
                 * បើភ្លេចលេខសម្ងាត់ សូមចាកចេញ (Logout) រួចចូលម្តងទៀតដើម្បី Reset

@@ -13,6 +13,7 @@ import {
   Eye,
   EyeOff,
   RefreshCw,
+  Copy,
 } from "lucide-react";
 import Modal from "../../../layout/components/Modal";
 import toast, { Toaster } from "react-hot-toast";
@@ -49,6 +50,15 @@ function TableUser() {
     setRegistrationData((prev) => ({ ...prev, password }));
     setShowPassword(true);
     toast.success("លេខសម្ងាត់ត្រូវបានបង្កើតដោយស្វ័យប្រវត្តិ");
+  };
+
+  const copyToClipboard = () => {
+    if (!registrationData.password) {
+      toast.error("មិនមានលេខសម្ងាត់ដើម្បីចម្លង");
+      return;
+    }
+    navigator.clipboard.writeText(registrationData.password);
+    toast.success("ចម្លងលេខសម្ងាត់ជោគជ័យ");
   };
 
   useEffect(() => {
@@ -354,20 +364,30 @@ function TableUser() {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  className="grow pr-10"
+                  className="grow pr-20"
                   placeholder="••••••••"
                   required
                   value={registrationData.password}
                   onChange={handleRegistrationInputChange}
                   minLength={6}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 opacity-50 hover:opacity-100 transition-opacity"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
+                <div className="absolute right-3 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={copyToClipboard}
+                    className="opacity-50 hover:opacity-100 transition-opacity"
+                    title="ចម្លងលេខសម្ងាត់"
+                  >
+                    <Copy size={18} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="opacity-50 hover:opacity-100 transition-opacity"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </label>
               <div className="flex items-center gap-2">
                 <input
