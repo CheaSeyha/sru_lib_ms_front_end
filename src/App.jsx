@@ -47,7 +47,7 @@ function App() {
                     <Route path="add-book" element={<BookManagement />} />
                     <Route path="book-borrowed" element={<BookManagement />} />
                     <Route path="time-spent" element={<BookManagement />} />
-                    <Route path="book-recovery" element={<BookManagement />} />
+                    <Route path="book-trash" element={<BookManagement />} />
                     <Route path="donation" element={<BookManagement />} />
                   </Route>
                   <Route

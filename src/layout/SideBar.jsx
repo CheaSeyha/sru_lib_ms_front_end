@@ -242,8 +242,8 @@ function Sidebar() {
         },
         {
           iconName: <DatabaseBackup className="w-[18px]" />,
-          dropDownBtnType: "Book Recovery",
-          urlPath: "/book-management/book-recovery",
+          dropDownBtnType: "Book Trash",
+          urlPath: "/book-management/book-trash",
         },
         {
           iconName: <BookUser className="w-[18px]" />,
