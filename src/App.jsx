@@ -70,7 +70,7 @@ function App() {
                   <Route
                     path="/user-manage"
                     element={
-                      <ProtectedRoute userRole={["ADMIN", "SUPER_ADMIN"]}>
+                      <ProtectedRoute userRole={["SUPER_ADMIN"]}>
                         <UserMange />
                       </ProtectedRoute>
                     }

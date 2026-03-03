@@ -282,7 +282,7 @@ function Sidebar() {
       dropDownButtonData: [],
     },
     {
-      requiredRole: ["ADMIN", "SUPER_ADMIN"],
+      requiredRole: ["SUPER_ADMIN"],
       btnType: "User Manage",
       path: "/user-manage",
       icon: <UserCog className="w-[18px] text-blue-300" />,
@@ -395,6 +395,12 @@ function Sidebar() {
   // Function to filter menu items based on role
   const getFilteredMenuItems = (role) => {
     return sidebarItems.filter((item) => {
+      // If the item has required roles defined, check if user has one of them
+      if (item.requiredRole) {
+        return item.requiredRole.includes(role);
+      }
+
+      // Default logic for roles if no specifically requiredRole is set on the item
       if (role === "ADMIN" || role === "SUPER_ADMIN") return true;
 
       if (role === "USER") {
@@ -402,7 +408,6 @@ function Sidebar() {
         return allowedItems.includes(item.btnType);
       }
 
-      // if role not loaded yet, show minimal OR nothing
       return false;
     });
   };
@@ -641,8 +646,9 @@ function Sidebar() {
           </div>
 
           <div className="passcode-setting w-full flex flex-col bg-secondary p-5 rounded-[20px] text-accent gap-3">
-            <p className="font-bold">
-              Admin Passcode {hasPasscode() && "(មានកូដរួចរាល់)"}
+            <p>
+              លេខសម្ងាត់​​កាពារផ្ទាំងស្កេន​ចេញចូល{" "}
+              {hasPasscode() && "(មានកូដរួចរាល់)"}
             </p>
 
             {hasPasscode() && (
