@@ -3,7 +3,7 @@ import Layout from "./pages/Layout";
 import { HideSideBarProvidor } from "./context/HideSidebarContext";
 import { ThemeSwitchProvider } from "./context/ThemeSwitchContext";
 import { AuthProvider } from "./context/AuthProvider";
-import LoginForm from "./pages/LoginRegiter/LoginForm";
+import LoginForm from "./pages/Auth/Auth";
 import ProtectedRoute from "./pages/ProtectedRoute"; // Ensure this path is correct
 import Dashbaord from "./pages/Dashboard/Dashboard";
 import QRStudentEntry from "./pages/QrEntry/QRStudentEntry";

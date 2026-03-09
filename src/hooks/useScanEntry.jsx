@@ -96,9 +96,10 @@ function useScanEntry() {
             }
             handleClearFormData();
           }
+        } else if (error.response?.data === "Visitor not found") {
+          toast.error("មិនមានអត្តលេខនេះទេ");
         } else {
           toast.error("Error while searching student please try again");
-          handleCheckScanEntryExit();
         }
       }
     }
