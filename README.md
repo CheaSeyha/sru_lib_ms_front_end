@@ -53,11 +53,6 @@ Export reports in multiple formats:
 - Excel
 - DOCX
 
-## Internationalization
-Multi-language support using **i18n**
-- English
-- Khmer
-
 ## UI & User Experience
 - Fully responsive interface
 - Dark mode support
